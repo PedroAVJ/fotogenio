@@ -3,6 +3,7 @@ import 'server-only';
 import { auth } from '@clerk/nextjs/server';
 import { type Client, createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
+import md5 from 'md5';
 
 import { env } from '@/server/env';
 
@@ -23,8 +24,9 @@ const globalForDb = globalThis as unknown as {
   client: Client | undefined;
 };
 
-const { orgSlug } = auth();
-const url = `libsql://${orgSlug}-${env.TURSO_ORG_NAME}.turso.io`;
+const { userId } = auth();
+const databaseName = md5(userId ?? '');
+const url = `libsql://${databaseName}-${env.TURSO_ORG_NAME}.turso.io`;
 const authToken = env.TURSO_GROUP_AUTH_TOKEN;
 
 export const client = globalForDb.client ?? createClient({ url, authToken });
