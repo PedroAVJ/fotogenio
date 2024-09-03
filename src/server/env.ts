@@ -9,6 +9,7 @@ export const env = createEnv({
     TURSO_ORG_NAME: z.string(),
     TURSO_GROUP_AUTH_TOKEN: z.string(),
     TURSO_USER_API_TOKEN: z.string(),
+    BLOB_READ_WRITE_TOKEN: z.string(),
     CLERK_SECRET_KEY: z.string(),
     CLERK_WEBHOOK_SECRET: z.string(),
     NODE_ENV: z
