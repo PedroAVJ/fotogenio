@@ -20,9 +20,13 @@ export const cliente = sqliteTable('cliente', {
     .primaryKey()
     .notNull()
     .$default(() => randomUUID()),
+
+  // General
   codigo: text('codigo').notNull().unique(),
   nombreComercial: text('nombreComercial').notNull(),
   regimenCapital: text('regimenCapital').notNull(),
+
+  // Dirección
   codigoPostal: text('codigoPostal').notNull(),
   colonia: text('colonia').notNull(),
   pais: text('pais', {
@@ -31,6 +35,8 @@ export const cliente = sqliteTable('cliente', {
   calle: text('calle').notNull(),
   ciudad: text('ciudad').notNull(),
   estado: text('estado').notNull(),
+
+  // Fiscal
   nombreLegal: text('nombreLegal').notNull(),
   rfc: text('rfc').notNull(),
   idTributario: text('idTributario').notNull(),
@@ -38,6 +44,8 @@ export const cliente = sqliteTable('cliente', {
   usoDeCfdiClave: text('usoDeCfdiClave').notNull(),
   regimenFiscalClave: text('regimenFiscalClave').notNull(),
   formaDePagoClave: text('formaDePagoClave').notNull(),
+
+  // Crédito
   topeDeCredito: integer('topeDeCredito').notNull(),
   descuento: integer('descuento').notNull(),
   diasACredito: integer('diasACredito').notNull(),
@@ -47,16 +55,23 @@ export const cliente = sqliteTable('cliente', {
 export const MAX_DIAS_A_CREDITO = 90;
 
 export const clienteSchema = createInsertSchema(cliente, {
+  // General
   codigo: (schema) => schema.codigo.min(1),
   nombreComercial: (schema) => schema.nombreComercial.min(1),
   regimenCapital: (schema) => schema.regimenCapital.min(1),
+
+  // Dirección
   codigoPostal: (schema) => schema.codigoPostal.min(5),
   colonia: (schema) => schema.colonia.min(1),
   calle: (schema) => schema.calle.min(1),
   ciudad: (schema) => schema.ciudad.min(1),
   estado: (schema) => schema.estado.min(1),
+
+  // Fiscal
   nombreLegal: (schema) => schema.nombreLegal.min(1),
   rfc: (schema) => schema.rfc.refine(validateRfc),
+
+  // Crédito
   topeDeCredito: (schema) =>
     schema.topeDeCredito.int().nonnegative().max(MAX_MONEY),
   descuento: (schema) => schema.descuento.int().nonnegative().max(MAX_PERCENT),

@@ -21,7 +21,7 @@ export function MainLayout({ sidebar, children }: MainLayoutProps) {
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable}`}
+      className={`${GeistSans.className}`}
       suppressHydrationWarning
     >
       <ClerkProvider localization={esMX}>

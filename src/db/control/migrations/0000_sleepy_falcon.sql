@@ -1,75 +1,11 @@
 CREATE TABLE `almacen` (
 	`id` text PRIMARY KEY NOT NULL,
 	`divisionId` text NOT NULL,
-	`placeId` text NOT NULL,
 	`nombre` text NOT NULL,
-	FOREIGN KEY (`divisionId`) REFERENCES `division`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`placeId`) REFERENCES `place`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `chofer` (
-	`id` text PRIMARY KEY NOT NULL,
-	`codigo` text NOT NULL,
-	`nombreCompleto` text NOT NULL,
-	`numeroDeLicencia` text NOT NULL,
-	`fechaDeVencimientoDeLicencia` integer NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE `cliente` (
-	`id` text PRIMARY KEY NOT NULL,
-	`codigo` text NOT NULL,
-	`nombreComercial` text NOT NULL,
-	`regimenCapital` text NOT NULL,
-	`codigoPostal` text NOT NULL,
-	`colonia` text NOT NULL,
-	`pais` text NOT NULL,
-	`calle` text NOT NULL,
-	`ciudad` text NOT NULL,
-	`estado` text NOT NULL,
-	`nombreLegal` text NOT NULL,
-	`rfc` text NOT NULL,
-	`idTributario` text NOT NULL,
-	`cuentaContableId` integer NOT NULL,
-	`usoDeCfdiClave` text NOT NULL,
-	`regimenFiscalClave` text NOT NULL,
-	`formaDePagoClave` text NOT NULL,
-	`topeDeCredito` integer NOT NULL,
-	`descuento` integer NOT NULL,
-	`diasACredito` integer NOT NULL,
-	`esPrecioEspecial` integer NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE `contacto` (
-	`id` text PRIMARY KEY NOT NULL,
-	`grupo` text NOT NULL,
-	`nombre` text NOT NULL,
-	`correoElectronico` text NOT NULL,
-	`lineaFija` text NOT NULL,
-	`celular` text,
-	`clienteId` text NOT NULL,
-	FOREIGN KEY (`clienteId`) REFERENCES `cliente`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `precioEspecial` (
-	`id` text PRIMARY KEY NOT NULL,
-	`clienteId` text NOT NULL,
-	`productoId` text NOT NULL,
-	`precioEspecial` integer NOT NULL,
-	FOREIGN KEY (`clienteId`) REFERENCES `cliente`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`productoId`) REFERENCES `producto`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `puntoDeEntrega` (
-	`id` text PRIMARY KEY NOT NULL,
 	`placeId` text NOT NULL,
-	`clienteId` text NOT NULL,
-	FOREIGN KEY (`placeId`) REFERENCES `place`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`clienteId`) REFERENCES `cliente`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `division` (
-	`id` text PRIMARY KEY NOT NULL,
-	`nombre` text NOT NULL
+	`formattedAddress` text NOT NULL,
+	`referencia` text NOT NULL,
+	FOREIGN KEY (`divisionId`) REFERENCES `division`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `articulo` (
@@ -94,13 +30,6 @@ CREATE TABLE `pedido` (
 	`fechaDeEntrega` integer NOT NULL,
 	FOREIGN KEY (`divisionId`) REFERENCES `division`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`puntoDeEntregaId`) REFERENCES `puntoDeEntrega`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `place` (
-	`id` text PRIMARY KEY NOT NULL,
-	`placeId` text NOT NULL,
-	`formattedAddress` text NOT NULL,
-	`referencia` text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `producto` (
@@ -161,13 +90,82 @@ CREATE TABLE `vehiculo` (
 	FOREIGN KEY (`choferId`) REFERENCES `chofer`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `chofer` (
+	`id` text PRIMARY KEY NOT NULL,
+	`codigo` text NOT NULL,
+	`nombreCompleto` text NOT NULL,
+	`numeroDeLicencia` text NOT NULL,
+	`fechaDeVencimientoDeLicencia` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `cliente` (
+	`id` text PRIMARY KEY NOT NULL,
+	`codigo` text NOT NULL,
+	`nombreComercial` text NOT NULL,
+	`regimenCapital` text NOT NULL,
+	`codigoPostal` text NOT NULL,
+	`colonia` text NOT NULL,
+	`pais` text NOT NULL,
+	`calle` text NOT NULL,
+	`ciudad` text NOT NULL,
+	`estado` text NOT NULL,
+	`nombreLegal` text NOT NULL,
+	`rfc` text NOT NULL,
+	`idTributario` text NOT NULL,
+	`cuentaContableId` integer NOT NULL,
+	`usoDeCfdiClave` text NOT NULL,
+	`regimenFiscalClave` text NOT NULL,
+	`formaDePagoClave` text NOT NULL,
+	`topeDeCredito` integer NOT NULL,
+	`descuento` integer NOT NULL,
+	`diasACredito` integer NOT NULL,
+	`esPrecioEspecial` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `contacto` (
+	`id` text PRIMARY KEY NOT NULL,
+	`grupo` text NOT NULL,
+	`nombre` text NOT NULL,
+	`correoElectronico` text NOT NULL,
+	`lineaFija` text NOT NULL,
+	`celular` text,
+	`clienteId` text NOT NULL,
+	FOREIGN KEY (`clienteId`) REFERENCES `cliente`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `precioEspecial` (
+	`id` text PRIMARY KEY NOT NULL,
+	`clienteId` text NOT NULL,
+	`productoId` text NOT NULL,
+	`precioEspecial` real NOT NULL,
+	FOREIGN KEY (`clienteId`) REFERENCES `cliente`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`productoId`) REFERENCES `producto`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `puntoDeEntrega` (
+	`id` text PRIMARY KEY NOT NULL,
+	`clienteId` text NOT NULL,
+	`nombre` text NOT NULL,
+	`placeId` text NOT NULL,
+	`formattedAddress` text NOT NULL,
+	`referencia` text NOT NULL,
+	FOREIGN KEY (`clienteId`) REFERENCES `cliente`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `division` (
+	`id` text PRIMARY KEY NOT NULL,
+	`nombre` text NOT NULL
+);
+--> statement-breakpoint
 CREATE UNIQUE INDEX `almacen_nombre_unique` ON `almacen` (`nombre`);--> statement-breakpoint
-CREATE UNIQUE INDEX `chofer_codigo_unique` ON `chofer` (`codigo`);--> statement-breakpoint
-CREATE UNIQUE INDEX `cliente_codigo_unique` ON `cliente` (`codigo`);--> statement-breakpoint
-CREATE UNIQUE INDEX `precioEspecial_clienteId_productoId_unique` ON `precioEspecial` (`clienteId`,`productoId`);--> statement-breakpoint
-CREATE UNIQUE INDEX `division_nombre_unique` ON `division` (`nombre`);--> statement-breakpoint
 CREATE UNIQUE INDEX `articulo_pedidoId_productoId_unique` ON `articulo` (`pedidoId`,`productoId`);--> statement-breakpoint
+CREATE UNIQUE INDEX `producto_codigo_unique` ON `producto` (`codigo`);--> statement-breakpoint
 CREATE UNIQUE INDEX `parada_rutaId_puntoDeEntregaId_unique` ON `parada` (`rutaId`,`puntoDeEntregaId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `ruta_nombre_unique` ON `ruta` (`nombre`);--> statement-breakpoint
 CREATE UNIQUE INDEX `vehiculo_codigo_unique` ON `vehiculo` (`codigo`);--> statement-breakpoint
-CREATE UNIQUE INDEX `vehiculo_choferId_unique` ON `vehiculo` (`choferId`);
+CREATE UNIQUE INDEX `vehiculo_choferId_unique` ON `vehiculo` (`choferId`);--> statement-breakpoint
+CREATE UNIQUE INDEX `chofer_codigo_unique` ON `chofer` (`codigo`);--> statement-breakpoint
+CREATE UNIQUE INDEX `cliente_codigo_unique` ON `cliente` (`codigo`);--> statement-breakpoint
+CREATE UNIQUE INDEX `precioEspecial_clienteId_productoId_unique` ON `precioEspecial` (`clienteId`,`productoId`);--> statement-breakpoint
+CREATE UNIQUE INDEX `puntoDeEntrega_nombre_unique` ON `puntoDeEntrega` (`nombre`);--> statement-breakpoint
+CREATE UNIQUE INDEX `division_nombre_unique` ON `division` (`nombre`);

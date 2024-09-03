@@ -8,7 +8,6 @@ export const env = createEnv({
     TURSO_PARENT_DB_URL: z.string().url(),
     TURSO_ORG: z.string(),
     TURSO_GROUP_AUTH_TOKEN: z.string(),
-    TURSO_PARENT_AUTH_TOKEN: z.string(),
     CATALOGOS_SAT_DATABASE_URL: z.string().url(),
     CLERK_SECRET_KEY: z.string(),
     GOOGLE_PLACES_API_KEY: z.string(),

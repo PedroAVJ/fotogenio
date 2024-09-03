@@ -9,9 +9,9 @@ interface Meta {
   permissions: string[];
 }
 
-export const t = initTRPC.meta<Meta>().create();
+const trpc = initTRPC.meta<Meta>().create();
 
-export const api = t.procedure
+export const api = trpc.procedure
   .experimental_caller(experimental_nextAppDirCaller({}))
   .use(async (opts) => {
     auth().protect();

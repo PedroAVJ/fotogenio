@@ -7,6 +7,6 @@ export default defineConfig({
   driver: 'turso',
   dbCredentials: {
     url: process.env['TURSO_PARENT_DB_URL'] ?? '',
-    authToken: process.env['TURSO_PARENT_AUTH_TOKEN'] ?? '',
+    authToken: process.env['TURSO_GROUP_AUTH_TOKEN'] ?? '',
   },
 });
