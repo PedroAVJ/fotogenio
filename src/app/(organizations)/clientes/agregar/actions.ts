@@ -4,7 +4,7 @@ import { PlacesClient } from '@googlemaps/places';
 import { JWT } from 'google-auth-library';
 import { redirect } from 'next/navigation';
 
-import { db } from '@/db/control';
+import { db } from '@/db';
 import {
   cliente as clienteTable,
   clienteSchema,
@@ -14,7 +14,7 @@ import {
   precioEspecialSchema,
   puntoDeEntrega as puntoDeEntregaTable,
   puntoDeEntregaSchema,
-} from '@/db/control/schema/organizations/cliente';
+} from '@/db/schema/organizations/cliente';
 import { z } from '@/lib/es-zod';
 import { env } from '@/server/env';
 import { api } from '@/server/trpc';
