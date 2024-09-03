@@ -1,0 +1,32 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/universal:linux",
+    "onCreateCommand": "npm install; cp .env.example .env",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "supermaven.supermaven",
+                "bradlc.vscode-tailwindcss",
+                "mikestead.dotenv",
+                "yoavbls.pretty-ts-errors",
+                "formulahendry.auto-rename-tag",
+                "dbaeumer.vscode-eslint"
+            ],
+            "settings": {
+                "files.associations": {
+                    "*.env*": "dotenv",
+                    "*.css": "tailwindcss"
+                },
+                "editor.quickSuggestions": {
+                    "strings": "on"
+                },
+                "[typescript]": {
+                    "editor.tabSize": 2
+                },
+                "[typescriptreact]": {
+                    "editor.tabSize": 2
+                },
+                "typescript.tsdk": "node_modules/typescript/lib"
+            }
+        }
+    }
+}
