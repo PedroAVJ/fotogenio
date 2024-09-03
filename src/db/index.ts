@@ -24,7 +24,7 @@ const globalForDb = globalThis as unknown as {
 };
 
 const { orgSlug } = auth();
-const url = `libsql://${orgSlug}-${env.TURSO_ORG}.turso.io`;
+const url = `libsql://${orgSlug}-${env.TURSO_ORG_NAME}.turso.io`;
 const authToken = env.TURSO_GROUP_AUTH_TOKEN;
 
 export const client = globalForDb.client ?? createClient({ url, authToken });

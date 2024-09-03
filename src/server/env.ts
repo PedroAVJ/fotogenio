@@ -6,11 +6,11 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     TURSO_PARENT_DB_URL: z.string().url(),
-    TURSO_ORG: z.string(),
+    TURSO_ORG_NAME: z.string(),
     TURSO_GROUP_AUTH_TOKEN: z.string(),
-    CATALOGOS_SAT_DATABASE_URL: z.string().url(),
+    TURSO_USER_API_TOKEN: z.string(),
     CLERK_SECRET_KEY: z.string(),
-    GOOGLE_PLACES_API_KEY: z.string(),
+    CLERK_WEBHOOK_SECRET: z.string(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
