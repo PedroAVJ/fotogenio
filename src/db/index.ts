@@ -1,9 +1,7 @@
 import 'server-only';
 
-import { auth } from '@clerk/nextjs/server';
-import { type Client, createClient } from '@libsql/client';
-import { drizzle } from 'drizzle-orm/libsql';
-import md5 from 'md5';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
 import { env } from '@/server/env';
 
@@ -21,18 +19,15 @@ import * as division from './schema/organizations/division';
  * update.
  */
 const globalForDb = globalThis as unknown as {
-  client: Client | undefined;
+  conn: postgres.Sql | undefined;
 };
 
-const { userId } = auth();
-const databaseName = md5(userId ?? '');
-const url = `libsql://${databaseName}-${env.TURSO_ORG_NAME}.turso.io`;
-const authToken = env.TURSO_GROUP_AUTH_TOKEN;
+const url = env.SUPABASE_DB_URL;
 
-export const client = globalForDb.client ?? createClient({ url, authToken });
-if (env.NODE_ENV !== 'production') globalForDb.client = client;
+const conn = globalForDb.conn ?? postgres(url, { prepare: false });
+if (env.NODE_ENV !== 'production') globalForDb.conn = conn;
 
-export const db = drizzle(client, {
+export const db = drizzle(conn, {
   schema: {
     ...almacen,
     ...chofer,

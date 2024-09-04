@@ -2,11 +2,8 @@ import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
   schema: './src/db/control/schema/*',
-  out: './src/db/control/migrations',
-  dialect: 'sqlite',
-  driver: 'turso',
+  dialect: 'postgresql',
   dbCredentials: {
-    url: process.env['TURSO_PARENT_DB_URL'] ?? '',
-    authToken: process.env['TURSO_GROUP_AUTH_TOKEN'] ?? '',
+    url: process.env['SUPABASE_DB_URL'] ?? '',
   },
 });
