@@ -1,23 +1,23 @@
 import 'server-only';
 
 import { auth } from '@clerk/nextjs/server';
-import { initTRPC } from '@trpc/server';
+import { initTRPC, TRPCError } from '@trpc/server';
 import { experimental_nextAppDirCaller } from '@trpc/server/adapters/next-app-dir';
 
-interface Meta {
-  roles: string[];
-  permissions: string[];
-}
+import { ratelimit } from '@/server/ratelimit';
 
-const trpc = initTRPC.meta<Meta>().create();
+const trpc = initTRPC.create();
 
 export const api = trpc.procedure
   .experimental_caller(experimental_nextAppDirCaller({}))
   .use(async (opts) => {
-    auth().protect();
-    opts.meta?.roles.forEach((role) => auth().protect({ role }));
-    opts.meta?.permissions.forEach((permission) =>
-      auth().protect({ permission }),
-    );
+    const { userId } = auth().protect();
+    const { success } = await ratelimit.limit(userId);
+    if (!success) {
+      throw new TRPCError({
+        code: 'TOO_MANY_REQUESTS',
+        message: 'Rate limited',
+      });
+    }
     return opts.next();
   });

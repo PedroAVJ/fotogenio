@@ -7,6 +7,8 @@ export const env = createEnv({
   server: {
     SUPABASE_DB_PASSWORD: z.string(),
     SUPABASE_DB_URL: z.string().url(),
+    UPSTASH_REDIS_REST_URL: z.string().url(),
+    UPSTASH_REDIS_REST_TOKEN: z.string(),
     BLOB_READ_WRITE_TOKEN: z.string(),
     REPLICATE_API_TOKEN: z.string(),
     CLERK_SECRET_KEY: z.string(),

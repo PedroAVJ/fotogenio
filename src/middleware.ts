@@ -1,9 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+
+import { ratelimit } from './server/ratelimit';
 
 const isProtectedRoute = createRouteMatcher(['(.*)']);
 
-export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) auth().protect();
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    const { userId } = auth().protect();
+    const { success } = await ratelimit.limit(userId);
+    if (!success) return new Response('Too many requests', { status: 429 });
+  } else {
+    const { ip } = req;
+    const { success } = await ratelimit.limit(ip ?? '');
+    if (!success) return new Response('Too many requests', { status: 429 });
+  }
+  return NextResponse.next();
 });
 
 export const config = {
