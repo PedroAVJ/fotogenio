@@ -12,12 +12,7 @@ import { Header } from './header';
 import { QueryClientProvider } from './query-client-provider';
 import { ThemeProvider } from './theme-provider';
 
-interface MainLayoutProps {
-  sidebar: ReactNode;
-  children: ReactNode;
-}
-
-export function MainLayout({ sidebar, children }: MainLayoutProps) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
@@ -33,7 +28,6 @@ export function MainLayout({ sidebar, children }: MainLayoutProps) {
             disableTransitionOnChange
           >
             <QueryClientProvider>
-              {sidebar}
               <div className="flex w-full flex-col">
                 <Header />
                 <ScrollArea>
