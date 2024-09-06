@@ -11,8 +11,6 @@ import { createInsertSchema } from 'drizzle-zod';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import validateRfc from 'validate-rfc';
 
-import { MAX_MONEY, MAX_PERCENT } from '@/lib/constants';
-
 import { producto } from '../divisions/producto';
 
 export const cliente = sqliteTable('cliente', {
@@ -73,8 +71,8 @@ export const clienteSchema = createInsertSchema(cliente, {
 
   // Crédito
   topeDeCredito: (schema) =>
-    schema.topeDeCredito.int().nonnegative().max(MAX_MONEY),
-  descuento: (schema) => schema.descuento.int().nonnegative().max(MAX_PERCENT),
+    schema.topeDeCredito.int().nonnegative().max(9_999_999.99),
+  descuento: (schema) => schema.descuento.int().nonnegative().max(100),
   diasACredito: (schema) =>
     schema.diasACredito.int().nonnegative().max(MAX_DIAS_A_CREDITO),
 });
@@ -142,7 +140,7 @@ export const precioEspecial = sqliteTable(
 
 export const precioEspecialSchema = createInsertSchema(precioEspecial, {
   precioEspecial: (schema) =>
-    schema.precioEspecial.nonnegative().max(MAX_MONEY).multipleOf(0.01),
+    schema.precioEspecial.nonnegative().max(9_999_999.99).multipleOf(0.01),
 });
 
 export const clienteRelations = relations(cliente, ({ many }) => ({

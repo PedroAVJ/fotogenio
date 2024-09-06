@@ -4,14 +4,12 @@
             "extensions": [
                 "supermaven.supermaven",
                 "bradlc.vscode-tailwindcss",
-                "mikestead.dotenv",
                 "yoavbls.pretty-ts-errors",
                 "formulahendry.auto-rename-tag",
                 "dbaeumer.vscode-eslint"
             ],
             "settings": {
                 "files.associations": {
-                    "*.env*": "dotenv",
                     "*.css": "tailwindcss"
                 },
                 "editor.quickSuggestions": {

@@ -2,8 +2,6 @@ import { randomUUID } from 'crypto';
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
 
-import { MAX_MONEY, MAX_PERCENT } from '@/lib/constants';
-
 export const producto = sqliteTable('producto', {
   id: text('id')
     .primaryKey()
@@ -39,15 +37,15 @@ export const productoSchema = createInsertSchema(producto, {
   codigo: (schema) => schema.codigo.min(1),
   descripcion: (schema) => schema.descripcion.min(1),
   precioUnitario: (schema) =>
-    schema.precioUnitario.positive().max(MAX_MONEY).multipleOf(0.01),
+    schema.precioUnitario.positive().max(9_999_999.99).multipleOf(0.01),
   tasaDeIva: (schema) =>
     schema.tasaDeIva.nonnegative().max(MAX_TASA_DE_IVA).multipleOf(0.01),
   retencionDeIva: (schema) =>
     schema.retencionDeIva.nonnegative().max(MAX_TASA_DE_IVA).multipleOf(0.01),
   retencionDeIsr: (schema) =>
-    schema.retencionDeIsr.nonnegative().max(MAX_PERCENT).multipleOf(0.01),
+    schema.retencionDeIsr.nonnegative().max(100).multipleOf(0.01),
   tasaDeIeps: (schema) =>
-    schema.tasaDeIeps.nonnegative().max(MAX_PERCENT).multipleOf(0.01),
+    schema.tasaDeIeps.nonnegative().max(100).multipleOf(0.01),
 }).refine(
   ({
     objetoDeImpuesto,
