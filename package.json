@@ -13,8 +13,6 @@
     "db:studio": "drizzle-kit studio",
     "db:pull:catalogos": "drizzle-kit introspect --config=drizzle.catalogos.config.ts",
     "db:studio:catalogos": "drizzle-kit studio --config=drizzle.catalogos.config.ts",
-    "vercel:link": "vercel link",
-    "vercel:env": "vercel env pull",
     "build": "next build",
     "start": "next start"
   },
@@ -114,7 +112,6 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "tailwindcss": "^3.4.10",
-    "typescript": "^5.5.3",
-    "vercel": "^37.4.0"
+    "typescript": "^5.5.3"
   }
 }
