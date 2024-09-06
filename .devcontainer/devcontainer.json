@@ -1,5 +1,4 @@
 {
-    "onCreateCommand": "npm install",
     "customizations": {
         "vscode": {
             "extensions": [
