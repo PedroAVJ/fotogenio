@@ -1,5 +1,4 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/universal:linux",
     "onCreateCommand": "npm install",
     "customizations": {
         "vscode": {
