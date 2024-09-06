@@ -10,3 +10,5 @@ next-env.d.ts
 
 # TypeScript
 *.tsbuildinfo
+.vercel
+.env*.local
