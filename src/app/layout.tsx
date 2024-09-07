@@ -2,43 +2,25 @@ import '@/globals.css';
 
 import { esMX } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';
-import { GeistSans } from 'geist/font/sans';
+import { Work_Sans } from 'next/font/google';
 import type { ReactNode } from 'react';
 
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Toaster } from '@/components/ui/sonner';
-
-import { Header } from './header';
 import { QueryClientProvider } from './query-client-provider';
-import { ThemeProvider } from './theme-provider';
+
+const workSans = Work_Sans({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${GeistSans.className}`}
+      className={`${workSans.className}`}
       suppressHydrationWarning
     >
       <ClerkProvider localization={esMX}>
-        <body className="flex h-screen w-screen overflow-hidden">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <QueryClientProvider>
-              <div className="flex w-full flex-col">
-                <Header />
-                <ScrollArea>
-                  <main className="flex flex-col items-center gap-4 p-6">
-                    {children}
-                  </main>
-                </ScrollArea>
-              </div>
-              <Toaster />
-            </QueryClientProvider>
-          </ThemeProvider>
+        <body className="h-screen w-screen">
+          <QueryClientProvider>
+            <main>{children}</main>
+          </QueryClientProvider>
         </body>
       </ClerkProvider>
     </html>
