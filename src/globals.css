@@ -41,3 +41,21 @@
 .rdp-vhidden {
   @apply hidden;
 }
+
+.border-gradient-step {
+  background-image: linear-gradient(90deg, hsl(var(--secondary)), hsl(var(--primary))), linear-gradient(90deg, hsl(var(--secondary)), hsl(var(--primary)));
+  background-size: 100% 5px;
+  background-position: 0 0, 0 100%;
+}
+
+.border-gradient-main {
+  background-image: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary))), linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+  background-size: 100% 5px;
+  background-position: 0 0, 0 100%;
+}
+
+.border-gradient-secondary {
+  background-image: linear-gradient(90deg, hsl(var(--foreground)), hsl(var(--secondary))), linear-gradient(90deg, hsl(var(--foreground)), hsl(var(--secondary)));
+  background-size: 100% 5px;
+  background-position: 0 0, 0 100%;
+}
