@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <ClerkProvider localization={esMX}>
-        <body className="h-screen w-screen">
+        <body className="h-dvh w-dvw">
           <QueryClientProvider>
             <main className="flex size-full flex-col items-center justify-between px-2 pb-8 pt-4">
               {children}
