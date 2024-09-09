@@ -37,7 +37,7 @@ export function ChooseGender() {
         <ToggleGroupItem
           value="male"
           aria-label="Toggle male"
-          className="relative h-60 w-72 md:h-72 md:w-96"
+          className="relative h-56 w-72 md:h-72 md:w-96"
         >
           <Image
             src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-male-k92XCfMROnzg0OlAT39xsiJC1xfm4S.png"
@@ -49,7 +49,7 @@ export function ChooseGender() {
         <ToggleGroupItem
           value="female"
           aria-label="Toggle female"
-          className="relative h-60 w-72 md:h-72 md:w-96"
+          className="relative h-56 w-72 md:h-72 md:w-96"
         >
           <Image
             src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-female-tpgFLyrunZe1K0FK4m0JeEO2Y6evh3.png"
