@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { H1, H3 } from '@/components/ui/typography';
@@ -28,35 +27,31 @@ export function ChooseGender() {
         onValueChange={(value) =>
           setSelectedGender(value as (typeof genderChoices)[number])
         }
-        className="flex w-full grow flex-col items-center justify-between space-y-4"
+        className="flex w-full grow flex-col items-center justify-evenly space-y-4 md:flex-row"
       >
         <ToggleGroupItem
           value="male"
           aria-label="Toggle male"
-          className="h-60 w-72 px-px"
+          className="relative h-60 w-72 md:h-72 md:w-96"
         >
-          <AspectRatio ratio={72 / 60}>
-            <Image
-              src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-male-k92XCfMROnzg0OlAT39xsiJC1xfm4S.png"
-              alt="Male character"
-              fill
-              className="size-full rounded-md object-cover"
-            />
-          </AspectRatio>
+          <Image
+            src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-male-k92XCfMROnzg0OlAT39xsiJC1xfm4S.png"
+            alt="Male character"
+            fill
+            className="size-full rounded-md object-cover p-0.5"
+          />
         </ToggleGroupItem>
         <ToggleGroupItem
           value="female"
           aria-label="Toggle female"
-          className="h-60 w-72 px-px"
+          className="relative h-60 w-72 md:h-72 md:w-96"
         >
-          <AspectRatio ratio={72 / 60}>
-            <Image
-              src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-female-tpgFLyrunZe1K0FK4m0JeEO2Y6evh3.png"
-              alt="Female character"
-              fill
-              className="size-full rounded-md object-cover"
-            />
-          </AspectRatio>
+          <Image
+            src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-female-tpgFLyrunZe1K0FK4m0JeEO2Y6evh3.png"
+            alt="Female character"
+            fill
+            className="size-full rounded-md object-cover p-0.5"
+          />
         </ToggleGroupItem>
       </ToggleGroup>
       <Button
