@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -9,9 +9,9 @@ import { H1, H3 } from '@/components/ui/typography';
 import type { genderChoices } from '@/server/db/styles';
 
 export function ChooseGender() {
-  const [selectedGender, setSelectedGender] = useState<
+  const [selectedGender, setSelectedGender] = useLocalStorage<
     (typeof genderChoices)[number] | null
-  >(null);
+  >('gender', null);
   return (
     <div className="flex size-full flex-col items-center space-y-20 px-3 pb-12 pt-3">
       <div className="flex w-full space-x-2">
@@ -24,9 +24,13 @@ export function ChooseGender() {
       </div>
       <ToggleGroup
         type="single"
-        onValueChange={(value) =>
-          setSelectedGender(value as (typeof genderChoices)[number])
-        }
+        onValueChange={(value) => {
+          if (value === '') {
+            setSelectedGender(null);
+          } else {
+            setSelectedGender(value as (typeof genderChoices)[number]);
+          }
+        }}
         className="flex w-full grow flex-col items-center justify-evenly space-y-4 md:flex-row"
       >
         <ToggleGroupItem
