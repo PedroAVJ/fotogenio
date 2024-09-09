@@ -8,7 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { H1, H3 } from '@/components/ui/typography';
 import type { genderChoices } from '@/server/db/styles';
 
-export function ChooseGender() {
+export function ChooseStyles() {
   const [selectedGender, setSelectedGender] = useLocalStorage<
     (typeof genderChoices)[number] | null
   >('gender', null);
@@ -20,7 +20,7 @@ export function ChooseGender() {
           {currentStep}
         </H1>
         <H3 className="border-gradient-main flex grow justify-center rounded-lg border-x-4 border-l-primary border-r-secondary bg-no-repeat p-4 font-medium">
-          Escoge Tu Género
+          Escoge Tu Estilo
         </H3>
       </div>
       <ToggleGroup
