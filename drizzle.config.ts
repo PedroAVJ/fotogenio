@@ -1,5 +1,8 @@
 import { defineConfig } from 'drizzle-kit';
 
+const supabasePassword = process.env['SUPABASE_DB_PASSWORD'] ?? '';
+const supabaseUrl = process.env['SUPABASE_DB_URL'] ?? '';
+
 export default defineConfig({
   schema: [
     './src/server/db/relations.ts',
@@ -9,6 +12,6 @@ export default defineConfig({
   ],
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env['SUPABASE_DB_URL'] ?? '',
+    url: supabaseUrl.replace('[YOUR-PASSWORD]', supabasePassword),
   },
 });
