@@ -19,7 +19,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <ClerkProvider localization={esMX}>
         <body className="h-screen w-screen">
           <QueryClientProvider>
-            <main className="h-screen w-screen">{children}</main>
+            <main className="flex size-full flex-col items-center justify-between px-2 pb-8 pt-4">
+              {children}
+            </main>
           </QueryClientProvider>
         </body>
       </ClerkProvider>

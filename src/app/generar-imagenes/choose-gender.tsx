@@ -14,7 +14,7 @@ export function ChooseGender() {
   >('gender', null);
   const [currentStep, setCurrentStep] = useLocalStorage('step', 1);
   return (
-    <div className="flex size-full flex-col items-center space-y-20 px-3 pb-12 pt-3">
+    <>
       <div className="flex w-full space-x-2">
         <H1 className="border-gradient-step flex size-16 items-center justify-center rounded-lg border-x-4 border-l-secondary border-r-primary bg-no-repeat font-medium text-primary">
           {currentStep}
@@ -32,7 +32,7 @@ export function ChooseGender() {
             setSelectedGender(value as (typeof genderChoices)[number]);
           }
         }}
-        className="flex w-full grow flex-col items-center justify-evenly space-y-4 md:flex-row"
+        className="flex w-full flex-col items-center justify-evenly space-y-4 md:flex-row"
       >
         <ToggleGroupItem
           value="male"
@@ -68,6 +68,6 @@ export function ChooseGender() {
       >
         Siguiente
       </Button>
-    </div>
+    </>
   );
 }

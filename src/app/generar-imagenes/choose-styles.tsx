@@ -20,7 +20,7 @@ export function ChooseStyles() {
           {currentStep}
         </H1>
         <H3 className="border-gradient-main flex grow justify-center rounded-lg border-x-4 border-l-primary border-r-secondary bg-no-repeat p-4 font-medium">
-          Escoge Tu Estilo
+          Escoge Tus Estilos
         </H3>
       </div>
       <ToggleGroup
