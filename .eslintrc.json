@@ -4,8 +4,7 @@
     "@tanstack/query",
     "unused-imports",
     "tailwindcss",
-    "simple-import-sort",
-    "drizzle"
+    "simple-import-sort"
   ],
   "extends": [
     "plugin:tailwindcss/recommended",
@@ -15,8 +14,7 @@
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:prettier/recommended",
-    "plugin:@tanstack/eslint-plugin-query/recommended",
-    "plugin:drizzle/all"
+    "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
