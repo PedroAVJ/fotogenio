@@ -1,17 +1,18 @@
 'use client';
 
+import { Gender } from '@prisma/client';
 import Image from 'next/image';
 import { useLocalStorage } from 'usehooks-ts';
 
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { H1, H3 } from '@/components/ui/typography';
-import type { genderChoices } from '@/server/db/styles';
 
 export function ChooseGender() {
-  const [selectedGender, setSelectedGender] = useLocalStorage<
-    (typeof genderChoices)[number] | null
-  >('gender', null);
+  const [selectedGender, setSelectedGender] = useLocalStorage<Gender | null>(
+    'gender',
+    null,
+  );
   const [currentStep, setCurrentStep] = useLocalStorage('step', 1);
   return (
     <>
@@ -29,13 +30,13 @@ export function ChooseGender() {
           if (value === '') {
             setSelectedGender(null);
           } else {
-            setSelectedGender(value as (typeof genderChoices)[number]);
+            setSelectedGender(value as Gender);
           }
         }}
         className="flex w-full flex-col items-center justify-evenly space-y-4 md:flex-row"
       >
         <ToggleGroupItem
-          value="male"
+          value={Gender.male}
           aria-label="Toggle male"
           className="relative h-56 w-72 md:h-72 md:w-96"
         >
@@ -47,7 +48,7 @@ export function ChooseGender() {
           />
         </ToggleGroupItem>
         <ToggleGroupItem
-          value="female"
+          value={Gender.female}
           aria-label="Toggle female"
           className="relative h-56 w-72 md:h-72 md:w-96"
         >

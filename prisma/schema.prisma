@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  male
+  female
+}
+
+model Style {
+  id            String        @id @default(uuid())
+  coverPhotoUrl String
+  gender        Gender
+  description   String
+  prompts       Prompt[]
+  chosenStyles  ChosenStyle[]
+}
+
+model Prompt {
+  id              String            @id @default(uuid())
+  inpaintPhotoUrl String
+  prompt          String
+  styleId         String
+  style           Style             @relation(fields: [styleId], references: [id])
+  generatedPhotos GeneratedPhoto[]
+}
+
+model ChosenStyle {
+  id      String @id @default(uuid())
+  userId  String
+  styleId String
+  style   Style  @relation(fields: [styleId], references: [id])
+
+  @@unique([userId, styleId])
+}
+
+model UserSettings {
+  id             String @id @default(uuid())
+  userId         String @unique
+  gender         Gender
+  credits        Int
+  pendingPhotos  Int
+}
+
+model UploadedPhoto {
+  id       String @id @default(uuid())
+  userId   String
+  photoUrl String
+}
+
+model GeneratedPhoto {
+  id       String @id @default(uuid())
+  userId   String
+  photoUrl String
+  promptId String
+  prompt   Prompt @relation(fields: [promptId], references: [id])
+
+  @@unique([userId, promptId])
+}

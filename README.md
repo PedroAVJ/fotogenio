@@ -1,4 +1,6 @@
 # photo-ai-clone
 
-- Properly protect hypermedia api, right now we are just protecting non existent routes
-- Design the db schema
+- Finish prisma migration (nuke the db and start fresh, linting and postinstall)
+- Remove unused dependencies
+- Remove unused eslint plugins
+- Remove unused shadcn components

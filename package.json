@@ -5,16 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "typescript:check": "tsc --noEmit",
-    "typescript:fix": "npx ts-autofix",
-    "lint:check": "next lint",
-    "lint:fix": "next lint --fix",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "db:pull:catalogos": "drizzle-kit introspect --config=drizzle.catalogos.config.ts",
-    "db:studio:catalogos": "drizzle-kit studio --config=drizzle.catalogos.config.ts",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "vercel:link": "vercel link",
+    "vercel:env:pull": "vercel env pull"
   },
   "dependencies": {
     "@brianmmdev/clerk-webhooks-handler": "^1.0.5",
@@ -26,6 +22,7 @@
     "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^3.9.0",
     "@libsql/client": "^0.10.0",
+    "@prisma/client": "^5.19.1",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -69,6 +66,7 @@
     "next": "^14.2.4",
     "next-themes": "^0.3.0",
     "postgres": "^3.4.4",
+    "prisma": "^5.19.1",
     "react": "^18.3.1",
     "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
