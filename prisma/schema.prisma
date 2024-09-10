@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Gender {
@@ -22,11 +23,11 @@ model Style {
 }
 
 model Prompt {
-  id              String            @id @default(uuid())
+  id              String           @id @default(uuid())
   inpaintPhotoUrl String
   prompt          String
   styleId         String
-  style           Style             @relation(fields: [styleId], references: [id])
+  style           Style            @relation(fields: [styleId], references: [id])
   generatedPhotos GeneratedPhoto[]
 }
 
@@ -40,11 +41,11 @@ model ChosenStyle {
 }
 
 model UserSettings {
-  id             String @id @default(uuid())
-  userId         String @unique
-  gender         Gender
-  credits        Int
-  pendingPhotos  Int
+  id            String @id @default(uuid())
+  userId        String @unique
+  gender        Gender
+  credits       Int
+  pendingPhotos Int
 }
 
 model UploadedPhoto {
