@@ -1,4 +1,4 @@
-import '@/globals.css';
+import '@/lib/global.css';
 
 import { esMX } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';

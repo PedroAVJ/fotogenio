@@ -4,8 +4,6 @@ import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
 
-import { db } from '@/server/db';
-
 const Prompt = z.object({
   description: z.string(),
 });
