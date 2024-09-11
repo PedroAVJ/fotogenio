@@ -7,11 +7,22 @@ import { useLocalStorage } from 'usehooks-ts';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { H1, H3 } from '@/components/ui/typography';
+import { Style } from '@prisma/client';
 
-export function ChooseStyles() {
-  const [selectedGender, setSelectedGender] = useLocalStorage<Gender | null>(
+export function ChooseStyles({
+  maleStyles,
+  femaleStyles,
+}: {
+  maleStyles: Style[];
+  femaleStyles: Style[];
+}) {
+  const [selectedGender] = useLocalStorage<Gender | null>(
     'gender',
     null,
+  );
+  const [selectedStyles, setSelectedStyles] = useLocalStorage<string[]>(
+    'styles',
+    [],
   );
   const [currentStep, setCurrentStep] = useLocalStorage('step', 1);
   return (
@@ -25,47 +36,54 @@ export function ChooseStyles() {
         </H3>
       </div>
       <ToggleGroup
-        type="single"
-        onValueChange={(value) => {
-          if (value === '') {
-            setSelectedGender(null);
+        type="multiple"
+        onValueChange={(styles) => {
+          if (styles.length === 0) {
+            setSelectedStyles([]);
           } else {
-            setSelectedGender(value as Gender);
+            setSelectedStyles(styles);
           }
         }}
-        className="flex w-full flex-col items-center justify-evenly space-y-4 md:flex-row"
+        className="grid grid-cols-2 gap-4 w-full md:grid-cols-4"
       >
-        <ToggleGroupItem
-          value={Gender.male}
-          aria-label="Toggle male"
-          className="relative h-56 w-72 md:h-72 md:w-96"
-        >
-          <Image
-            src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-male-k92XCfMROnzg0OlAT39xsiJC1xfm4S.png"
-            alt="Male character"
-            fill
-            className="size-full rounded-md object-cover p-0.5"
-          />
-        </ToggleGroupItem>
-        <ToggleGroupItem
-          value={Gender.female}
-          aria-label="Toggle female"
-          className="relative h-56 w-72 md:h-72 md:w-96"
-        >
-          <Image
-            src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/gender-female-tpgFLyrunZe1K0FK4m0JeEO2Y6evh3.png"
-            alt="Female character"
-            fill
-            className="size-full rounded-md object-cover p-0.5"
-          />
-        </ToggleGroupItem>
+        {selectedGender === Gender.male
+          ? maleStyles.map((style) => (
+              <ToggleGroupItem
+                key={style.id}
+                value={style.id}
+                aria-label={`Toggle ${style.description}`}
+                className="relative h-64 w-40 md:h-80 md:w-48"
+              >
+                <Image
+                  src={style.coverPhotoUrl}
+                  alt={style.description}
+                  fill
+                  className="size-full rounded-md object-cover p-0.5"
+                />
+              </ToggleGroupItem>
+            ))
+          : femaleStyles.map((style) => (
+              <ToggleGroupItem
+                key={style.id}
+                value={style.id}
+                aria-label={`Toggle ${style.description}`}
+                className="relative h-64 w-40 md:h-80 md:w-48"
+              >
+                <Image
+                  src={style.coverPhotoUrl}
+                  alt={style.description}
+                  fill
+                  className="size-full rounded-md object-cover p-0.5"
+                />
+              </ToggleGroupItem>
+            ))}
       </ToggleGroup>
       <Button
         variant="custom"
         size="lg"
         className="flex w-36 rounded-md"
-        disabled={!selectedGender}
-        onClick={() => setCurrentStep(2)}
+        disabled={!selectedStyles.length}
+        onClick={() => setCurrentStep(3)}
       >
         Siguiente
       </Button>

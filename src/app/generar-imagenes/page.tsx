@@ -1,14 +1,19 @@
-'use client';
+import { db } from '@/server/db';
 
-import { useLocalStorage } from 'usehooks-ts';
+import { Stepper } from './stepper';
 
-import { ChooseGender } from './choose-gender';
-import { ChooseStyles } from './choose-styles';
-
-export default function Page() {
-  const [currentStep] = useLocalStorage('step', 1);
-  if (currentStep === 1) {
-    return <ChooseGender />;
-  }
-  return <ChooseStyles />;
+export default async function Page() {
+  const maleStyles = await db.style.findMany({
+    where: {
+      gender: 'male',
+    },
+    take: 4,
+  });
+  const femaleStyles = await db.style.findMany({
+    where: {
+      gender: 'female',
+    },
+    take: 4,
+  });
+  return <Stepper maleStyles={maleStyles} femaleStyles={femaleStyles} />;
 }
