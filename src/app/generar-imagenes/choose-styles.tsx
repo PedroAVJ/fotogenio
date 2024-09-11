@@ -24,7 +24,7 @@ export function ChooseStyles({
     'styles',
     [],
   );
-  const [currentStep, setCurrentStep] = useLocalStorage('step', 1);
+  const [currentStep, setCurrentStep] = useLocalStorage('step', 2);
   return (
     <>
       <div className="flex w-full space-x-2">
