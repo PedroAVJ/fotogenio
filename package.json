@@ -74,6 +74,7 @@
     "react-hook-form": "^7.52.1",
     "react-number-format": "^5.4.0",
     "react-phone-number-input": "^3.4.3",
+    "react-use-storage": "^0.5.1",
     "replicate": "^0.32.1",
     "server-only": "^0.0.1",
     "sonner": "^1.5.0",

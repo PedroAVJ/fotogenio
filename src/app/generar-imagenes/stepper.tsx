@@ -1,9 +1,9 @@
 'use client';
 
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage } from 'react-use-storage'
 import { Style } from '@prisma/client';
 
-import { ChooseGender } from './choose-gender';
+import { ChooseGender } from '@/components/choose-gender';
 import { ChooseStyles } from './choose-styles';
 
 export function Stepper({
