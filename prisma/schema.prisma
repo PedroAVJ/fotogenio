@@ -15,17 +15,17 @@ enum Gender {
 
 model Style {
   id            String        @id @default(uuid())
-  coverPhotoUrl String
+  coverPhotoUrl String        @unique
   gender        Gender
-  description   String
+  description   String        @unique
   prompts       Prompt[]
   chosenStyles  ChosenStyle[]
 }
 
 model Prompt {
   id              String           @id @default(uuid())
-  inpaintPhotoUrl String
-  prompt          String
+  inpaintPhotoUrl String           @unique
+  prompt          String           @unique
   styleId         String
   style           Style            @relation(fields: [styleId], references: [id])
   generatedPhotos GeneratedPhoto[]
@@ -51,13 +51,13 @@ model UserSettings {
 model UploadedPhoto {
   id       String @id @default(uuid())
   userId   String
-  photoUrl String
+  photoUrl String @unique
 }
 
 model GeneratedPhoto {
   id       String @id @default(uuid())
   userId   String
-  photoUrl String
+  photoUrl String @unique
   promptId String
   prompt   Prompt @relation(fields: [promptId], references: [id])
 
