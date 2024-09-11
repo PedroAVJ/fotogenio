@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use-storage'
 import { Style } from '@prisma/client';
 
 import { ChooseGender } from '@/components/choose-gender';
-import { ChooseStyles } from './choose-styles';
+import { ChooseStyles } from '@/components/choose-styles';
 
 export function Stepper({
   maleStyles,
