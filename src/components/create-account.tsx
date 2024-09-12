@@ -10,8 +10,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { useLocalStorage } from 'react-use-storage'
-import { Smartphone } from 'lucide-react'
-import { isValidPhoneNumber } from 'libphonenumber-js'
+import { Mail } from 'lucide-react'
 import { Form, FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,11 +20,7 @@ import { useSignUp } from '@clerk/nextjs'
 const workSans = Work_Sans({ subsets: ['latin'] })
 
 const formSchema = z.object({
-  phoneNumber: z.string().refine((value) => {
-    const phoneRegex = /^\+1\d{7}1(?:[0-9][0-9]|9[0-9])$/
-  const isDevPhone = phoneRegex.test(value)
-    return isValidPhoneNumber(value, 'MX') || isDevPhone
-  }, 'Por favor ingresa un número de teléfono válido'),
+  emailAddress: z.string().email('Por favor ingresa una dirección de correo electrónico válida'),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -36,7 +31,7 @@ export function CreateAccountComponent() {
     resolver: zodResolver(formSchema),
     mode: 'onChange',
     defaultValues: {
-      phoneNumber: '',
+      emailAddress: '',
     },
   })
 
@@ -47,21 +42,20 @@ export function CreateAccountComponent() {
     if (!isLoaded) return
     setCodeSent(true)
     await signUp.create({
-      phoneNumber: form.getValues('phoneNumber'),
+      emailAddress: form.getValues('emailAddress'),
     })
-    await signUp.preparePhoneNumberVerification()
+    await signUp.prepareEmailAddressVerification()
   }
 
   async function handleCodeChange(code: string) {
     if (code.length !== 6) return
     if (!isLoaded) return
-    const signInAttempt = await signUp.attemptPhoneNumberVerification({
+    const signInAttempt = await signUp.attemptEmailAddressVerification({
       code,
     })
     await setActive({ session: signInAttempt.createdSessionId })
     setStep(4)
   }
-  // Add this line to get the form state
   const isValid = form.formState.isValid
 
   return (
@@ -86,27 +80,27 @@ export function CreateAccountComponent() {
         </div>
         <div className="flex flex-col items-center justify-center w-full max-w-md space-y-6">
           <div className="w-full h-24 bg-gradient-to-r from-[#8E54E9] to-[#4776E6] rounded-lg flex items-center justify-center">
-            <Smartphone className="w-12 h-12 text-white" />
+            <Mail className="w-12 h-12 text-white" />
           </div>
-          <h4 className="text-xl font-semibold">Verifica tu teléfono celular</h4>
+          <h4 className="text-xl font-semibold">Verifica tu dirección de correo electrónico</h4>
           <p className="text-sm text-center">
-            Por Favor pon el <span className="font-extrabold">código</span> que te mandamos a tu <span className="font-extrabold">SMS</span>.
+            Por favor introduce el <span className="font-extrabold">código</span> que te enviamos a tu <span className="font-extrabold">correo electrónico</span>.
           </p>
           <Form {...form}>
             <FormField
               control={form.control}
-              name="phoneNumber"
+              name="emailAddress"
               render={({ field }) => {
                 return (
                   <>
                     <FormItem className="w-full flex items-center space-x-4 px-3 py-2">
-                      <Smartphone className="h-8 w-8 text-gray-400 flex-shrink-0" />
+                      <Mail className="h-8 w-8 text-gray-400 flex-shrink-0" />
                       <FormControl>
                         <Input
-                          type="tel"
+                          type="email"
                           {...field}
                           className="bg-transparent text-white py-6 px-6 w-full text-lg"
-                          placeholder="Ingresa tu número de teléfono"
+                          placeholder="Ingresa tu dirección de correo electrónico"
                         />
                       </FormControl>
                     </FormItem>
@@ -148,7 +142,7 @@ export function CreateAccountComponent() {
               </InputOTP>
               <div className="w-full">
                 <button onClick={() => handleSendCode()} className="text-[#8E54E9] text-sm text-left">
-                  Pedir otro código?
+                  ¿Pedir otro código?
                 </button>
               </div>
             </>
