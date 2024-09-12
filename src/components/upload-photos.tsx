@@ -5,12 +5,13 @@ import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
 import { CloudUpload, X, Check } from 'lucide-react'
 import Image from 'next/image'
+import { uploadPhotosAction } from '@/app/generar-imagenes/actions'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
 export function UploadPhotosComponent() {
   const [step, setStep] = useState<number>(4)
-  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([])
+  const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([])
   const [error, setError] = useState<string | null>(null)
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,13 +23,18 @@ export function UploadPhotosComponent() {
         setError(`You can only upload up to 20 photos. You've selected ${totalPhotos} photos.`)
         return
       }
-      setUploadedPhotos(prevPhotos => [...prevPhotos, ...newPhotos])
+      setUploadedPhotos(Array.from(files))
       setError(null)
     }
   }
 
-  const handleNextStep = () => {
-    setStep(5)
+  async function handleNextStep() {
+    const formData = new FormData();
+    uploadedPhotos.forEach((photo) => {
+      formData.append('photos', photo);
+    });
+    await uploadPhotosAction(formData);
+    setStep(5);
   }
 
   const getUploadCountColor = (count: number) => {
