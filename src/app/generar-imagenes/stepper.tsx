@@ -6,6 +6,7 @@ import { Style } from '@prisma/client';
 import { ChooseGender } from '@/components/choose-gender';
 import { ChooseStyles } from '@/components/choose-styles';
 import { CreateAccountComponent } from '@/components/create-account';
+import { UploadPhotosComponent } from '@/components/upload-photos';
 
 export function Stepper({
   maleStyles,
@@ -21,6 +22,8 @@ export function Stepper({
     return <ChooseStyles maleStyles={maleStyles} femaleStyles={femaleStyles} />;
   } else if (currentStep === 3) {
     return <CreateAccountComponent />;
+  } else if (currentStep === 4) {
+    return <UploadPhotosComponent />
   }
   return 'Success';
 }

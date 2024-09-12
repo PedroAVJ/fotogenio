@@ -1,0 +1,125 @@
+'use client'
+
+import React, { useState } from 'react'
+import { Work_Sans } from 'next/font/google'
+import { Button } from "@/components/ui/button"
+import { CloudUpload, X, Check } from 'lucide-react'
+import Image from 'next/image'
+
+const workSans = Work_Sans({ subsets: ['latin'] })
+
+export function UploadPhotosComponent() {
+  const [step, setStep] = useState<number>(4)
+  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([])
+  const [error, setError] = useState<string | null>(null)
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (files) {
+      const newPhotos = Array.from(files).map(file => URL.createObjectURL(file))
+      const totalPhotos = uploadedPhotos.length + newPhotos.length
+      if (totalPhotos > 20) {
+        setError(`You can only upload up to 20 photos. You've selected ${totalPhotos} photos.`)
+        return
+      }
+      setUploadedPhotos(prevPhotos => [...prevPhotos, ...newPhotos])
+      setError(null)
+    }
+  }
+
+  const handleNextStep = () => {
+    setStep(5)
+  }
+
+  const getUploadCountColor = (count: number) => {
+    if (count === 0) return 'text-white'
+    if (count < 10) return 'text-red-500'
+    if (count <= 20) return 'text-green-500'
+    return 'text-yellow-500' // This case should not occur now
+  }
+
+  const placeholderImages = [
+    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-QTSU0OCBEghGuESy0sc9HnScS08Dq4.png", status: 'rejected' },
+    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wTrLSZQpwybyB8BPmROpU4XhREVsGF.png", status: 'rejected' },
+    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-b6SBw2k13WjOastTp1BYAIjyAFGyIp.png", status: 'rejected' },
+    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-yggqGpcbigSYdq0o2dxcormJsaTrNY.png", status: 'accepted' },
+    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Q2p7wOGYwuCZ4dK2O9ubINsJOfoPbo.png", status: 'accepted' },
+    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-C1Lj3ycrLHJuhk2qEwmwaLWjAxklUX.png", status: 'accepted' },
+  ]
+
+  return (
+    <main className={`
+      ${workSans.className}
+      h-dvh w-dvw
+      flex size-full flex-col items-center justify-between
+      px-2 pb-8 pt-4
+      text-[#F5F5F5]
+      bg-gradient-to-b from-[#534E4E] to-[#171717]
+    `}>
+      <div className="flex w-full space-x-2">
+        <h1 
+          className="scroll-m-20 text-4xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-medium text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
+        >
+          {step}
+        </h1>
+        <h3 className="scroll-m-20 text-2xl tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 font-medium [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
+          Sube Tus Fotos
+        </h3>
+      </div>
+      <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-md md:max-w-4xl px-4">
+        <div className="text-sm mb-4 w-full text-left">
+          <p>1. Sube Fotos Variadas.</p>
+          <p>2. Sube entre 10 y 20 fotos.</p>
+        </div>
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 gap-y-8 w-full">
+          {placeholderImages.map((img, index) => (
+            <div key={index} className="relative aspect-square overflow-visible">
+              <Image
+                src={img.src}
+                alt={`Placeholder ${index + 1}`}
+                fill
+                className="rounded-md object-cover"
+              />
+              {img.status === 'rejected' ? (
+                <div className="absolute -top-4 -right-4 w-8 h-8 flex items-center justify-center rounded-full border border-red-500">
+                  <X className="text-red-500" size={20} />
+                </div>
+              ) : (
+                <div className="absolute -top-4 -right-4 w-8 h-8 flex items-center justify-center rounded-full border border-green-500">
+                  <Check className="text-green-500" size={20} />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <label htmlFor="photo-upload" className="cursor-pointer w-full md:w-1/3">
+          <div className="flex flex-col items-center justify-center w-full h-32 md:h-24 border-2 border-dashed border-white rounded-lg hover:bg-white/10 transition-colors">
+            <CloudUpload size={24} className="text-white transform scale-x-[-1] mb-2" />
+            <p className={`text-sm ${getUploadCountColor(uploadedPhotos.length)}`}>
+              {uploadedPhotos.length > 0
+                ? `${uploadedPhotos.length} photo${uploadedPhotos.length !== 1 ? 's' : ''} uploaded`
+                : 'No photos uploaded yet'}
+            </p>
+          </div>
+          <input
+            id="photo-upload"
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleFileUpload}
+          />
+        </label>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+      </div>
+      <Button
+        size="lg"
+        className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={uploadedPhotos.length < 10 || uploadedPhotos.length > 20}
+        onClick={handleNextStep}
+      >
+        Siguiente
+      </Button>
+    </main>
+  )
+}
