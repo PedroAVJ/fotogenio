@@ -16,6 +16,7 @@ import { Form, FormField, FormItem, FormControl, FormMessage } from '@/component
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'
+import { useSignUp } from '@clerk/nextjs'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -28,6 +29,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>
 
 export function CreateAccountComponent() {
+  const { signUp, setActive, isLoaded } = useSignUp()
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
@@ -36,13 +38,26 @@ export function CreateAccountComponent() {
     },
   })
 
-  const [step, setStep] = useLocalStorage<number>('step', 4)
+  const [step, setStep] = useLocalStorage<number>('step', 3)
   const [codeSent, setCodeSent] = useState(false)
 
-  function handleSendCode() {
+  async function handleSendCode() {
+    if (!isLoaded) return
     setCodeSent(true)
+    await signUp.create({
+      phoneNumber: form.getValues('phoneNumber'),
+    })
+    await signUp.preparePhoneNumberVerification()
   }
 
+  async function handleCodeChange(code: string) {
+    if (!isLoaded) return
+    const signInAttempt = await signUp.attemptPhoneNumberVerification({
+      code,
+    })
+    await setActive({ session: signInAttempt.createdSessionId })
+    setStep(4)
+  }
   // Add this line to get the form state
   const isValid = form.formState.isValid
 
@@ -110,6 +125,7 @@ export function CreateAccountComponent() {
         ) : (
           <>
             <InputOTP
+              onChange={handleCodeChange}
               maxLength={6}
             >
               <InputOTPGroup className="gap-3">
