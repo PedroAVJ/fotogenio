@@ -58,7 +58,7 @@
     "i18next": "^23.11.5",
     "input-otp": "^1.2.4",
     "jiti": "^1.21.6",
-    "libphonenumber-js": "^1.11.7",
+    "libphonenumber-js": "^1.11.8",
     "lodash": "^4.17.21",
     "lucide-react": "^0.427.0",
     "md5": "^2.3.0",

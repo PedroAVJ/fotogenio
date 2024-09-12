@@ -5,6 +5,7 @@ import { Style } from '@prisma/client';
 
 import { ChooseGender } from '@/components/choose-gender';
 import { ChooseStyles } from '@/components/choose-styles';
+import { CreateAccountComponent } from '@/components/create-account';
 
 export function Stepper({
   maleStyles,
@@ -16,6 +17,10 @@ export function Stepper({
   const [currentStep] = useLocalStorage('step', 1);
   if (currentStep === 1) {
     return <ChooseGender />;
+  } else if (currentStep === 2) {
+    return <ChooseStyles maleStyles={maleStyles} femaleStyles={femaleStyles} />;
+  } else if (currentStep === 3) {
+    return <CreateAccountComponent />;
   }
-  return <ChooseStyles maleStyles={maleStyles} femaleStyles={femaleStyles} />;
+  return 'Success';
 }
