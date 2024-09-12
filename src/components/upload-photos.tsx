@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { CloudUpload, X, Check } from 'lucide-react'
 import Image from 'next/image'
 import { uploadPhotosAction } from '@/app/generar-imagenes/actions'
+import { useMutation } from '@tanstack/react-query'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -28,13 +29,22 @@ export function UploadPhotosComponent() {
     }
   }
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: uploadPhotosAction,
+    onSuccess: () => {
+      setStep(5);
+    },
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
+
   async function handleNextStep() {
     const formData = new FormData();
     uploadedPhotos.forEach((photo) => {
       formData.append('photos', photo);
     });
-    await uploadPhotosAction(formData);
-    setStep(5);
+    mutate(formData);
   }
 
   const getUploadCountColor = (count: number) => {
@@ -121,10 +131,10 @@ export function UploadPhotosComponent() {
       <Button
         size="lg"
         className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={uploadedPhotos.length < 10 || uploadedPhotos.length > 20}
+        disabled={uploadedPhotos.length < 10 || uploadedPhotos.length > 20 || isPending}
         onClick={handleNextStep}
       >
-        Siguiente
+        {isPending ? 'Cargando...' : 'Siguiente'}
       </Button>
     </main>
   )
