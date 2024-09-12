@@ -22,7 +22,9 @@ const workSans = Work_Sans({ subsets: ['latin'] })
 
 const formSchema = z.object({
   phoneNumber: z.string().refine((value) => {
-    return isValidPhoneNumber(value, 'MX')
+    const phoneRegex = /^\+1\d{7}1(?:[0-9][0-9]|9[0-9])$/
+  const isDevPhone = phoneRegex.test(value)
+    return isValidPhoneNumber(value, 'MX') || isDevPhone
   }, 'Por favor ingresa un número de teléfono válido'),
 })
 
@@ -51,6 +53,7 @@ export function CreateAccountComponent() {
   }
 
   async function handleCodeChange(code: string) {
+    if (code.length !== 6) return
     if (!isLoaded) return
     const signInAttempt = await signUp.attemptPhoneNumberVerification({
       code,
