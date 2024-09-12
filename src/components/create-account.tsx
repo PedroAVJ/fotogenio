@@ -11,46 +11,40 @@ import {
 } from "@/components/ui/input-otp"
 import { useLocalStorage } from 'react-use-storage'
 import { Smartphone } from 'lucide-react'
-import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js'
+import { isValidPhoneNumber } from 'libphonenumber-js'
+import { Form, FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from 'zod'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
+const formSchema = z.object({
+  phoneNumber: z.string().refine((value) => {
+    return isValidPhoneNumber(value, 'MX')
+  }, 'Por favor ingresa un número de teléfono válido'),
+})
+
+type FormData = z.infer<typeof formSchema>
+
 export function CreateAccountComponent() {
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+    defaultValues: {
+      phoneNumber: '',
+    },
+  })
+
   const [step, setStep] = useLocalStorage<number>('step', 4)
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [verificationCode, setVerificationCode] = useState('')
   const [codeSent, setCodeSent] = useState(false)
-  const [isPhoneValid, setIsPhoneValid] = useState(true)
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setPhoneNumber(value)
-    setIsPhoneValid(true)
+  function handleSendCode() {
+    setCodeSent(true)
   }
 
-  const handleVerificationCodeChange = (value: string) => {
-    setVerificationCode(value)
-  }
-
-  const handleSendCode = () => {
-    try {
-      const parsedNumber = parsePhoneNumber(phoneNumber, 'MX')
-      if (isValidPhoneNumber(parsedNumber.number)) {
-        // Here you would implement the logic to send the code
-        setCodeSent(true)
-        setIsPhoneValid(true)
-      } else {
-        setIsPhoneValid(false)
-      }
-    } catch (error) {
-      setIsPhoneValid(false)
-    }
-  }
-
-  const handleResendCode = () => {
-    // Here you would implement the logic to resend the code
-    console.log("Resending code...")
-  }
+  // Add this line to get the form state
+  const isValid = form.formState.isValid
 
   return (
     <main className={`
@@ -79,28 +73,43 @@ export function CreateAccountComponent() {
         <p className="text-sm text-center">
           Por Favor pon el <span className="font-extrabold">código</span> que te mandamos a tu <span className="font-extrabold">SMS</span>.
         </p>
-        <div className="w-full flex items-center space-x-4 px-3 py-2">
-          <Smartphone className="h-8 w-8 text-gray-400 flex-shrink-0" />
-          <Input
-            type="tel"
-            value={phoneNumber}
-            onChange={handlePhoneChange}
-            className="bg-transparent text-white py-6 px-6 w-full text-lg"
-            placeholder="Ingresa tu número de teléfono"
+        <Form {...form}>
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => {
+              return (
+                <>
+                  <FormItem className="w-full flex items-center space-x-4 px-3 py-2">
+                    <Smartphone className="h-8 w-8 text-gray-400 flex-shrink-0" />
+                    <FormControl>
+                      <Input
+                        type="tel"
+                        {...field}
+                        className="bg-transparent text-white py-6 px-6 w-full text-lg"
+                        placeholder="Ingresa tu número de teléfono"
+                      />
+                    </FormControl>
+                  </FormItem>
+                  <FormMessage />
+                </>
+              )
+            }}
           />
-        </div>
+        </Form>
         {!codeSent ? (
           <Button
-            onClick={handleSendCode}
-            className="w-full bg-gradient-to-r from-[#4776E6] to-[#8E54E9] text-white py-2 rounded-lg hover:opacity-90 transition-opacity"
+            onClick={() => form.handleSubmit(handleSendCode)()}
+            className={`w-full bg-gradient-to-r from-[#4776E6] to-[#8E54E9] text-white py-2 rounded-lg transition-opacity ${
+              isValid ? 'hover:opacity-90' : 'opacity-50 cursor-not-allowed'
+            }`}
+            disabled={!isValid}
           >
             Enviar código
           </Button>
         ) : (
           <>
             <InputOTP
-              value={verificationCode}
-              onChange={handleVerificationCodeChange}
               maxLength={6}
             >
               <InputOTPGroup className="gap-3">
@@ -118,7 +127,7 @@ export function CreateAccountComponent() {
               </InputOTPGroup>
             </InputOTP>
             <div className="w-full">
-              <button onClick={handleResendCode} className="text-[#8E54E9] text-sm text-left">
+              <button onClick={() => handleSendCode()} className="text-[#8E54E9] text-sm text-left">
                 Pedir otro código?
               </button>
             </div>

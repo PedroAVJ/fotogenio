@@ -1,8 +1,10 @@
 import { db } from '@/server/db';
+import { translateZodErrors } from '@/lib/es-zod';
 
 import { Stepper } from './stepper';
 
 export default async function Page() {
+  await translateZodErrors();
   const maleStyles = await db.style.findMany({
     where: {
       gender: 'male',
