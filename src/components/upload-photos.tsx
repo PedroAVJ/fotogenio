@@ -7,11 +7,12 @@ import { CloudUpload, X, Check } from 'lucide-react'
 import Image from 'next/image'
 import { uploadPhotosAction } from '@/app/generar-imagenes/actions'
 import { useMutation } from '@tanstack/react-query'
+import { useLocalStorage } from 'react-use-storage'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
 export function UploadPhotosComponent() {
-  const [step, setStep] = useState<number>(4)
+  const [step, setStep] = useLocalStorage<number>('step', 4)
   const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([])
   const [error, setError] = useState<string | null>(null)
 
