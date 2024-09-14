@@ -5,6 +5,8 @@ import { zfd } from "zod-form-data";
 import { db } from "@/server/db";
 import { put } from "@vercel/blob";
 import { auth } from '@clerk/nextjs/server';
+import { z } from "zod";
+import { Gender } from "@prisma/client";
 
 const uploadPhotos = zfd.formData({
   photos: zfd.repeatableOfType(zfd.file())
@@ -34,4 +36,29 @@ export const uploadPhotosAction = api
         })
       }
     ))
+  });
+
+const addUserSettings = z.object({
+  gender: z.nativeEnum(Gender),
+  styleIds: z.array(z.string()),
+});
+
+export const addUserSettingsAction = api
+  .input(addUserSettings)
+  .mutation(async ({ input: { gender, styleIds } }) => {
+    const { userId } = auth().protect();
+    await db.userSettings.create({
+      data: {
+        userId,
+        gender,
+        credits: 25,
+        pendingPhotos: 0,
+      },
+    });
+    await db.chosenStyle.createMany({
+      data: styleIds.map((styleId) => ({
+        userId,
+        styleId,
+      })),
+    });
   });

@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'
 import { useSignUp } from '@clerk/nextjs'
+import { addUserSettingsAction } from '@/app/generar-imagenes/actions'
+import { Gender } from '@prisma/client'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -36,6 +38,8 @@ export function CreateAccountComponent() {
   })
 
   const [step, setStep] = useLocalStorage<number>('step', 3)
+  const [gender] = useLocalStorage<Gender>('gender')
+  const [styleIds] = useLocalStorage<string[]>('selectedStyles')
   const [codeSent, setCodeSent] = useState(false)
 
   async function handleSendCode() {
@@ -54,6 +58,10 @@ export function CreateAccountComponent() {
       code,
     })
     await setActive({ session: signInAttempt.createdSessionId })
+    await addUserSettingsAction({
+      gender,
+      styleIds,
+    })
     setStep(4)
   }
   const isValid = form.formState.isValid
