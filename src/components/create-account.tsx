@@ -78,11 +78,11 @@ export function CreateAccountComponent() {
       <div className="flex flex-col items-center justify-center w-full max-w-md space-y-6">
         <div className="flex w-full space-x-2">
           <h1 
-            className="scroll-m-20 text-4xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-medium text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
+            className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
           >
             {step}
           </h1>
-          <h3 className="scroll-m-20 text-2xl tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 font-medium [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
+          <h3 className="scroll-m-20 text-xl tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 font-semibold [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
             Crea tu cuenta
           </h3>
         </div>
@@ -91,7 +91,7 @@ export function CreateAccountComponent() {
             <Mail className="w-12 h-12 text-white" />
           </div>
           <h4 className="text-xl font-semibold">Verifica tu dirección de correo electrónico</h4>
-          <p className="text-sm text-center">
+          <p className="text-xs text-left">
             Por favor introduce el <span className="font-extrabold">código</span> que te enviamos a tu <span className="font-extrabold">correo electrónico</span>.
           </p>
           <Form {...form}>
@@ -159,7 +159,7 @@ export function CreateAccountComponent() {
       </div>
       <Button
         size="lg"
-        className="w-full max-w-md rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] opacity-50 cursor-not-allowed"
+        className="w-full font-semibold max-w-md rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] opacity-50 cursor-not-allowed"
         disabled
       >
         Siguiente
