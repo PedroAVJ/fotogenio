@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { env } from '@/server/env';
+import { auth } from '@clerk/nextjs/server';
 
 // Initialize Stripe
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -9,6 +10,8 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 
 export async function POST(request: Request) {
   try {
+    const { userId } = auth().protect();
+
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -21,6 +24,9 @@ export async function POST(request: Request) {
       mode: 'payment',
       success_url: `${request.headers.get('origin')}/wait`,
       cancel_url: `${request.headers.get('origin')}/generar-imagenes`,
+      metadata: {
+        userId: userId, // Add Clerk user ID to metadata
+      },
     });
 
     // Redirect to the Stripe session URL

@@ -11,6 +11,7 @@ export const env = createEnv({
     REPLICATE_API_TOKEN: z.string(),
     CLERK_SECRET_KEY: z.string(),
     STRIPE_SECRET_KEY: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
