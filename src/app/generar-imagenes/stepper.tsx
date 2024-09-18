@@ -7,6 +7,7 @@ import { ChooseGender } from '@/components/choose-gender';
 import { ChooseStyles } from '@/components/choose-styles';
 import { CreateAccountComponent } from '@/components/create-account';
 import { UploadPhotosComponent } from '@/components/upload-photos';
+import { ChoosePaymentComponent } from '@/components/choose-payment';
 
 export function Stepper({
   maleStyles,
@@ -25,5 +26,5 @@ export function Stepper({
   } else if (currentStep === 4) {
     return <UploadPhotosComponent />
   }
-  return 'Success';
+  return <ChoosePaymentComponent />;
 }

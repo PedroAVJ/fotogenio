@@ -19,8 +19,8 @@ export async function POST(request: Request) {
         },
       ],
       mode: 'payment',
-      success_url: `${request.headers.get('origin')}/wait/`,
-      cancel_url: `${request.headers.get('origin')}`,
+      success_url: `${request.headers.get('origin')}/wait`,
+      cancel_url: `${request.headers.get('origin')}/generar-imagenes`,
     });
 
     // Redirect to the Stripe session URL

@@ -6,18 +6,11 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import { useLocalStorage } from 'react-use-storage'
 import { ArrowDown } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
 export function ChoosePaymentComponent() {
-  const [step, setStep] = useLocalStorage<number>('step', 5)
-  const router = useRouter()
-
-  const handleCheckout = () => {
-    router.push('/api/create-checkout-session')
-  }
-
+  const [step] = useLocalStorage<number>('step', 5)
   return (
     <main className={`
       ${workSans.className}
@@ -51,13 +44,15 @@ export function ChoosePaymentComponent() {
           <span className="text-purple-500">$99 pesos</span> por <span className="text-purple-500">25 fotos</span>
         </p>
       </div>
-      <Button
-        size="lg"
-        className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 font-semibold"
-        onClick={handleCheckout}
-      >
-        ¡Crear Fotos!
-      </Button>
+      <form action="/api/create-checkout-session" method="POST">
+        <Button
+          size="lg"
+          type="submit"
+          className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 font-semibold"
+        >
+          ¡Crear Fotos!
+        </Button>
+      </form>
     </main>
   )
 }
