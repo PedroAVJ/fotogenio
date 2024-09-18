@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "stripe:webhook": "stripe listen --forward-to localhost:3000/api/webhooks",
+    "vercel:link": "vercel link",
+    "vercel:pull": "vercel pull .env --environment=development",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
