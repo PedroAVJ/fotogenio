@@ -10,6 +10,8 @@ export const env = createEnv({
     BLOB_READ_WRITE_TOKEN: z.string(),
     REPLICATE_API_TOKEN: z.string(),
     CLERK_SECRET_KEY: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_PUBLISHABLE_KEY: z.string(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
