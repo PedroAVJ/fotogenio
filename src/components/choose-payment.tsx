@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import { useLocalStorage } from 'react-use-storage'
 import { ArrowDown } from 'lucide-react'
+import { createCheckoutSessionAction } from '@/app/generar-imagenes/actions'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -44,15 +45,13 @@ export function ChoosePaymentComponent() {
           <span className="text-purple-500">$99 pesos</span> por <span className="text-purple-500">25 fotos</span>
         </p>
       </div>
-      <form action="/api/create-checkout-session" method="POST">
-        <Button
-          size="lg"
-          type="submit"
-          className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 font-semibold"
-        >
-          ¡Crear Fotos!
-        </Button>
-      </form>
+      <Button
+        size="lg"
+        onClick={() => createCheckoutSessionAction()}
+        className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 font-semibold"
+      >
+        ¡Crear Fotos!
+      </Button>
     </main>
   )
 }
