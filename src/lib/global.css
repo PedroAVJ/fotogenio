@@ -41,8 +41,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/* https://github.com/shadcn-ui/ui/issues/546#issuecomment-1633100711 */
-.rdp-vhidden {
-  @apply hidden;
-}
