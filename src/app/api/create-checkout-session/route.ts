@@ -33,6 +33,7 @@ export async function POST(request: Request) {
     // Redirect to the Stripe session URL
     return NextResponse.redirect(session.url!, 303);
   } catch (err: any) {
+    console.log(err);
     return NextResponse.json({ error: err.message }, { status: err.statusCode || 500 });
   }
 }
