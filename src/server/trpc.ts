@@ -9,13 +9,17 @@ const trpc = initTRPC.create();
 export const api = trpc.procedure
   .experimental_caller(experimental_nextAppDirCaller({}))
   .use(async (opts) => {
-    const { userId } = auth().protect();
-    const { success } = await ratelimit.limit(userId);
+    const session = auth().protect();
+    const { success } = await ratelimit.limit(session.userId);
     if (!success) {
       throw new TRPCError({
         code: 'TOO_MANY_REQUESTS',
         message: 'Rate limited',
       });
     }
-    return opts.next();
+    return opts.next({
+      ctx: {
+        session,
+      },
+    });
   });
