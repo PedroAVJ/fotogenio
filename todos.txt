@@ -1,0 +1,6 @@
+Change the style choices so that, instead of just the firsy 4 styles, we show a curated selection of styles for each gender.
+Create the landing page in v0
+Create the waiting page in v0
+Create the home page in v0
+Create the New Style page in v0
+Change to stripe account that Santiago uses
