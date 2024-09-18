@@ -3,6 +3,8 @@ import { translateZodErrors } from '@/lib/es-zod';
 
 import { Stepper } from './stepper';
 
+export const revalidate = 10_000_000;
+
 export default async function Page() {
   await translateZodErrors();
   const maleStyles = await db.style.findMany({

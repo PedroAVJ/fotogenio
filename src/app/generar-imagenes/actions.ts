@@ -4,7 +4,6 @@ import { api } from "@/server/trpc";
 import { zfd } from "zod-form-data";
 import { db } from "@/server/db";
 import { put } from "@vercel/blob";
-import { auth } from '@clerk/nextjs/server';
 import { z } from "zod";
 import { Gender } from "@prisma/client";
 
@@ -14,28 +13,19 @@ const uploadPhotos = zfd.formData({
 
 export const uploadPhotosAction = api
   .input(uploadPhotos)
-  .mutation(async ({ input: { photos } }) => {
-    const folder = 'user/uploads'
-    const uploadedPhotos = await Promise.all(photos.map(
-      async (photo) => {
-        const path = `${folder}/${photo.name}`
-        const blob = await put(path, photo, {
-          access: "public",
-        })
-        return blob;
-      }
-    ))
-    const { userId } = auth().protect();
-    await Promise.all(uploadedPhotos.map(
-      async (photo) => {
-        await db.uploadedPhoto.create({
-          data: {
-            photoUrl: photo.url,
-            userId,
-          }
-        })
-      }
-    ))
+  .mutation(async ({ input: { photos }, ctx: { session: { userId } } }) => {
+    await Promise.all(photos.map(async (photo) => {
+      const path = `user/uploads/${photo.name}`
+      const blob = await put(path, photo, {
+        access: "public",
+      })
+      await db.uploadedPhoto.create({
+        data: {
+          photoUrl: blob.url,
+          userId,
+        }
+      })
+    }))
   });
 
 const addUserSettings = z.object({
@@ -45,8 +35,7 @@ const addUserSettings = z.object({
 
 export const addUserSettingsAction = api
   .input(addUserSettings)
-  .mutation(async ({ input: { gender, styleIds } }) => {
-    const { userId } = auth().protect();
+  .mutation(async ({ input: { gender, styleIds }, ctx: { session: { userId } } }) => {
     await db.userSettings.create({
       data: {
         userId,
