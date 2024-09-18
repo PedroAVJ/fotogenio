@@ -3,4 +3,4 @@ Create the landing page in v0
 Create the waiting page in v0
 Create the home page in v0
 Create the New Style page in v0
-Change to stripe account that Santiago uses
+Make a production deployment
