@@ -37,6 +37,7 @@ export async function POST(request: Request) {
 
 async function handlePaymentSucceeded(session: Stripe.Checkout.Session) {
   const userId = session.metadata?.['userId'];
+  const operation = session.metadata?.['operation'] ?? '';
 
   if (!userId) {
     console.error('User ID not found in session metadata');
@@ -47,5 +48,5 @@ async function handlePaymentSucceeded(session: Stripe.Checkout.Session) {
   // - Updating user's subscription status in your database
   // - Granting access to paid features
   // - Sending a confirmation email
-  console.log(`Payment succeeded for user ${userId}`);
+  console.log(`Payment succeeded for user ${userId} with operation ${operation}`);
 }

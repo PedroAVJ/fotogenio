@@ -26,6 +26,7 @@ export async function POST(request: Request) {
       cancel_url: `${request.headers.get('origin')}/generar-imagenes`,
       metadata: {
         userId: userId, // Add Clerk user ID to metadata
+        operation: 'create-model',
       },
     });
 
