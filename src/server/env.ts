@@ -13,6 +13,7 @@ export const env = createEnv({
     CLERK_SECRET_KEY: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
+    WEBHOOK_MOCK_URL: z.string().url(),
     VERCEL_PROJECT_PRODUCTION_URL: z.string().url().optional(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])

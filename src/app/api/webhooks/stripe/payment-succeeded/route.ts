@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   const paymentIntent = event.data.object;
   const userId = paymentIntent.metadata['userId'] ?? '';
   const operation = paymentIntent.metadata['operation'] ?? '';
-  await db.userSettings.update({
+  /* await db.userSettings.update({
     where: { userId },
     data: { credits: { increment: 25 } },
   });
@@ -41,20 +41,21 @@ export async function POST(request: NextRequest) {
         hardware: 'gpu-t4'
       }
     )
-    const photoUrls = await db.uploadedPhoto.findMany({
-      where: {
-        userId,
-      },
-      select: {
-        photoUrl: true,
-      },
+    const zippedPhotosUrl = await db.userSettings.findUnique({
+      where: { userId },
+      select: { zippedPhotosUrl: true },
     });
-    const training = await replicate.trainings.create(
+    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : `http://${env.WEBHOOK_MOCK_URL}`;
+    await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",
       "885394e6a31c6f349dd4f9e6e7ffbabd8d9840ab2559ab78aed6b2451ab2cfef",
       {
         destination: `${model.owner}/${model.name}`,
+        webhook: `${baseUrl}/api/webhooks/replicate/fine-tune-completed`,
+        webhook_events_filter: ['completed'],
         input: {
           steps: 1000,
           lora_rank: 16,
@@ -62,7 +63,7 @@ export async function POST(request: NextRequest) {
           batch_size: 1,
           resolution: "512,768,1024",
           autocaption: true,
-          input_images: "https://",
+          input_images: zippedPhotosUrl,
           trigger_word: "TOK",
           learning_rate: 0.0004,
           wandb_project: "flux_train_replicate",
@@ -73,6 +74,6 @@ export async function POST(request: NextRequest) {
         }
       }
     );
-  }
+  } */
   return NextResponse.json({ received: true });
 }

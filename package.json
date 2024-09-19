@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "stripe:webhook": "stripe listen --load-from-webhooks-api --forward-to localhost:3000",
+    "webhook:mock": "npx ngrok http 3000",
+    "webhook:stripe": "stripe listen --load-from-webhooks-api --forward-to localhost:3000",
     "vercel:link": "vercel link",
     "vercel:pull": "vercel env pull .env --environment=development",
     "db:push": "prisma db push",
@@ -62,6 +63,7 @@
     "i18next": "^23.11.5",
     "input-otp": "^1.2.4",
     "jiti": "^1.21.6",
+    "jszip": "^3.10.1",
     "libphonenumber-js": "^1.11.8",
     "lodash": "^4.17.21",
     "lucide-react": "^0.427.0",

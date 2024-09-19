@@ -10,6 +10,7 @@ import Stripe from 'stripe';
 import { env } from '@/server/env';
 import { TRPCError } from '@trpc/server';
 import { redirect } from 'next/navigation';
+import JSZip from 'jszip';
 
 const uploadPhotos = zfd.formData({
   photos: zfd.repeatableOfType(zfd.file())
@@ -18,8 +19,13 @@ const uploadPhotos = zfd.formData({
 export const uploadPhotosAction = api
   .input(uploadPhotos)
   .mutation(async ({ input: { photos }, ctx: { session: { userId } } }) => {
+    const zip = new JSZip();
+    photos.forEach((photo) => {
+      zip.file(photo.name, photo);
+    });
+    const zipContent = await zip.generateAsync({ type: 'blob' });
     await Promise.all(photos.map(async (photo) => {
-      const path = `user/uploads/${photo.name}`
+      const path = `user/uploads/${userId}/${photo.name}`
       const blob = await put(path, photo, {
         access: "public",
       })
@@ -30,6 +36,14 @@ export const uploadPhotosAction = api
         }
       })
     }))
+    const zipPath = `user/uploads/${userId}/all_photos.zip`;
+    const zipBlob = await put(zipPath, zipContent, {
+      access: "public",
+    });
+    await db.userSettings.update({
+      where: { userId },
+      data: { zippedPhotosUrl: zipBlob.url },
+    });
   });
 
 const addUserSettings = z.object({
@@ -46,6 +60,7 @@ export const addUserSettingsAction = api
         gender,
         credits: 25,
         pendingPhotos: 0,
+        hasModel: false,
       },
     });
     await db.chosenStyle.createMany({
