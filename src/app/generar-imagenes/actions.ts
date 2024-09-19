@@ -9,6 +9,7 @@ import { Gender } from "@prisma/client";
 import Stripe from 'stripe';
 import { env } from '@/server/env';
 import { TRPCError } from '@trpc/server';
+import { redirect } from 'next/navigation';
 
 const uploadPhotos = zfd.formData({
   photos: zfd.repeatableOfType(zfd.file())
@@ -85,5 +86,5 @@ export const createCheckoutSessionAction = api
         message: 'Failed to create checkout session',
       });
     }
-    return url;
+    redirect(url);
   });

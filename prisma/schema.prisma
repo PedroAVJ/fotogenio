@@ -46,6 +46,7 @@ model UserSettings {
   gender        Gender
   credits       Int
   pendingPhotos Int
+  hasModel      Boolean
 }
 
 model UploadedPhoto {
