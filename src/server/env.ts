@@ -9,6 +9,7 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_TOKEN: z.string(),
     BLOB_READ_WRITE_TOKEN: z.string(),
     REPLICATE_API_TOKEN: z.string(),
+    REPLICATE_OWNER: z.string(),
     CLERK_SECRET_KEY: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),

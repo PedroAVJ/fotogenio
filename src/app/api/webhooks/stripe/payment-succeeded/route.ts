@@ -32,7 +32,47 @@ export async function POST(request: NextRequest) {
     data: { credits: { increment: 25 } },
   });
   if (operation === 'create-model') {
-    
+    const modelName = `flux-${userId}`;
+    const model = await replicate.models.create(
+      env.REPLICATE_OWNER,
+      modelName,
+      {
+        visibility: 'private',
+        hardware: 'gpu-t4'
+      }
+    )
+    const photoUrls = await db.uploadedPhoto.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        photoUrl: true,
+      },
+    });
+    const training = await replicate.trainings.create(
+      "ostris",
+      "flux-dev-lora-trainer",
+      "885394e6a31c6f349dd4f9e6e7ffbabd8d9840ab2559ab78aed6b2451ab2cfef",
+      {
+        destination: `${model.owner}/${model.name}`,
+        input: {
+          steps: 1000,
+          lora_rank: 16,
+          optimizer: "adamw8bit",
+          batch_size: 1,
+          resolution: "512,768,1024",
+          autocaption: true,
+          input_images: "https://",
+          trigger_word: "TOK",
+          learning_rate: 0.0004,
+          wandb_project: "flux_train_replicate",
+          wandb_save_interval: 100,
+          caption_dropout_rate: 0.05,
+          cache_latents_to_disk: false,
+          wandb_sample_interval: 100
+        }
+      }
+    );
   }
   return NextResponse.json({ received: true });
 }
