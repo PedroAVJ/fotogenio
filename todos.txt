@@ -4,3 +4,6 @@ Create the waiting page in v0
 Create the home page in v0
 Create the New Style page in v0
 Make a production deployment
+Use the sizes props on images to improve performance
+Add favicon
+Add a robots.txt
