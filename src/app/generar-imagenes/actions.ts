@@ -7,7 +7,7 @@ import { put } from "@vercel/blob";
 import { z } from "zod";
 import { Gender } from "@prisma/client";
 import Stripe from 'stripe';
-import { env } from '@/server/env';
+import { env } from '@/lib/env';
 import { TRPCError } from '@trpc/server';
 import { redirect } from 'next/navigation';
 import JSZip from 'jszip';

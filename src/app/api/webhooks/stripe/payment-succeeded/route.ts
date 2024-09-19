@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import Stripe from 'stripe';
-import { env } from '@/server/env';
+import { env } from '@/lib/env';
 import { headers } from 'next/headers';
 import { ratelimit } from '@/server/ratelimit';
 import { db } from '@/server/db';
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   const paymentIntent = event.data.object;
   const userId = paymentIntent.metadata['userId'] ?? '';
   const operation = paymentIntent.metadata['operation'] ?? '';
-  /* await db.userSettings.update({
+  await db.userSettings.update({
     where: { userId },
     data: { credits: { increment: 25 } },
   });
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     });
     const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : `http://${env.WEBHOOK_MOCK_URL}`;
+      : env.WEBHOOK_MOCK_URL;
     await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",
@@ -74,6 +74,6 @@ export async function POST(request: NextRequest) {
         }
       }
     );
-  } */
+  }
   return NextResponse.json({ received: true });
 }
