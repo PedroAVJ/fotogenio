@@ -14,9 +14,11 @@ const webhookSecret = env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(request: NextRequest) {
   const ipAddress = request.ip ?? 'Unknown IP';
-  const { success } = await ratelimit.limit(ipAddress);
-  if (!success) {
-    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+  if (env.NODE_ENV === 'production') {
+    const { success } = await ratelimit.limit(ipAddress);
+    if (!success) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
   }
   const body = await request.text();
   const signature = headers().get('stripe-signature') ?? '';

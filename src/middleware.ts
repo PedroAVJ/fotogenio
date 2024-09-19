@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import { env } from '@/lib/env';
 
 import { ratelimit } from './server/ratelimit';
 
@@ -8,6 +9,9 @@ const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
     const { userId } = auth().protect();
+    if (env.NODE_ENV === 'development') {
+      return NextResponse.next();
+    }
     const { success } = await ratelimit.limit(userId);
     if (!success) return new Response('Too many requests', { status: 429 });
   }
