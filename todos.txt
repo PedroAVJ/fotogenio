@@ -6,7 +6,6 @@ Landing page:
 - Add the images for how a user photo got generated
 - Fix the image fan
 - Use proper arrow icons
-Create the waiting page in v0
 Create the home page in v0
 Create the New Style page in v0
 Make a production deployment

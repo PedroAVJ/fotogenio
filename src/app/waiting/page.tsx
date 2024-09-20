@@ -1,3 +1,5 @@
+import { WaitingComponent } from "@/components/waiting";
+
 export default function Page() {
-  return <div>Wait</div>;
+  return <WaitingComponent />;
 }
