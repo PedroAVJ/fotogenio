@@ -7,5 +7,4 @@ Make a production deployment
 Use the sizes props on images to improve performance
 Add favicon
 Add a robots.txt
-Add fine tune completed webhook
 Add sentry
