@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "webhook:mock": "ngrok http 3000",
+    "webhook:mock": "dotenv -- bash -c 'ngrok config add-authtoken \"$NGROK_AUTH_TOKEN\" && ngrok http 3000'",
     "webhook:stripe": "stripe listen --load-from-webhooks-api --forward-to localhost:3000",
     "vercel:pull": "vercel env pull .env --environment=development",
     "db:push": "prisma db push",
