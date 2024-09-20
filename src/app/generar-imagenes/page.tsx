@@ -8,16 +8,18 @@ import { Stepper } from './stepper';
 export default async function Page() {
   const { userId } = auth().protect();
   await translateZodErrors();
-  const hasModel = await db.userSettings.findFirst({
+  const { modelStatus } = await db.userSettings.findFirstOrThrow({
     where: {
       userId,
     },
     select: {
-      hasModel: true,
+      modelStatus: true,
     },
   });
-  if (!hasModel) {
+  if (modelStatus === 'ready') {
     redirect('/home');
+  } else if (modelStatus === 'training') {
+    redirect('/wait')
   }
   const maleStyles = await db.style.findMany({
     where: {

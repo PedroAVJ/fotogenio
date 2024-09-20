@@ -7,7 +7,10 @@ import { replicate } from '@/server/replicate';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
-  const signature = headers().get('stripe-signature') ?? '';
+  const signature = headers().get('stripe-signature');
+  if (!signature) {
+    return NextResponse.json({ error: 'Missing stripe-signature' }, { status: 400 });
+  }
   const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-06-20',
   });
@@ -16,14 +19,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid event type' }, { status: 400 });
   }
   const paymentIntent = event.data.object;
-  const userId = paymentIntent.metadata['userId'] ?? '';
-  const operation = paymentIntent.metadata['operation'] ?? '';
-  const userSettings = await db.userSettings.findUnique({
-    where: { userId },
-  });
-  if (userSettings?.modelStatus !== 'pending') {
-    return NextResponse.json({ error: 'Model already ready' }, { status: 400 });
+  const userId = paymentIntent.metadata['userId'];
+  if (!userId) {
+    return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
   }
+  const operation = paymentIntent.metadata['operation'];
+  if (!operation) {
+    return NextResponse.json({ error: 'Missing operation' }, { status: 400 });
+  }
+  const { zippedPhotosUrl } = await db.userSettings.findUniqueOrThrow({
+    where: { userId, modelStatus: 'pending' },
+    select: { zippedPhotosUrl: true },
+  });
   if (operation === 'create-model') {
     const modelName = `flux-${userId}`;
     const model = await replicate.models.create(
@@ -52,7 +59,7 @@ export async function POST(request: NextRequest) {
           batch_size: 1,
           resolution: "512,768,1024",
           autocaption: true,
-          input_images: userSettings.zippedPhotosUrl,
+          input_images: zippedPhotosUrl,
           trigger_word: "TOK",
           learning_rate: 0.0004,
           wandb_project: "flux_train_replicate",
