@@ -60,7 +60,7 @@ export const addUserSettingsAction = api
         gender,
         credits: 25,
         pendingPhotos: 0,
-        hasModel: false,
+        modelStatus: 'pending',
       },
     });
     await db.chosenStyle.createMany({

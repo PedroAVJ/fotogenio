@@ -40,13 +40,19 @@ model ChosenStyle {
   @@unique([userId, styleId])
 }
 
+enum ModelStatus {
+  pending
+  training
+  ready
+}
+
 model UserSettings {
   id              String  @id @default(uuid())
   userId          String  @unique
   gender          Gender
   credits         Int
   pendingPhotos   Int
-  hasModel        Boolean
+  modelStatus     ModelStatus
   zippedPhotosUrl String? @unique
 }
 
