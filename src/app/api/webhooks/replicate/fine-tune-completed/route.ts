@@ -18,25 +18,32 @@ export async function POST(request: NextRequest) {
     where: { userId },
     data: { modelStatus: 'ready' },
   });
-  const choosenStyles = await db.chosenStyle.findMany({
-    where: { userId },
+  const prompts = await db.prompt.findMany({
     include: {
-      style: true,
+      style: {
+        include: {
+          chosenStyles: {
+            where: {
+              userId,
+            },
+          },
+        },
+      },
     },
   });
   const modelName = `flux-${userId}`;
   const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
     : env.WEBHOOK_MOCK_URL;
-  await Promise.all(choosenStyles.map(async (choosenStyle) => {
+  await Promise.all(prompts.map(async (prompt) => {
     await replicate.run(
       `${env.REPLICATE_OWNER}/${modelName}`,
       {
-        webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&styleId=${choosenStyle.styleId}`,
+        webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`,
         webhook_events_filter: ['completed'],
         input: {
-          prompt: choosenStyle.style.description,
-          image: choosenStyle.style.coverPhotoUrl,
+          prompt: prompt.prompt,
+          image: prompt.inpaintPhotoUrl,
           model: "dev",
           lora_scale: 1,
           num_outputs: 1,
