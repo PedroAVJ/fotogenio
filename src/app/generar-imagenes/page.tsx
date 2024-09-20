@@ -19,7 +19,7 @@ export default async function Page() {
   if (modelStatus === 'ready') {
     redirect('/home');
   } else if (modelStatus === 'training') {
-    redirect('/wait')
+    redirect('/waiting')
   }
   const maleStyles = await db.style.findMany({
     where: {

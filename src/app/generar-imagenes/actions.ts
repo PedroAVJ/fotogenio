@@ -101,7 +101,7 @@ export const createCheckoutSessionAction = api
         },
       ],
       mode: 'payment',
-      success_url: `${baseUrl}/wait`,
+      success_url: `${baseUrl}/waiting`,
       cancel_url: `${baseUrl}/generar-imagenes`,
       metadata: {
         userId: userId,
