@@ -14,8 +14,12 @@ export async function POST(request: NextRequest) {
   if (!userId) {
     return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
   }
-  await db.userSettings.findUniqueOrThrow({
-    where: { userId, modelStatus: 'training' },
+  const promptId = searchParams.get('promptId');
+  if (!promptId) {
+    return NextResponse.json({ error: 'Missing promptId' }, { status: 400 });
+  }
+  await db.generatedPhoto.findUniqueOrThrow({
+    where: { userId_promptId: { userId, promptId } },
   });
   await db.userSettings.update({
     where: { userId },
