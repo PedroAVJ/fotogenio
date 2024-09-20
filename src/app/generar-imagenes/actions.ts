@@ -54,20 +54,33 @@ const addUserSettings = z.object({
 export const addUserSettingsAction = api
   .input(addUserSettings)
   .mutation(async ({ input: { gender, styleIds }, ctx: { session: { userId } } }) => {
-    await db.userSettings.create({
-      data: {
-        userId,
-        gender,
-        credits: 25,
-        pendingPhotos: 0,
-        modelStatus: 'pending',
-      },
-    });
     await db.chosenStyle.createMany({
       data: styleIds.map((styleId) => ({
         userId,
         styleId,
       })),
+    });
+    const prompts = await db.prompt.findMany({
+      include: {
+        style: {
+          include: {
+            chosenStyles: {
+              where: {
+                userId,
+              },
+            },
+          },
+        },
+      },
+    });
+    await db.userSettings.create({
+      data: {
+        userId,
+        gender,
+        credits: 25,
+        pendingPhotos: prompts.length,
+        modelStatus: 'pending',
+      },
     });
   });
 
