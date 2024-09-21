@@ -16,6 +16,7 @@ export default async function Home() {
   const photoUrls = await db.generatedPhoto.findMany({
     where: { userId },
     select: { photoUrl: true },
+    orderBy: { createdAt: "desc" },
   });
   return <HomeComponent numberOfPhotos={credits} imageUrls={photoUrls.map((photo) => photo.photoUrl)} />;
 }

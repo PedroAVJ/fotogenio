@@ -47,13 +47,13 @@ enum ModelStatus {
 }
 
 model UserSettings {
-  id              String  @id @default(uuid())
-  userId          String  @unique
+  id              String      @id @default(uuid())
+  userId          String      @unique
   gender          Gender
   credits         Int
   pendingPhotos   Int
   modelStatus     ModelStatus
-  zippedPhotosUrl String? @unique
+  zippedPhotosUrl String?     @unique
 }
 
 model UploadedPhoto {
@@ -63,11 +63,12 @@ model UploadedPhoto {
 }
 
 model GeneratedPhoto {
-  id       String @id @default(uuid())
-  userId   String
-  photoUrl String @unique
-  promptId String
-  prompt   Prompt @relation(fields: [promptId], references: [id])
+  id        String   @id @default(uuid())
+  userId    String
+  photoUrl  String   @unique
+  promptId  String
+  prompt    Prompt   @relation(fields: [promptId], references: [id])
+  createdAt DateTime @default(now())
 
   @@unique([userId, promptId])
 }
