@@ -1,11 +1,4 @@
-Change the style choices so that, instead of just the firsy 4 styles, we show a curated selection of styles for each gender.
-Landing page:
-- Change the first row of images in the landing page to match the mockup
-- Change the gradient so it stops being sticky to the viewport
-- Should the review be real, kept as is?
-- Add the images for how a user photo got generated
-- Fix the image fan
-- Use proper arrow icons
+Change the style choices so that, instead of just the first 4 styles, we show a curated selection of styles for each gender.
 Create the home page in v0
 Create the New Style page in v0
 Make a production deployment

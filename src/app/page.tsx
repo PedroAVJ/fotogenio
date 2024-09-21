@@ -1,12 +1,5 @@
-import Link from 'next/link';
-import { UserButton } from '@clerk/nextjs';
+import { FotoGenioLandingComponent } from "@/components/foto-genio-landing";
 
 export default function Page() {
-  return (
-    <>
-      <h1>Este sera el landing page en un futuro</h1>
-      <UserButton />
-      <Link href="/generar-imagenes">Generar imagenes</Link>
-    </>
-  );
+  return <FotoGenioLandingComponent />;
 }
