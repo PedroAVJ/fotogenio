@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
   });
   interface Body {
     output: string[];
+    id: string;
   }
   const body = await request.json() as Body;
   const photoUrl = body.output[0];
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
   }
   const imageBuffer = await imageResponse.arrayBuffer();
   const folder = `user/generations/${userId}`;
-  const blob = await put(`${folder}/${photoUrl}`, imageBuffer, { access: 'public' });
+  const blob = await put(`${folder}/${body.id}`, imageBuffer, { access: 'public' });
   await db.generatedPhoto.update({
     where: { userId_promptId: { userId, promptId } },
     data: { photoUrl: blob.url },

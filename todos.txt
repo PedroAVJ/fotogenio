@@ -1,8 +1,0 @@
-Change the style choices so that, instead of just the first 4 styles, we show a curated selection of styles for each gender.
-Create the New Style page in v0
-Make a production deployment
-Use the sizes props on images to improve performance
-Add favicon
-Add a robots.txt
-Add sentry
-Verify that the UI works on mobile FIRST

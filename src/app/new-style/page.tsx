@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 
 export default async function NewStyle() {
   const { userId } = auth().protect();
-  const { credits, pendingPhotos } = await db.userSettings.findUniqueOrThrow({
+  const { credits, pendingPhotos, gender } = await db.userSettings.findUniqueOrThrow({
     where: { userId },
-    select: { credits: true, pendingPhotos: true },
+    select: { credits: true, pendingPhotos: true, gender: true },
   });
   if (pendingPhotos > 0) {
     redirect("/waiting-for-photos");
@@ -25,6 +25,7 @@ export default async function NewStyle() {
       id: {
         notIn: chosenStyles.map((chosenStyle) => chosenStyle.styleId),
       },
+      gender,
     },
     include: {
       prompts: {

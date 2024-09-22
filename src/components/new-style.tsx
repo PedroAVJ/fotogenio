@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Image from 'next/image'
 import { Camera, Plus } from 'lucide-react'
-import { createCheckoutSessionAction } from '@/app/new-style/actions'
+import { createCheckoutSessionAction, createImages } from '@/app/new-style/actions'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -47,7 +47,7 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
   }, [selectedStyles, styles, initialCredits])
 
   async function handleNextStep() {
-    // TODO: Implement next step logic
+    await createImages({ styleIds: selectedStyles })
   }
 
   async function handleAddCredits() {

@@ -3,20 +3,19 @@
 import { api } from "@/server/trpc";
 import { db } from "@/server/db";
 import { z } from "zod";
-import { Gender } from "@prisma/client";
 import Stripe from 'stripe';
 import { env } from '@/lib/env';
 import { TRPCError } from '@trpc/server';
 import { redirect } from 'next/navigation';
+import { replicate } from "@/server/replicate";
 
 const addUserSettings = z.object({
-  gender: z.nativeEnum(Gender),
   styleIds: z.array(z.string()),
 });
 
-export const addUserSettingsAction = api
+export const createImages = api
   .input(addUserSettings)
-  .mutation(async ({ input: { gender, styleIds }, ctx: { session: { userId } } }) => {
+  .mutation(async ({ input: { styleIds }, ctx: { session: { userId } } }) => {
     await db.chosenStyle.createMany({
       data: styleIds.map((styleId) => ({
         userId,
@@ -36,15 +35,42 @@ export const addUserSettingsAction = api
         },
       },
     });
-    await db.userSettings.create({
+    const filteredPrompts = prompts.filter(prompt => 
+      styleIds.includes(prompt.style.id)
+    );
+    await db.userSettings.update({
+      where: { userId },
       data: {
-        userId,
-        gender,
-        credits: 25,
-        pendingPhotos: prompts.length,
-        modelStatus: 'pending',
+        pendingPhotos: filteredPrompts.length,
       },
     });
+    const modelName = `flux-${userId}`;
+    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : env.WEBHOOK_MOCK_URL;
+    await Promise.all(filteredPrompts.map(async (prompt) => {
+      await replicate.run(
+        `${env.REPLICATE_OWNER}/${modelName}`,
+        {
+          webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`,
+          webhook_events_filter: ['completed'],
+          input: {
+            prompt: prompt.prompt,
+            image: prompt.inpaintPhotoUrl,
+            model: "dev",
+            lora_scale: 1,
+            num_outputs: 1,
+            aspect_ratio: "1:1",
+            output_format: "webp",
+            guidance_scale: 3.5,
+            output_quality: 90,
+            prompt_strength: 0.8,
+            extra_lora_scale: 1,
+            num_inference_steps: 28
+          }
+        }
+      );
+    }))
   });
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
