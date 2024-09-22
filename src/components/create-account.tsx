@@ -10,7 +10,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { useLocalStorage } from 'react-use-storage'
-import { Mail } from 'lucide-react'
+import { Mail, Loader2 } from 'lucide-react'
 import { Form, FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,6 +18,7 @@ import { z } from 'zod'
 import { useSignUp } from '@clerk/nextjs'
 import { addUserSettingsAction } from '@/app/generar-imagenes/actions'
 import { Gender } from '@prisma/client'
+import { useMutation } from '@tanstack/react-query'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -51,6 +52,16 @@ export function CreateAccountComponent() {
     await signUp.prepareEmailAddressVerification()
   }
 
+  const mutation = useMutation({
+    mutationFn: () => addUserSettingsAction({
+      gender,
+      styleIds,
+    }),
+    onSuccess: () => {
+      setStep(4)
+    }
+  });
+
   async function handleCodeChange(code: string) {
     if (code.length !== 6) return
     if (!isLoaded) return
@@ -58,11 +69,7 @@ export function CreateAccountComponent() {
       code,
     })
     await setActive({ session: signInAttempt.createdSessionId })
-    await addUserSettingsAction({
-      gender,
-      styleIds,
-    })
-    setStep(4)
+    mutation.mutate()
   }
   const isValid = form.formState.isValid
 
@@ -162,7 +169,14 @@ export function CreateAccountComponent() {
         className="w-full font-semibold max-w-md rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] opacity-50 cursor-not-allowed"
         disabled
       >
-        Siguiente
+        {mutation.isPending ? (
+          <div className="flex items-center justify-center">
+            <Loader2 className="mr-2 size-4 animate-spin" />
+            <span>Procesando...</span>
+          </div>
+        ) : (
+          "Siguiente"
+        )}
       </Button>
     </main>
   )
