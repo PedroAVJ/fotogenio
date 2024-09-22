@@ -1,6 +1,14 @@
-Change the style choices so that, instead of just the first 4 styles, we show a curated selection of styles for each gender.
-Verify that the UI works on mobile FIRST
-Use the sizes props on images to improve performance
+## Future Enhancements
+
+- 🎨 Curate style selections for each gender
+  - [ ] Review and select appropriate styles for male users
+  - [ ] Review and select appropriate styles for female users
+  - [ ] Implement logic to display gender-specific style choices
+
+- 🖼️ Optimize image loading performance
+  - [ ] Add `sizes` prop to `Image` components
+  - [ ] Determine appropriate size values for different viewports
+  - [ ] Test image loading speed improvements
 
 ## Production Deployment Roadmap
 
