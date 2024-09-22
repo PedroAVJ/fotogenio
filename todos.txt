@@ -5,3 +5,4 @@ Use the sizes props on images to improve performance
 Add favicon
 Add a robots.txt
 Add sentry
+Change clerk auth protection

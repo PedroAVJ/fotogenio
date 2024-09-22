@@ -2,12 +2,16 @@
 
 import React, { useEffect, useState } from 'react'
 import { Work_Sans } from 'next/font/google'
-import { Button } from "@/components/ui/button"
 import Lottie from 'lottie-react'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
-export function WaitingComponent() {
+// 1. Define the prop types
+interface WaitingComponentProps {
+  aproxTime: 5 | 30
+}
+
+export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
   const [animationData, setAnimationData] = useState(null)
 
   useEffect(() => {
@@ -16,11 +20,6 @@ export function WaitingComponent() {
       .then(data => setAnimationData(data))
       .catch(error => console.error('Error fetching animation data:', error))
   }, [])
-
-  const handleClose = () => {
-    // Handle closing the component
-    console.log("Closing the component")
-  }
 
   return (
     <main className={`
@@ -54,18 +53,8 @@ export function WaitingComponent() {
           <div className="flex justify-center items-center h-32">Cargando animación...</div>
         )}
         <p className="font-semibold text-[12px] leading-[20px] tracking-[0.02em] mt-4">
-          Tiempo aprox. 30 min
+          Tiempo aprox. {aproxTime} min
         </p>
-      </div>
-
-      <div className="mt-4 flex justify-center">
-        <Button
-          size="lg"
-          className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-[14px] tracking-[0.02em]"
-          onClick={handleClose}
-        >
-          Cerrar
-        </Button>
       </div>
     </main>
   )

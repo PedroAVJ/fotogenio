@@ -5,18 +5,21 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
   const { userId } = auth().protect();
-  const { modelStatus } = await db.userSettings.findFirstOrThrow({
+  const { modelStatus, pendingPhotos } = await db.userSettings.findFirstOrThrow({
     where: {
       userId,
     },
     select: {
       modelStatus: true,
+      pendingPhotos: true,
     },
   });
   if (modelStatus === 'ready') {
     redirect('/home');
   } else if (modelStatus === 'pending') {
     redirect('/generar-imagenes');
+  } else if (pendingPhotos === 0) {
+    redirect('/home');
   }
-  return <WaitingComponent aproxTime={30} />;
+  return <WaitingComponent aproxTime={5} />;
 }
