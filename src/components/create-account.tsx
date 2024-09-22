@@ -38,7 +38,7 @@ export function CreateAccountComponent() {
   })
 
   const [step, setStep] = useLocalStorage<number>('step', 3)
-  const [gender] = useLocalStorage<Gender>('gender')
+  const [gender] = useLocalStorage<Gender>('selectedGender')
   const [styleIds] = useLocalStorage<string[]>('selectedStyles')
   const [codeSent, setCodeSent] = useState(false)
 
