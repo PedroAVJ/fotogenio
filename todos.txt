@@ -5,6 +5,4 @@ Use the sizes props on images to improve performance
 Add favicon
 Add a robots.txt
 Add sentry
-Change clerk auth protection
-Verify redirect logic for all pages
 Verify that the UI works on mobile FIRST

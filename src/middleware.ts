@@ -1,21 +1,11 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
-import { env } from '@/lib/env';
 
-import { ratelimit } from './server/ratelimit';
+const isPublicRoute = createRouteMatcher(['/', '/generar-imagenes']);
 
-const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
-
-export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) {
-    const { userId } = auth().protect();
-    if (env.NODE_ENV === 'development') {
-      return NextResponse.next();
-    }
-    const { success } = await ratelimit.limit(userId);
-    if (!success) return new Response('Too many requests', { status: 429 });
+export default clerkMiddleware((auth, req) => {
+  if (!isPublicRoute(req)) {
+    auth().protect();
   }
-  return NextResponse.next();
 });
 
 export const config = {
