@@ -7,6 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Image from 'next/image'
 import { Camera, Plus } from 'lucide-react'
+import { createCheckoutSessionAction } from '@/app/new-style/actions'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -45,10 +46,8 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
     setRemainingCredits(Math.max(0, initialCredits - usedCredits))
   }, [selectedStyles, styles, initialCredits])
 
-  const handleNextStep = () => {
-    // Handle next step logic here
-    console.log("Selected styles:", selectedStyles)
-    console.log("Remaining credits:", remainingCredits)
+  async function handleNextStep() {
+    await createCheckoutSessionAction()
   }
 
   return (
