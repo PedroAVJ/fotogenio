@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
+    CREDITS_PRICE_ID: z.string(),
     DATABASE_URL: z.string().url(),
     DIRECT_URL: z.string().url(),
     BLOB_READ_WRITE_TOKEN: z.string(),

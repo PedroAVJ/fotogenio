@@ -47,6 +47,10 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
   }, [selectedStyles, styles, initialCredits])
 
   async function handleNextStep() {
+    // TODO: Implement next step logic
+  }
+
+  async function handleAddCredits() {
     await createCheckoutSessionAction()
   }
 
@@ -68,7 +72,11 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
             <h3 className="scroll-m-20 text-[20px] leading-[102%] tracking-[0px] font-semibold justify-center items-center rounded-lg border-x-4 border-l-white border-r-[#4776E6] bg-no-repeat px-6 py-4 [background-image:linear-gradient(90deg,white,#4776E6),linear-gradient(90deg,white,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%] inline-flex space-x-4">
               <Camera />
               <span className="bg-gradient-to-b from-[#4776E6] to-white bg-clip-text text-transparent text-[24px] leading-[102%] tracking-[0px] font-semibold">x {remainingCredits}</span>
-              <div className="rounded-full border-[2px] border-white p-0.5 flex items-center justify-center w-5 h-5">
+              <div 
+                className="rounded-full border-[2px] border-white p-0.5 flex items-center justify-center w-5 h-5 cursor-pointer"
+                onClick={handleAddCredits}
+                onTouchStart={handleAddCredits}
+              >
                 <Plus size={12} strokeWidth={3} />
               </div>
             </h3>

@@ -74,6 +74,11 @@ export async function POST(request: NextRequest) {
       where: { userId },
       data: { credits: { increment: 25 }, modelStatus: 'training' },
     });
+  } else if (operation === 'buy-credits') {
+    await db.userSettings.update({
+      where: { userId },
+      data: { credits: { increment: 25 } },
+    });
   }
   return NextResponse.json({ received: true });
 }

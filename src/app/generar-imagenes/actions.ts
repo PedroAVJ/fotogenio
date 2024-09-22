@@ -96,7 +96,7 @@ export const createCheckoutSessionAction = api
     const { url } = await stripe.checkout.sessions.create({
       line_items: [
         {
-          price: 'price_1Q0ChaBgMxTXAhq1FZsBAkwX',
+          price: env.CREDITS_PRICE_ID,
           quantity: 1,
         },
       ],
