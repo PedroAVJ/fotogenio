@@ -13,10 +13,8 @@ export default async function Page() {
       modelStatus: true,
     },
   });
-  if (modelStatus === 'ready') {
+  if (modelStatus !== 'training') {
     redirect('/home');
-  } else if (modelStatus === 'pending') {
-    redirect('/generar-imagenes');
   }
   return <WaitingComponent aproxTime={30} />;
 }
