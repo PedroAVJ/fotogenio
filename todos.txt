@@ -6,3 +6,4 @@ Add favicon
 Add a robots.txt
 Add sentry
 Change clerk auth protection
+Verify redirect logic for all pages
