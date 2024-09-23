@@ -24,6 +24,15 @@ export async function POST(request: NextRequest) {
     data: { modelStatus: 'ready' },
   });
   const prompts = await db.prompt.findMany({
+    where: {
+      style: {
+        chosenStyles: {
+          some: {
+            userId,
+          },
+        },
+      },
+    },
     include: {
       style: {
         include: {
