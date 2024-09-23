@@ -4,6 +4,7 @@ import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
 import { validateWebhook } from "replicate";
 import { getBaseUrl } from '@/lib/utils';
+import md5 from 'md5';
 
 export async function POST(request: NextRequest) {
   const isValid = validateWebhook(request, env.REPLICATE_WEBHOOK_SECRET);
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
       },
     },
   });
-  const modelName = `flux-${userId}`;
+  const modelName = `flux-${md5(userId)}`;
   const baseUrl = getBaseUrl();
   await Promise.all(prompts.map(async (prompt) => {
     await replicate.run(
