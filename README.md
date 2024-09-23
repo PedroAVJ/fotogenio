@@ -10,6 +10,12 @@
   - [ ] Determine appropriate size values for different viewports
   - [ ] Test image loading speed improvements
 
+- 💧 Add watermarks to generated images
+  - [ ] Design watermark
+  - [ ] Implement logic to apply watermark to generated images
+  - [ ] Ensure watermark does not obscure important parts of the image
+  - [ ] Test watermark visibility and placement
+
 ## Production Deployment Roadmap
 
 1. 🚀 Make a production deployment
@@ -26,9 +32,3 @@
    - [ ] Create robots.txt file
    - [ ] Define crawling rules
    - [ ] Place in correct directory
-
-4. 🐛 Integrate Sentry
-   - [ ] Set up Sentry account
-   - [ ] Install Sentry SDK
-   - [ ] Configure error tracking
-   - [ ] Test error reporting
