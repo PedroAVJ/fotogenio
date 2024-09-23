@@ -3,7 +3,6 @@
 - 🎨 Curate style selections for each gender
   - [ ] Review and select appropriate styles for male users
   - [ ] Review and select appropriate styles for female users
-  - [ ] Implement logic to display gender-specific style choices
 
 - 🖼️ Optimize image loading performance
   - [ ] Add `sizes` prop to `Image` components
@@ -18,22 +17,17 @@
 
 ## Production Deployment Roadmap
 
-1. 🚀 Make a production deployment
-   - [ ] Set up production environment
-   - [ ] Configure deployment pipeline
-   - [ ] Perform final testing
-
-2. 🎨 Add favicon
+1. 🎨 Add favicon
    - [ ] Design favicon
    - [ ] Generate favicon files for different devices
    - [ ] Implement favicon in HTML
 
-3. 🤖 Add robots.txt
+2. 🤖 Add robots.txt
    - [ ] Create robots.txt file
    - [ ] Define crawling rules
    - [ ] Place in correct directory
 
-4. 💳 Set up Stripe production instance
+3. 💳 Set up Stripe production instance
    - [ ] Create a Stripe production account
    - [ ] Update environment variables with production API keys
    - [ ] Test payment flow in production environment
