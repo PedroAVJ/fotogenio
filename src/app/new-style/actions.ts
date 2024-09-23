@@ -8,6 +8,7 @@ import { env } from '@/lib/env';
 import { TRPCError } from '@trpc/server';
 import { redirect } from 'next/navigation';
 import { replicate } from "@/server/replicate";
+import { getBaseUrl } from "@/lib/utils";
 
 const addUserSettings = z.object({
   styleIds: z.array(z.string()),
@@ -45,13 +46,7 @@ export const createImages = api
       },
     });
     const modelName = `flux-${userId}`;
-    const baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
-    if (!baseUrl) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Missing baseUrl',
-      });
-    }
+    const baseUrl = getBaseUrl();
     await Promise.all(filteredPrompts.map(async (prompt) => {
       await replicate.run(
         `pedroavj/${modelName}`,
@@ -83,9 +78,7 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 
 export const createCheckoutSessionAction = api
   .mutation(async ({ ctx: { session: { userId } } }) => {
-    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : `http://localhost:3000`;
+    const baseUrl = getBaseUrl();
     const { url } = await stripe.checkout.sessions.create({
       line_items: [
         {

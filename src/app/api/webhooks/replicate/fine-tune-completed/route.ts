@@ -3,6 +3,7 @@ import { env } from '@/lib/env';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
 import { validateWebhook } from "replicate";
+import { getBaseUrl } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
   const isValid = validateWebhook(request, env.REPLICATE_WEBHOOK_SECRET);
@@ -35,10 +36,7 @@ export async function POST(request: NextRequest) {
     },
   });
   const modelName = `flux-${userId}`;
-  const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
-  if (!baseUrl) {
-    return NextResponse.json({ error: 'Missing baseUrl' }, { status: 400 });
-  }
+  const baseUrl = getBaseUrl();
   await Promise.all(prompts.map(async (prompt) => {
     await replicate.run(
       `pedroavj/${modelName}`,

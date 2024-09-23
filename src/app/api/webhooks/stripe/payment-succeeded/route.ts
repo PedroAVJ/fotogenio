@@ -4,6 +4,7 @@ import { env } from '@/lib/env';
 import { headers } from 'next/headers';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
+import { getBaseUrl } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -41,10 +42,7 @@ export async function POST(request: NextRequest) {
         hardware: 'gpu-t4'
       }
     )
-    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
-    if (!baseUrl) {
-      return NextResponse.json({ error: 'Missing baseUrl' }, { status: 400 });
-    }
+    const baseUrl = getBaseUrl();
     await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",

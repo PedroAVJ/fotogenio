@@ -11,6 +11,7 @@ import { env } from '@/lib/env';
 import { TRPCError } from '@trpc/server';
 import { redirect } from 'next/navigation';
 import JSZip from 'jszip';
+import { getBaseUrl } from "@/lib/utils";
 
 const uploadPhotos = zfd.formData({
   photos: zfd.repeatableOfType(zfd.file())
@@ -100,13 +101,7 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 
 export const createCheckoutSessionAction = api
   .mutation(async ({ ctx: { session: { userId } } }) => {
-    const baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
-    if (!baseUrl) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to create checkout session',
-      });
-    }
+    const baseUrl = getBaseUrl();
     const { url } = await stripe.checkout.sessions.create({
       line_items: [
         {
