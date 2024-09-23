@@ -1,4 +1,4 @@
-import { HomeComponent } from "@/components/home";
+import { HomeComponent } from "./home";
 import { db } from "@/server/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

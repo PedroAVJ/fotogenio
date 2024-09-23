@@ -3,11 +3,11 @@
 import { useLocalStorage } from 'react-use-storage'
 import { Style } from '@prisma/client';
 
-import { ChooseGender } from '@/components/choose-gender';
-import { ChooseStyles } from '@/components/choose-styles';
-import { CreateAccountComponent } from '@/components/create-account';
-import { UploadPhotosComponent } from '@/components/upload-photos';
-import { ChoosePaymentComponent } from '@/components/choose-payment';
+import { ChooseGender } from './choose-gender';
+import { ChooseStyles } from './choose-styles';
+import { CreateAccountComponent } from './create-account';
+import { UploadPhotosComponent } from './upload-photos';
+import { ChoosePaymentComponent } from './choose-payment';
 
 export function Stepper({
   maleStyles,

@@ -1,4 +1,4 @@
-import { NewStyleComponent } from "@/components/new-style";
+import { NewStyleComponent } from "./new-style";
 import { db } from "@/server/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
