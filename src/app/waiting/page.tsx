@@ -13,7 +13,7 @@ export default async function Page() {
       modelStatus: true,
     },
   });
-  if (modelStatus !== 'training') {
+  if (modelStatus === 'ready') {
     redirect('/home');
   }
   return <WaitingComponent aproxTime={30} />;

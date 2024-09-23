@@ -29,11 +29,15 @@ export async function POST(request: NextRequest) {
   if (!operation) {
     return NextResponse.json({ error: 'Missing operation' }, { status: 400 });
   }
-  const { zippedPhotosUrl } = await db.userSettings.findUniqueOrThrow({
-    where: { userId, modelStatus: 'pending' },
-    select: { zippedPhotosUrl: true },
-  });
   if (operation === 'create-model') {
+    const { zippedPhotosUrl } = await db.userSettings.findUniqueOrThrow({
+      where: { userId, modelStatus: 'pending' },
+      select: { zippedPhotosUrl: true },
+    });
+    await db.userSettings.update({
+      where: { userId },
+      data: { credits: { increment: 25 }, modelStatus: 'training' },
+    });
     const modelName = `flux-${md5(userId)}`;
     const model = await replicate.models.create(
       'pedroavj',
@@ -70,10 +74,6 @@ export async function POST(request: NextRequest) {
         }
       }
     );
-    await db.userSettings.update({
-      where: { userId },
-      data: { credits: { increment: 25 }, modelStatus: 'training' },
-    });
   } else if (operation === 'buy-credits') {
     await db.userSettings.update({
       where: { userId },
