@@ -89,9 +89,11 @@ export const createCheckoutSessionAction = api
       mode: 'payment',
       success_url: `${baseUrl}/new-style`,
       cancel_url: `${baseUrl}/new-style`,
-      metadata: {
-        userId: userId,
-        operation: 'buy-credits',
+      payment_intent_data: {
+        metadata: {
+          userId,
+          operation: 'buy-credits',
+        },
       },
     });
     if (!url) {
