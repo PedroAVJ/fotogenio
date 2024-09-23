@@ -45,7 +45,7 @@ export const createImages = api
       },
     });
     const modelName = `flux-${userId}`;
-    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
+    const baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
     if (!baseUrl) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',

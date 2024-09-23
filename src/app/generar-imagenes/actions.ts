@@ -100,7 +100,7 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 
 export const createCheckoutSessionAction = api
   .mutation(async ({ ctx: { session: { userId } } }) => {
-    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
+    const baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
     if (!baseUrl) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
