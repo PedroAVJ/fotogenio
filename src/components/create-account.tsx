@@ -53,23 +53,20 @@ export function CreateAccountComponent() {
   }
 
   const mutation = useMutation({
-    mutationFn: () => addUserSettingsAction({
-      gender,
-      styleIds,
-    }),
+    mutationFn: async (code: string) => {
+      if (!isLoaded) throw new Error("Sign up not loaded");
+      const signInAttempt = await signUp.attemptEmailAddressVerification({ code });
+      await setActive({ session: signInAttempt.createdSessionId });
+      await addUserSettingsAction({ gender, styleIds });
+    },
     onSuccess: () => {
       setStep(4)
     }
   });
 
   async function handleCodeChange(code: string) {
-    if (code.length !== 6) return
-    if (!isLoaded) return
-    const signInAttempt = await signUp.attemptEmailAddressVerification({
-      code,
-    })
-    await setActive({ session: signInAttempt.createdSessionId })
-    mutation.mutate()
+    if (code.length !== 6) return;
+    mutation.mutate(code);
   }
   const isValid = form.formState.isValid
 

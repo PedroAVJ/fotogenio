@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
-import { CloudUpload, X, Check } from 'lucide-react'
+import { CloudUpload, X, Check, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { uploadPhotosAction } from '@/app/generar-imagenes/actions'
 import { useMutation } from '@tanstack/react-query'
@@ -114,8 +114,8 @@ export function UploadPhotosComponent() {
             <CloudUpload size={24} className="text-white transform scale-x-[-1] mb-2" />
             <p className={`text-sm ${getUploadCountColor(uploadedPhotos.length)}`}>
               {uploadedPhotos.length > 0
-                ? `${uploadedPhotos.length} photo${uploadedPhotos.length !== 1 ? 's' : ''} uploaded`
-                : 'No photos uploaded yet'}
+                ? `${uploadedPhotos.length} foto${uploadedPhotos.length !== 1 ? 's' : ''} subida${uploadedPhotos.length !== 1 ? 's' : ''}`
+                : 'Aún no se han subido fotos'}
             </p>
           </div>
           <input
@@ -135,7 +135,14 @@ export function UploadPhotosComponent() {
         disabled={uploadedPhotos.length < 10 || uploadedPhotos.length > 20 || isPending}
         onClick={handleNextStep}
       >
-        {isPending ? 'Cargando...' : 'Siguiente'}
+        {isPending ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Cargando...
+          </>
+        ) : (
+          'Siguiente'
+        )}
       </Button>
     </main>
   )
