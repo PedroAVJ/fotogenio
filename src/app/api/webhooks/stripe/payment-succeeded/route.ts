@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
 import { getBaseUrl } from '@/lib/utils';
+import md5 from 'md5';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
     select: { zippedPhotosUrl: true },
   });
   if (operation === 'create-model') {
-    const modelName = `flux-${userId}`;
+    const modelName = `flux-${md5(userId)}`;
     const model = await replicate.models.create(
       'pedroavj',
       modelName,
