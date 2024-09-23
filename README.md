@@ -16,6 +16,14 @@
   - [ ] Ensure watermark does not obscure important parts of the image
   - [ ] Test watermark visibility and placement
 
+- 🔄 Consider migrating from Prisma to Drizzle
+  - [ ] Evaluate the benefits and drawbacks of Drizzle compared to Prisma
+  - [ ] Identify potential challenges and solutions for migration
+  - [ ] Create a migration plan and timeline
+  - [ ] Test the migration process in a staging environment
+  - [ ] Ensure all functionalities work as expected post-migration
+  - [ ] Update documentation to reflect the changes
+
 ## Production Deployment Roadmap
 
 1. 🚀 Make a production deployment
