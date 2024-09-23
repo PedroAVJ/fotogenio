@@ -112,9 +112,11 @@ export const createCheckoutSessionAction = api
       mode: 'payment',
       success_url: `${baseUrl}/waiting`,
       cancel_url: `${baseUrl}/generar-imagenes`,
-      metadata: {
-        userId: userId,
-        operation: 'create-model',
+      payment_intent_data: {
+        metadata: {
+          userId,
+          operation: 'create-model',
+        },
       },
     });
     if (!url) {
