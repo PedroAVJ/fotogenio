@@ -1,9 +1,9 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-const isPublicRoute = createRouteMatcher(['/', '/generar-imagenes']);
+const isProtectedRoute = createRouteMatcher(['/home', '/new-style', '/waiting', '/waiting-for-photos']);
 
 export default clerkMiddleware((auth, req) => {
-  if (!isPublicRoute(req)) {
+  if (isProtectedRoute(req)) {
     auth().protect();
   }
 });
