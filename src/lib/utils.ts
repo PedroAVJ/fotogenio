@@ -7,14 +7,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getBaseUrl() {
-  if (!env.VERCEL_PROJECT_PRODUCTION_URL) {
-    throw new Error('VERCEL_PROJECT_PRODUCTION_URL is not set');
-  }
-  if (!env.VERCEL_BRANCH_URL) {
-    throw new Error('VERCEL_BRANCH_URL is not set');
-  }
-  if (env.NODE_ENV === 'production') {
+  if (env.VERCEL_ENV === 'preview') {
+    return `https://${env.VERCEL_BRANCH_URL}`;
+  } else if (env.VERCEL_ENV === 'production') {
     return `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
   }
-  return `https://${env.VERCEL_BRANCH_URL}`;
+  throw new Error('Invalid environment');
 }
