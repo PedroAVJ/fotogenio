@@ -45,12 +45,16 @@ export const createImages = api
       },
     });
     const modelName = `flux-${userId}`;
-    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : env.WEBHOOK_MOCK_URL;
+    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
+    if (!baseUrl) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Missing baseUrl',
+      });
+    }
     await Promise.all(filteredPrompts.map(async (prompt) => {
       await replicate.run(
-        `${env.REPLICATE_OWNER}/${modelName}`,
+        `pedroavj/${modelName}`,
         {
           webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`,
           webhook_events_filter: ['completed'],

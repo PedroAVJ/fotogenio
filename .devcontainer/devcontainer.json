@@ -1,6 +1,6 @@
 {
 	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
-	"postCreateCommand": "npm install && sudo bash .devcontainer/stripe-cli.sh",
+	"postCreateCommand": "npm install",
 	"customizations": {
 			"vscode": {
 					"extensions": [

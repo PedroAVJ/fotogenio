@@ -35,12 +35,13 @@ export async function POST(request: NextRequest) {
     },
   });
   const modelName = `flux-${userId}`;
-  const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : env.WEBHOOK_MOCK_URL;
+  const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (!baseUrl) {
+    return NextResponse.json({ error: 'Missing baseUrl' }, { status: 400 });
+  }
   await Promise.all(prompts.map(async (prompt) => {
     await replicate.run(
-      `${env.REPLICATE_OWNER}/${modelName}`,
+      `pedroavj/${modelName}`,
       {
         webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`,
         webhook_events_filter: ['completed'],

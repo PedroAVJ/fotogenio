@@ -10,12 +10,9 @@ export const env = createEnv({
     BLOB_READ_WRITE_TOKEN: z.string(),
     REPLICATE_WEBHOOK_SECRET: z.string(),
     REPLICATE_API_TOKEN: z.string(),
-    REPLICATE_OWNER: z.string(),
     CLERK_SECRET_KEY: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
-    WEBHOOK_MOCK_URL: z.string().url(),
-    NGROK_AUTH_TOKEN: z.string(),
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),

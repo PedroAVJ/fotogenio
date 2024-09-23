@@ -34,16 +34,17 @@ export async function POST(request: NextRequest) {
   if (operation === 'create-model') {
     const modelName = `flux-${userId}`;
     const model = await replicate.models.create(
-      env.REPLICATE_OWNER,
+      'pedroavj',
       modelName,
       {
         visibility: 'private',
         hardware: 'gpu-t4'
       }
     )
-    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : env.WEBHOOK_MOCK_URL;
+    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
+    if (!baseUrl) {
+      return NextResponse.json({ error: 'Missing baseUrl' }, { status: 400 });
+    }
     await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",
