@@ -20,9 +20,10 @@ export const uploadPhotosAction = api
   .input(uploadPhotos)
   .mutation(async ({ input: { photos }, ctx: { session: { userId } } }) => {
     const zip = new JSZip();
-    photos.forEach((photo) => {
-      zip.file(photo.name, photo);
-    });
+    await Promise.all(photos.map(async (photo) => {
+      const arrayBuffer = await photo.arrayBuffer();
+      zip.file(photo.name, arrayBuffer);
+    }));
     const zipContent = await zip.generateAsync({ type: 'blob' });
     await Promise.all(photos.map(async (photo) => {
       const path = `user/uploads/${userId}/${photo.name}`
