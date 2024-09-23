@@ -62,6 +62,15 @@ export const addUserSettingsAction = api
       })),
     });
     const prompts = await db.prompt.findMany({
+      where: {
+        style: {
+          chosenStyles: {
+            some: {
+              userId,
+            },
+          },
+        },
+      },
       include: {
         style: {
           include: {
