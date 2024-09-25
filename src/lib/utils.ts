@@ -17,7 +17,7 @@ export function getBaseUrl() {
   throw new Error('Invalid environment');
 }
 
-export async function addWatermark(imageUrl: string, outputPath: string): Promise<void> {
+export async function addWatermark(imageUrl: string, outputPath: string){
   // Fetch the input image from the provided URL
   const imageResponse = await fetch(imageUrl);
   const imageBuffer = await imageResponse.arrayBuffer();
@@ -59,5 +59,6 @@ export async function addWatermark(imageUrl: string, outputPath: string): Promis
       { input: transparentWatermark, gravity: 'southeast' }
     ])
 
-  await put(outputPath, image, { access: 'public' });
+  const blob = await put(outputPath, image, { access: 'public' });
+  return blob;
 }
