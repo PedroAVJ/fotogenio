@@ -16,11 +16,6 @@
    - [ ] Generate favicon files for different devices
    - [ ] Implement favicon in HTML
 
-2. 🤖 Add robots.txt
-   - [ ] Create robots.txt file
-   - [ ] Define crawling rules
-   - [ ] Place in correct directory
-
 3. 💳 Set up Stripe production instance
    - [ ] Create a Stripe production account
    - [ ] Update environment variables with production API keys

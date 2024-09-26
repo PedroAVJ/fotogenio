@@ -6,6 +6,11 @@ import type { ReactNode } from 'react';
 import { Toaster } from "@/components/ui/sonner"
 
 import { QueryClientProvider } from './query-client-provider';
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Fotogenio',
+}
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
