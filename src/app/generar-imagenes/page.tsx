@@ -9,7 +9,7 @@ export default async function Page() {
   await translateZodErrors();
   const { userId } = auth();
   if (userId) {
-    const { modelStatus } = await db.userSettings.findFirstOrThrow({
+    const userSettings = await db.userSettings.findUnique({
       where: {
         userId,
       },
@@ -17,10 +17,12 @@ export default async function Page() {
         modelStatus: true,
       },
     });
-    if (modelStatus === 'ready') {
-      redirect('/home');
-    } else if (modelStatus === 'training') {
-      redirect('/waiting');
+    if (userSettings) {
+      if (userSettings.modelStatus === 'ready') {
+        redirect('/home');
+      } else if (userSettings.modelStatus === 'training') {
+        redirect('/waiting');
+      }
     }
   }
   const maleStyles = await db.style.findMany({
