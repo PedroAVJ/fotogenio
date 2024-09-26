@@ -5,15 +5,15 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
   const { userId } = auth().protect();
-  const { modelStatus } = await db.userSettings.findFirstOrThrow({
+  const userSettings = await db.userSettings.findUnique({
     where: {
       userId,
     },
-    select: {
-      modelStatus: true,
-    },
   });
-  if (modelStatus === 'ready') {
+  if (!userSettings) {
+    redirect('/generar-imagenes')
+  }
+  if (userSettings.modelStatus === 'ready') {
     redirect('/home');
   }
   return <WaitingComponent aproxTime={30} />;
