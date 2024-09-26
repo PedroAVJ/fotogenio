@@ -65,9 +65,6 @@ export async function POST(request: NextRequest) {
   if (!promptId) {
     return NextResponse.json({ error: 'Missing promptId' }, { status: 400 });
   }
-  await db.generatedPhoto.findUniqueOrThrow({
-    where: { userId_promptId: { userId, promptId } },
-  });
   interface Body {
     output: string[];
     id: string;
@@ -77,11 +74,20 @@ export async function POST(request: NextRequest) {
   if (!photoUrl) {
     return NextResponse.json({ error: 'Missing photoUrl' }, { status: 400 });
   }
+  const generatedPhoto = await db.generatedPhoto.findUnique({
+    where: { userId_promptId: { userId, promptId } },
+  });
+  if (generatedPhoto) {
+    return NextResponse.json({ error: 'Generated photo already exists' }, { status: 400 });
+  }
   const folder = `user/generations/${userId}`;
   const blob = await addWatermark(photoUrl, `${folder}/${body.id}`);
-  await db.generatedPhoto.update({
-    where: { userId_promptId: { userId, promptId } },
-    data: { photoUrl: blob.url },
+  await db.generatedPhoto.create({
+    data: {
+      userId,
+      promptId,
+      photoUrl: blob.url,
+    },
   });
   await db.userSettings.update({
     where: {
