@@ -52,7 +52,9 @@ async function addWatermark(imageUrl: string, outputPath: string){
 }
 
 export async function POST(request: NextRequest) {
-  const isValid = validateWebhook(request, env.REPLICATE_WEBHOOK_SECRET);
+  const requestClone = request.clone();
+
+  const isValid = validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
     return NextResponse.json({ error: 'Invalid webhook' }, { status: 400 });
   }
