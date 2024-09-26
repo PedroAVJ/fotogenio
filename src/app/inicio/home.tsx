@@ -58,7 +58,7 @@ export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
             size="lg"
             className="flex items-center justify-center gap-2 px-4 py-2 mb-8 rounded-xl text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 text-[14px] leading-[12px] tracking-[0.02em] font-semibold"
           >
-            <Link href="/new-style">
+            <Link href="/nuevo-estilo">
               Generar Nuevas Fotos
               <Camera className="w-5 h-5 ml-2" />
             </Link>

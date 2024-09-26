@@ -7,7 +7,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Image from 'next/image'
 import { Camera, Loader2, Plus } from 'lucide-react'
-import { createCheckoutSessionAction, createImages } from '@/app/new-style/actions'
+import { createCheckoutSessionAction, createImages } from '@/app/nuevo-estilo/actions'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
