@@ -1,10 +1,28 @@
 import { db } from '@/server/db';
 import { translateZodErrors } from '@/lib/es-zod';
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
 import { Stepper } from './stepper';
 
 export default async function Page() {
   await translateZodErrors();
+  const { userId } = auth();
+  if (userId) {
+    const { modelStatus } = await db.userSettings.findFirstOrThrow({
+      where: {
+        userId,
+      },
+      select: {
+        modelStatus: true,
+      },
+    });
+    if (modelStatus === 'ready') {
+      redirect('/home');
+    } else if (modelStatus === 'training') {
+      redirect('/waiting');
+    }
+  }
   const maleStyles = await db.style.findMany({
     where: {
       gender: 'male',
