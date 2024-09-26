@@ -13,9 +13,6 @@ export default async function Page() {
       where: {
         userId,
       },
-      select: {
-        modelStatus: true,
-      },
     });
     if (userSettings) {
       if (userSettings.modelStatus === 'ready') {

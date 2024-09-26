@@ -1,8 +1,5 @@
 ## Future Enhancements
 
-- Remove instances of selects
-- Remove instances of find firsts, and replace them with finduniques
-
 - 🌐 Translate all English text to Spanish
   - [ ] Identify all user-facing text in the application
   - [ ] Create a translation file or use a localization library

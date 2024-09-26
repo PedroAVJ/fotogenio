@@ -32,12 +32,10 @@ export async function POST(request: NextRequest) {
   if (operation === 'create-model') {
     const userSettings = await db.userSettings.findUnique({
       where: { userId, modelStatus: 'pending' },
-      select: { zippedPhotosUrl: true },
     });
     if (!userSettings) {
       return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
     }
-    const { zippedPhotosUrl } = userSettings;
     await db.userSettings.update({
       where: { userId },
       data: { credits: { increment: 25 }, modelStatus: 'training' },
@@ -67,7 +65,7 @@ export async function POST(request: NextRequest) {
           batch_size: 1,
           resolution: "512,768,1024",
           autocaption: true,
-          input_images: zippedPhotosUrl,
+          input_images: userSettings.zippedPhotosUrl,
           trigger_word: "TOK",
           learning_rate: 0.0004,
           wandb_project: "flux_train_replicate",

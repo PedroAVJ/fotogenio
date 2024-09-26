@@ -19,9 +19,6 @@ export default async function NewStyle() {
     where: {
       userId,
     },
-    select: {
-      styleId: true,
-    },
   });
   const notChosenStyles = await db.style.findMany({
     where: {
@@ -31,11 +28,7 @@ export default async function NewStyle() {
       gender,
     },
     include: {
-      prompts: {
-        select: {
-          id: true,
-        },
-      },
+      prompts: true,
     },
   });
   const styles = notChosenStyles.map((style) => ({

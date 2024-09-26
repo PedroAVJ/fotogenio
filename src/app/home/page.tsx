@@ -7,7 +7,6 @@ export default async function Home() {
   const { userId } = auth().protect();
   const userSettings = await db.userSettings.findUnique({
     where: { userId },
-    select: { credits: true, pendingPhotos: true },
   });
   if (!userSettings) {
     redirect('/generar-imagenes')
@@ -18,7 +17,6 @@ export default async function Home() {
   }
   const generatedPhotos = await db.generatedPhoto.findMany({
     where: { userId },
-    select: { photoUrl: true },
     orderBy: { createdAt: "desc" },
   });
   const imageUrls = generatedPhotos.map((generatedPhoto) => generatedPhoto.photoUrl);
