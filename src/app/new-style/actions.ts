@@ -47,9 +47,17 @@ export const createImages = api
     });
     const modelName = `flux-${userId}`;
     const baseUrl = getBaseUrl();
+    const model = await replicate.models.get('pedroavj', modelName);
+    const version = model.latest_version;
+    if (!version) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Version not found',
+      });
+    }
     await Promise.all(filteredPrompts.map(async (prompt) => {
       await replicate.run(
-        `pedroavj/${modelName}`,
+        `pedroavj/${modelName}:${version.id}`,
         {
           webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`,
           webhook_events_filter: ['completed'],
