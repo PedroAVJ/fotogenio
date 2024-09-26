@@ -74,7 +74,7 @@ export const createImages = api
         }
       );
     }))
-    redirect('/waiting-for-photos')
+    redirect('/generando-fotos')
   });
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {

@@ -87,7 +87,7 @@ export const createCheckoutSessionAction = api
         },
       ],
       mode: 'payment',
-      success_url: `${baseUrl}/waiting`,
+      success_url: `${baseUrl}/generando-fotos`,
       cancel_url: `${baseUrl}/generar-imagenes`,
       payment_intent_data: {
         metadata: {

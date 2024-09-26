@@ -13,7 +13,7 @@ export default async function NewStyle() {
   }
   const { pendingPhotos, gender, credits } = userSettings;
   if (pendingPhotos > 0) {
-    redirect("/waiting-for-photos");
+    redirect("/generando-fotos");
   }
   const chosenStyles = await db.chosenStyle.findMany({
     where: {

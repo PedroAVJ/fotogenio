@@ -13,7 +13,7 @@ export default async function Home() {
   }
   const { pendingPhotos, credits } = userSettings;
   if (pendingPhotos > 0) {
-    redirect("/waiting-for-photos");
+    redirect("/generando-fotos");
   }
   const generatedPhotos = await db.generatedPhoto.findMany({
     where: { userId },

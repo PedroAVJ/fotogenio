@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-const isProtectedRoute = createRouteMatcher(['/home', '/new-style', '/waiting', '/waiting-for-photos']);
+const isProtectedRoute = createRouteMatcher(['/home', '/new-style', '/generando-fotos']);
 
 export default clerkMiddleware((auth, req) => {
   if (isProtectedRoute(req)) {

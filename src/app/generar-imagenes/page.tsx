@@ -18,7 +18,7 @@ export default async function Page() {
       if (userSettings.modelStatus === 'ready') {
         redirect('/home');
       } else if (userSettings.modelStatus === 'training') {
-        redirect('/waiting');
+        redirect('/generando-fotos');
       }
     }
   }

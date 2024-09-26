@@ -13,8 +13,12 @@ export default async function Page() {
   if (!userSettings) {
     redirect('/generar-imagenes')
   }
-  if (userSettings.modelStatus === 'ready') {
-    redirect('/home');
+  const { modelStatus, pendingPhotos } = userSettings;
+  if (modelStatus === 'pending' || modelStatus === 'training') {
+    return <WaitingComponent aproxTime={30} />;
   }
-  return <WaitingComponent aproxTime={30} />;
+  if (pendingPhotos > 0) {
+    return <WaitingComponent aproxTime={5} />;
+  }
+  redirect('/home');
 }
