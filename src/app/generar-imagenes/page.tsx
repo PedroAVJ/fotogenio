@@ -16,7 +16,7 @@ export default async function Page() {
     });
     if (userSettings) {
       if (userSettings.modelStatus === 'ready') {
-        redirect('/home');
+        redirect('/inicio');
       } else if (userSettings.modelStatus === 'training') {
         redirect('/generando-fotos');
       }

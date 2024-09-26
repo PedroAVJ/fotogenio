@@ -20,5 +20,5 @@ export default async function Page() {
   if (pendingPhotos > 0) {
     return <WaitingComponent aproxTime={5} />;
   }
-  redirect('/home');
+  redirect('/inicio');
 }
