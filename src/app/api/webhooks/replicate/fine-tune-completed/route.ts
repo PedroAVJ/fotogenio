@@ -59,15 +59,15 @@ export async function POST(request: NextRequest) {
   if (!version) {
     return NextResponse.json({ error: 'Version not found' }, { status: 400 });
   }
-  await Promise.all(prompts.map(async (prompt) => {
-    await replicate.run(
+  prompts.forEach(({ id, prompt, inpaintPhotoUrl }) => {
+    replicate.run(
       `pedroavj/${modelName}:${version.id}`,
       {
-        webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`,
+        webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
         webhook_events_filter: ['completed'],
         input: {
-          prompt: prompt.prompt,
-          image: prompt.inpaintPhotoUrl,
+          prompt,
+          image: inpaintPhotoUrl,
           model: "dev",
           lora_scale: 1,
           num_outputs: 1,
@@ -81,6 +81,6 @@ export async function POST(request: NextRequest) {
         }
       }
     );
-  }))
+  });
   return NextResponse.json({ received: true });
 }

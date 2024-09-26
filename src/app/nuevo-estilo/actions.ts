@@ -51,15 +51,15 @@ export const createImages = api
     if (!version) {
       return { message: 'La ultima versión del modelo no se encuentro' }
     }
-    await Promise.all(filteredPrompts.map(async (prompt) => {
-      await replicate.run(
+    filteredPrompts.forEach(({ id, prompt, inpaintPhotoUrl }) => {
+      replicate.run(
         `pedroavj/${modelName}:${version.id}`,
         {
-          webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`,
+          webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
           webhook_events_filter: ['completed'],
           input: {
-            prompt: prompt.prompt,
-            image: prompt.inpaintPhotoUrl,
+            prompt,
+            image: inpaintPhotoUrl,
             model: "dev",
             lora_scale: 1,
             num_outputs: 1,
@@ -73,7 +73,7 @@ export const createImages = api
           }
         }
       );
-    }))
+    })
     redirect('/generando-fotos')
   });
 
