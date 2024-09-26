@@ -11,12 +11,7 @@
 
 ## Production Deployment Roadmap
 
-1. 🎨 Add favicon
-   - [ ] Design favicon
-   - [ ] Generate favicon files for different devices
-   - [ ] Implement favicon in HTML
-
-3. 💳 Set up Stripe production instance
+💳 Set up Stripe production instance
    - [ ] Create a Stripe production account
    - [ ] Update environment variables with production API keys
    - [ ] Test payment flow in production environment
