@@ -4,6 +4,7 @@ import { db } from '@/server/db';
 import { validateWebhook } from "replicate";
 import sharp from 'sharp';
 import { put } from '@vercel/blob';
+import { readFile } from 'fs/promises';
 
 async function addWatermark(imageUrl: string, outputPath: string){
   // Fetch the input image from the provided URL
@@ -15,10 +16,9 @@ async function addWatermark(imageUrl: string, outputPath: string){
   const width = metadata.width || 0;
   const height = metadata.height || 0;
   
-  // Fetch the watermark image from the provided URL using fetch
-  const watermarkUrl = 'https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/watermark-yhC4mXM1Ov9UUYfCmAJjSqBcHjuYep.png';
-  const watermarkResponse = await fetch(watermarkUrl);
-  const watermarkBuffer = await watermarkResponse.arrayBuffer();
+  // Load the watermark image from the same directory of this file
+  const watermarkPath = './watermark.png';
+  const watermarkBuffer = await readFile(watermarkPath);
   
   // Load the watermark image
   const watermark = sharp(Buffer.from(watermarkBuffer));
