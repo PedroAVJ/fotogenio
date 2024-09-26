@@ -45,6 +45,10 @@ export async function POST(request: NextRequest) {
       },
     },
   });
+  await db.userSettings.update({
+    where: { userId },
+    data: { pendingPhotos: { increment: prompts.length } },
+  });
   const modelName = `flux-${md5(userId)}`;
   const baseUrl = getBaseUrl();
   const model = await replicate.models.get('pedroavj', modelName);

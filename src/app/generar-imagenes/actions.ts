@@ -62,34 +62,12 @@ export const addUserSettingsAction = api
         styleId,
       })),
     });
-    const prompts = await db.prompt.findMany({
-      where: {
-        style: {
-          chosenStyles: {
-            some: {
-              userId,
-            },
-          },
-        },
-      },
-      include: {
-        style: {
-          include: {
-            chosenStyles: {
-              where: {
-                userId,
-              },
-            },
-          },
-        },
-      },
-    });
     await db.userSettings.create({
       data: {
         userId,
         gender,
-        credits: 25,
-        pendingPhotos: prompts.length,
+        credits: 0,
+        pendingPhotos: 0,
         modelStatus: 'pending',
       },
     });
