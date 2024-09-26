@@ -5,7 +5,6 @@ import { db } from "@/server/db";
 import { z } from "zod";
 import Stripe from 'stripe';
 import { env } from '@/lib/env';
-import { TRPCError } from '@trpc/server';
 import { redirect } from 'next/navigation';
 import { replicate } from "@/server/replicate";
 import { getBaseUrl } from "@/lib/utils";
@@ -50,10 +49,7 @@ export const createImages = api
     const model = await replicate.models.get('pedroavj', modelName);
     const version = model.latest_version;
     if (!version) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Version not found',
-      });
+      return { message: 'La ultima versión del modelo no se encuentro' }
     }
     await Promise.all(filteredPrompts.map(async (prompt) => {
       await replicate.run(
@@ -78,6 +74,7 @@ export const createImages = api
         }
       );
     }))
+    redirect('/waiting-for-photos')
   });
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -105,10 +102,7 @@ export const createCheckoutSessionAction = api
       },
     });
     if (!url) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to create checkout session',
-      });
+      return { message: 'Hubo un error al crear la sesión de pago' }
     }
     redirect(url);
   });

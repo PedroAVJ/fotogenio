@@ -30,10 +30,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Missing operation' }, { status: 400 });
   }
   if (operation === 'create-model') {
-    const { zippedPhotosUrl } = await db.userSettings.findUniqueOrThrow({
+    const userSettings = await db.userSettings.findUnique({
       where: { userId, modelStatus: 'pending' },
       select: { zippedPhotosUrl: true },
     });
+    if (!userSettings) {
+      return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
+    }
+    const { zippedPhotosUrl } = userSettings;
     await db.userSettings.update({
       where: { userId },
       data: { credits: { increment: 25 }, modelStatus: 'training' },

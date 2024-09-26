@@ -5,13 +5,21 @@ import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import { useLocalStorage } from 'react-use-storage'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, Loader2 } from 'lucide-react'
 import { createCheckoutSessionAction } from '@/app/generar-imagenes/actions'
+import { toast } from "sonner"
+import { useMutation } from '@tanstack/react-query'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
 export function ChoosePaymentComponent() {
   const [step] = useLocalStorage<number>('step', 5)
+  const mutation = useMutation({
+    mutationFn: createCheckoutSessionAction,
+    onSuccess: ({ message }) => {
+      toast.error(message)
+    },
+  })
   return (
     <main className={`
       ${workSans.className}
@@ -47,10 +55,11 @@ export function ChoosePaymentComponent() {
       </div>
       <Button
         size="lg"
-        onClick={() => createCheckoutSessionAction()}
+        onClick={() => mutation.mutate()}
+        disabled={mutation.isPending}
         className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 font-semibold"
       >
-        ¡Crear Fotos!
+        {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : '¡Crear Fotos!'}
       </Button>
     </main>
   )

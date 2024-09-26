@@ -3,6 +3,7 @@ import '@/lib/global.css';
 import { esMX } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { ReactNode } from 'react';
+import { Toaster } from "@/components/ui/sonner"
 
 import { QueryClientProvider } from './query-client-provider';
 
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <QueryClientProvider>
             {children}
           </QueryClientProvider>
+          <Toaster />
         </body>
       </ClerkProvider>
     </html>

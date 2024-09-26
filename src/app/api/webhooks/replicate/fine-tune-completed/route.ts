@@ -16,9 +16,12 @@ export async function POST(request: NextRequest) {
   if (!userId) {
     return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
   }
-  await db.userSettings.findUniqueOrThrow({
+  const userSettings = await db.userSettings.findUnique({
     where: { userId, modelStatus: 'training' },
   });
+  if (!userSettings) {
+    return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
+  }
   await db.userSettings.update({
     where: { userId },
     data: { modelStatus: 'ready' },

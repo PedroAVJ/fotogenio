@@ -8,7 +8,6 @@ import { z } from "zod";
 import { Gender } from "@prisma/client";
 import Stripe from 'stripe';
 import { env } from '@/lib/env';
-import { TRPCError } from '@trpc/server';
 import { redirect } from 'next/navigation';
 import JSZip from 'jszip';
 import { getBaseUrl } from "@/lib/utils";
@@ -98,10 +97,7 @@ export const createCheckoutSessionAction = api
       },
     });
     if (!url) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to create checkout session',
-      });
+      return { message: 'Hubo un error al crear la sesión de pago' }
     }
     redirect(url);
   });

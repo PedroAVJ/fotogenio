@@ -19,6 +19,7 @@ import { useSignUp } from '@clerk/nextjs'
 import { addUserSettingsAction } from '@/app/generar-imagenes/actions'
 import { Gender } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -54,7 +55,10 @@ export function CreateAccountComponent() {
 
   const mutation = useMutation({
     mutationFn: async (code: string) => {
-      if (!isLoaded) throw new Error("Sign up not loaded");
+      if (!isLoaded) {
+        toast.error('El componente de autenticación no está cargado')
+        return
+      }
       const signInAttempt = await signUp.attemptEmailAddressVerification({ code });
       await setActive({ session: signInAttempt.createdSessionId });
       await addUserSettingsAction({ gender, styleIds });

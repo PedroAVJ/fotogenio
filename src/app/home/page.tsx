@@ -5,10 +5,14 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const { userId } = auth().protect();
-  const { credits, pendingPhotos } = await db.userSettings.findUniqueOrThrow({
+  const userSettings = await db.userSettings.findUnique({
     where: { userId },
     select: { credits: true, pendingPhotos: true },
   });
+  if (!userSettings) {
+    redirect('/generar-imagenes')
+  }
+  const { pendingPhotos, credits } = userSettings;
   if (pendingPhotos > 0) {
     redirect("/waiting-for-photos");
   }

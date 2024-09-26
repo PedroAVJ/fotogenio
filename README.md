@@ -1,5 +1,14 @@
 ## Future Enhancements
 
+- 🌐 Translate all English text to Spanish
+  - [ ] Identify all user-facing text in the application
+  - [ ] Create a translation file or use a localization library
+  - [ ] Translate all identified text to Spanish
+  - [ ] Implement language switching functionality (if not already present)
+  - [ ] Update components to use translated text
+  - [ ] Review and test the application to ensure all text is properly translated
+  - [ ] Consider implementing a system for easy future updates to translations
+
 - 🎨 Curate style selections for each gender
   - [ ] Review and select appropriate styles for male users
   - [ ] Review and select appropriate styles for female users
