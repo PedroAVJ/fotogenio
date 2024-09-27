@@ -111,7 +111,7 @@ export const createCheckoutSessionAction = api
           operation: 'buy-credits',
         },
       },
-      locale: 'es-419'
+      locale: 'es'
     });
     if (!url) {
       return { message: 'Hubo un error al crear la sesión de pago' }
