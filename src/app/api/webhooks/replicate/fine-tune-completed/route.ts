@@ -60,9 +60,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Version not found' }, { status: 400 });
   }
   await Promise.all(prompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
-    await replicate.run(
-      `pedroavj/${modelName}:${version.id}`,
+    await replicate.predictions.create(
       {
+        model: `pedroavj/${modelName}`,
+        version: version.id,
         webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
         webhook_events_filter: ['completed'],
         input: {

@@ -62,9 +62,10 @@ export const createImages = api
       return { message: 'La ultima versión del modelo no se encontró' }
     }
     await Promise.all(filteredPrompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
-      await replicate.run(
-        `pedroavj/${modelName}:${version.id}`,
+      await replicate.predictions.create(
         {
+          model: `pedroavj/${modelName}`,
+          version: version.id,
           webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
           webhook_events_filter: ['completed'],
           input: {
