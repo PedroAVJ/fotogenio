@@ -94,7 +94,7 @@ export function FotoGenioLandingComponent() {
           <div className="w-full max-w-md mt-12">
             <div className="rounded-lg p-6">
               <p className="text-white text-2xl font-semibold mb-4 text-center">
-                "Ahora tengo las mejores fotos para redes sociales"
+                &ldquo;Ahora tengo las mejores fotos para redes sociales&rdquo;
               </p>
               <div className="flex items-center justify-center">
                 <Image 
@@ -157,7 +157,6 @@ export function FotoGenioLandingComponent() {
                     alt={style.alt}
                     width={100}
                     height={114}
-                    objectFit="cover"
                   />
                 </div>
               ))}
