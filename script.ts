@@ -31,7 +31,6 @@ async function main() {
         },
       },
     },
-    take: 1,
   });
   const modelName = `flux-${md5(userId)}`;
   const baseUrl = 'https://fotogenio-git-staging-pedroavjs-projects.vercel.app';
@@ -41,8 +40,8 @@ async function main() {
     throw new Error('Version not found');
   }
   console.log('starting');
-  prompts.forEach(async ({ id, prompt, inpaintPhotoUrl }) => {
-    replicate.run(
+  await Promise.all(prompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
+    await replicate.run(
       `pedroavj/${modelName}:${version.id}`,
       {
         webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
@@ -63,9 +62,8 @@ async function main() {
         }
       }
     );
-  });
+  }));
   console.log('done');
 }
 
 await main();
-process.exit(0);
