@@ -5,6 +5,7 @@ import { validateWebhook } from "replicate";
 import sharp from 'sharp';
 import { put } from '@vercel/blob';
 import { readFile } from 'fs/promises';
+import path from 'path';
 
 async function addWatermark(imageUrl: string, outputPath: string){
   // Fetch the input image from the provided URL
@@ -16,7 +17,8 @@ async function addWatermark(imageUrl: string, outputPath: string){
   const width = metadata.width || 0;
   const height = metadata.height || 0;
   
-  const watermarkBuffer = await readFile(process.cwd() + '/public/watermark.png', 'utf8');
+  const watermarkPath = path.join(process.cwd(), 'src/app/api/webhooks/replicate/image-generated', 'watermark.png');
+  const watermarkBuffer = await readFile(watermarkPath);
   
   // Load the watermark image
   const watermark = sharp(Buffer.from(watermarkBuffer));
