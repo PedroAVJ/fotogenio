@@ -113,8 +113,7 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
                   <Image
                     src={style.coverPhotoUrl}
                     alt={style.description}
-                    width={149}
-                    height={215}
+                    fill
                     className="object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-75"
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
