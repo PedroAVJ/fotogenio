@@ -95,7 +95,7 @@ export const createCheckoutSessionAction = api
           operation: 'create-model',
         },
       },
-      locale: 'es-419'
+      locale: 'es'
     });
     if (!url) {
       return { message: 'Hubo un error al crear la sesión de pago' }
