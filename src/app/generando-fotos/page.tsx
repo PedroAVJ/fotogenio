@@ -1,4 +1,4 @@
-import { WaitingComponent } from "@/components/waiting";
+import { WaitingComponent } from "./waiting";
 import { db } from "@/server/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -11,7 +11,7 @@ export default async function Page() {
     },
   });
   if (!userSettings) {
-    redirect('/generar-imagenes')
+    redirect('/registrarse')
   }
   const { modelStatus, pendingPhotos } = userSettings;
   if (modelStatus === 'pending' || modelStatus === 'training') {

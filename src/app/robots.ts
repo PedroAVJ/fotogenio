@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         '/api/',
         '/generando-fotos',
-        '/generar-imagenes',
+        '/registrarse',
         '/inicio',
         '/nuevo-estilo'
       ],

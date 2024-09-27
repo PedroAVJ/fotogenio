@@ -40,13 +40,13 @@ export function FotoGenioLandingComponent() {
           </div>
           <div className="w-full max-w-[495px] space-y-4 mb-8">
             <div className="grid grid-cols-3 gap-4">
-              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/mujer-de-azul-uw7hM2ka6SgEi2tnyssmhIQjj7tRXS.png" alt="Blonde woman in blue lighting" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
-              <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-9zCRfc7NCVffAWiU9Px8KDvYCL3AbM.png" alt="Man in suit with tattoos" width={155} height={226} className="rounded-lg object-cover w-[155px] h-[226px]" />
-              <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-oHWovo6g4knA5s1aixSDKD1nerYJ8Q.png" alt="Man with cyberpunk aesthetic" width={155} height={226} className="rounded-lg object-cover w-[155px] h-[226px]" />
+              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/mujer-1-ErRABih9WZLDuNu88y7YOvjTqfOIlC.png" alt="Blonde woman in blue lighting" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
+              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/hombre-1-M4g1NcnY2g3ss5fGPZj60HuZSxN22h.png" alt="Man in suit with tattoos" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
+              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/hombre-2-dPcqK9BOOxgK7KhjRsJ6xFRXv5ZyeT.png" alt="Man with cyberpunk aesthetic" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
             </div>
             <div className="flex justify-center gap-4">
-              <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-R0A3pM2o1r3E62bIgoAAiXac4Cg384.png" alt="Man in patterned shirt" width={155} height={226} className="rounded-lg object-cover w-[155px] h-[226px]" />
-              <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-lvBoMIcNaRxxLFUsvx287jbFAZj2WD.png" alt="Blonde woman with tattoos on red background" width={155} height={226} className="rounded-lg object-cover w-[155px] h-[226px]" />
+              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/hombre-3-ZqcQl2yRkCXaz0y9iuSdqQSDEXKWnp.png" alt="Man in patterned shirt" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
+              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/mujer-2-NsKJNMQGhCOzUfqjR862Bl4ltREm4f.png" alt="Blonde woman with tattoos on red background" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
             </div>
           </div>
           <Button 
@@ -54,7 +54,7 @@ export function FotoGenioLandingComponent() {
             size="lg"
             asChild
           >
-            <Link href="/generar-imagenes">¡Empieza Ahora!</Link>
+            <Link href="/registrarse">¡Empieza Ahora!</Link>
           </Button>
           <p className="text-white text-[20px] font-normal leading-[25px] tracking-[0.02em] mt-4 mb-8 text-center w-full">
             Creamos fotos de ti usando inteligencia artificial.
@@ -197,7 +197,7 @@ export function FotoGenioLandingComponent() {
             size="lg"
             asChild
           >
-            <Link href="/generar-imagenes">Comenzar</Link>
+            <Link href="/registrarse">Comenzar</Link>
           </Button>
         </div>
       </ScrollArea>

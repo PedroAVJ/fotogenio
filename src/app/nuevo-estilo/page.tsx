@@ -9,7 +9,7 @@ export default async function NewStyle() {
     where: { userId },
   });
   if (!userSettings) {
-    redirect('/generar-imagenes')
+    redirect('/registrarse')
   }
   const { pendingPhotos, gender, credits } = userSettings;
   if (pendingPhotos > 0) {

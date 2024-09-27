@@ -9,7 +9,7 @@ export default async function Home() {
     where: { userId },
   });
   if (!userSettings) {
-    redirect('/generar-imagenes')
+    redirect('/registrarse')
   }
   const { pendingPhotos, credits } = userSettings;
   if (pendingPhotos > 0) {
