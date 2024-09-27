@@ -23,6 +23,15 @@ export const createImages = api
       })),
     });
     const prompts = await db.prompt.findMany({
+      where: {
+        style: {
+          chosenStyles: {
+            some: {
+              userId,
+            },
+          },
+        },
+      },
       include: {
         style: {
           include: {
@@ -51,8 +60,8 @@ export const createImages = api
     if (!version) {
       return { message: 'La ultima versión del modelo no se encuentro' }
     }
-    filteredPrompts.forEach(({ id, prompt, inpaintPhotoUrl }) => {
-      replicate.run(
+    await Promise.all(filteredPrompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
+      await replicate.run(
         `pedroavj/${modelName}:${version.id}`,
         {
           webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
@@ -73,7 +82,7 @@ export const createImages = api
           }
         }
       );
-    })
+    }));
     redirect('/generando-fotos')
   });
 
