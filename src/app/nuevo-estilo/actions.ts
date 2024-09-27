@@ -8,6 +8,7 @@ import { env } from '@/lib/env';
 import { redirect } from 'next/navigation';
 import { replicate } from "@/server/replicate";
 import { getBaseUrl } from "@/lib/utils";
+import md5 from "md5";
 
 const addUserSettings = z.object({
   styleIds: z.array(z.string()),
@@ -53,12 +54,12 @@ export const createImages = api
         pendingPhotos: filteredPrompts.length,
       },
     });
-    const modelName = `flux-${userId}`;
+    const modelName = `flux-${md5(userId)}`;
     const baseUrl = getBaseUrl();
     const model = await replicate.models.get('pedroavj', modelName);
     const version = model.latest_version;
     if (!version) {
-      return { message: 'La ultima versión del modelo no se encuentro' }
+      return { message: 'La ultima versión del modelo no se encontró' }
     }
     await Promise.all(filteredPrompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
       await replicate.run(
