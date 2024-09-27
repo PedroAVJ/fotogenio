@@ -40,7 +40,7 @@ export function FotoGenioLandingComponent() {
           </div>
           <div className="w-full max-w-[495px] space-y-4 mb-8">
             <div className="grid grid-cols-3 gap-4">
-              <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-9hQY2WxwMjda00PnoIVe8S1H6byQZr.png" alt="Blonde woman in blue lighting" width={155} height={226} className="rounded-lg object-cover w-[155px] h-[226px]" />
+              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/mujer-de-azul-uw7hM2ka6SgEi2tnyssmhIQjj7tRXS.png" alt="Blonde woman in blue lighting" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
               <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-9zCRfc7NCVffAWiU9Px8KDvYCL3AbM.png" alt="Man in suit with tattoos" width={155} height={226} className="rounded-lg object-cover w-[155px] h-[226px]" />
               <Image src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-oHWovo6g4knA5s1aixSDKD1nerYJ8Q.png" alt="Man with cyberpunk aesthetic" width={155} height={226} className="rounded-lg object-cover w-[155px] h-[226px]" />
             </div>
