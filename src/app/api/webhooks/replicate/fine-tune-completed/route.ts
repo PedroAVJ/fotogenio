@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
   if (!version) {
     return NextResponse.json({ error: 'Version not found' }, { status: 400 });
   }
-  prompts.forEach(({ id, prompt, inpaintPhotoUrl }) => {
-    replicate.run(
+  await Promise.all(prompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
+    await replicate.run(
       `pedroavj/${modelName}:${version.id}`,
       {
         webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
@@ -81,6 +81,6 @@ export async function POST(request: NextRequest) {
         }
       }
     );
-  });
+  }));
   return NextResponse.json({ received: true });
 }
