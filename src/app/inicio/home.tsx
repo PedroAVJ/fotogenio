@@ -84,8 +84,7 @@ export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
                 <Image
                   src={url}
                   alt={`Generated image ${index + 1}`}
-                  width={303}
-                  height={420}
+                  fill
                   className="object-cover rounded-[10px]"
                 />
                 <div className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center transition-opacity duration-300 ${
