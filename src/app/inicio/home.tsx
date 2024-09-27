@@ -23,8 +23,17 @@ export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
 
   const [touchedIndex, setTouchedIndex] = useState<number | null>(null)
 
-  const handleDownload = (url: string) => {
-    window.open(`${url}?download=1`, '_blank')
+  async function handleDownload(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `fotogenio-image-${Date.now()}.jpg`; // Unique filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
   }
 
   const handleTouchStart = (index: number) => {
