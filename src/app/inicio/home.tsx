@@ -29,7 +29,7 @@ export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
     const downloadUrl = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = `fotogenio-image-${Date.now()}.jpg`; // Unique filename
+    link.download = `fotogenio-${Date.now()}.png`; // Unique filename
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
