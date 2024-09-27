@@ -65,7 +65,7 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
   return (
     <main className={`
       ${workSans.className}
-      h-screen w-full
+      h-dvh w-dvw
       flex flex-col
       text-[#F5F5F5]
       bg-gradient-to-b from-[#534E4E] to-[#171717]
