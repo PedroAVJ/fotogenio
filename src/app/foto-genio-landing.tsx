@@ -1,16 +1,85 @@
-'use client'
-
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Work_Sans } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowDown } from 'lucide-react'
+import diana from './diana.png'
+import dianaVestidoBlanco from './diana-vestido-blanco.png'
+import santiago from './santiago.png'
+import santiagoGym from './santiago-gym.png'
+import reseñaOscarGutierrez from './reseña-oscar-gutierrez.png'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
   variable: '--font-work-sans',
 })
+
+import mujerAsombradaEnLaCama from './mujer-asombrada-en-la-cama.png'
+import hombreEleganteConTatuajes from './hombre-elegante-con-tatuajes.png'
+import mujerRubiaConTatuajesYFondoRojo from './mujer-rubia-con-tatuajes-y-fondo-rojo.png'
+import hombreCyberpunkConLuces from './hombre-cyberpunk-con-luces.png'
+import hombreConCamisaEstampada from './hombre-con-camisa-estampada.png'
+
+const personajesFavoritos = [
+  {
+    photo: mujerAsombradaEnLaCama,
+    alternativeText: 'Mujer joven sorprendida en la cama de noche.',
+  },
+  {
+    photo: hombreEleganteConTatuajes,
+    alternativeText: 'Hombre con traje y tatuajes visibles caminando en una calle.',
+  },
+  {
+    photo: hombreCyberpunkConLuces,
+    alternativeText: 'Hombre con estilo cyberpunk y tatuajes, iluminado con luces rojas.',
+  },
+  {
+    photo: hombreConCamisaEstampada,
+    alternativeText: 'Hombre con bigote luciendo una camisa estampada y reloj elegante.',
+  },
+  {
+    photo: mujerRubiaConTatuajesYFondoRojo,
+    alternativeText: 'Mujer rubia con tatuajes y estilo punk, posando sobre fondo rojo.',
+  },
+]
+
+import glamourEnAmbienteLujoso from './glamour-en-ambiente-lujoso.png'
+import mujerConGafasEnJardin from './mujer-con-gafas-en-jardin.png'
+import mujerEleganteEnAbrigo from './mujer-elegante-en-abrigo-de-piel.png'
+
+const rotatedPhotos = [
+  {
+    rotate: -15, 
+    left: -10, 
+    zIndex: 1,
+    photo: glamourEnAmbienteLujoso,
+    alternativeText: 'Mujer elegante con joyas disfrutando de un entorno lujoso.',
+  },
+  {
+    rotate: 0,
+    left: 0,
+    zIndex: 2,
+    photo: mujerConGafasEnJardin,
+    alternativeText: 'Mujer sofisticada con gafas de sol y abrigo de piel, sentada en escaleras de mármol.',
+  },
+  {
+    rotate: 15,
+    left: 10,
+    zIndex: 3,
+    photo: mujerEleganteEnAbrigo,
+    alternativeText: 'Mujer elegante con abrigo de piel, posando en un ambiente moderno.',
+  },
+]
+
+const estilos = [
+  { label: "Princesa", emoji: "👑", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-LQ1b2ZwdgIkkzzHQMAQz1sWfiLBLFb.png", alt: "Mujer con cabello oscuro y joyas doradas" },
+  { label: "Avatar", emoji: "🦹", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ppuifls2gKu8UvGL9VB9mAtN1p5cjh.png", alt: "Hombre con pelo largo en un escenario cyberpunk" },
+  { label: "México", emoji: "🇲🇽", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-hflAUSjyvUiNlqelxdGYcywR0qB8DH.png", alt: "Mujer con un vestido mexicano colorido y flores" },
+  { label: "GYM", emoji: "💪", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jl6iTPKTjzcsw8sPS2LXpl84EJKIRs.png", alt: "Hombre musculoso levantando pesas" },
+  { label: "Sexy", emoji: "👗", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ugKNbZLizWFZ8N5nahKe3BNnTFLMkh.png", alt: "Mujer con vestido negro en un sofá verde" },
+  { label: "Superhéroe", emoji: "🦸", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-j832p9V84OvtW8dvnQoGQus1HGL69e.png", alt: "Superman con un traje oscuro" },
+]
 
 export function FotoGenioLandingComponent() {
   return (
@@ -40,13 +109,24 @@ export function FotoGenioLandingComponent() {
           </div>
           <div className="w-full max-w-[495px] space-y-4 mb-8">
             <div className="grid grid-cols-3 gap-4">
-              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/mujer-1-ErRABih9WZLDuNu88y7YOvjTqfOIlC.png" alt="Blonde woman in blue lighting" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
-              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/hombre-1-M4g1NcnY2g3ss5fGPZj60HuZSxN22h.png" alt="Man in suit with tattoos" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
-              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/hombre-2-dPcqK9BOOxgK7KhjRsJ6xFRXv5ZyeT.png" alt="Man with cyberpunk aesthetic" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
+              {personajesFavoritos.slice(0, 3).map((personaje, index) => (
+                <Image
+                  key={index}
+                  src={personaje.photo}
+                  alt={personaje.alternativeText}
+                  className="rounded-lg object-cover w-[155px] h-[226px]"
+                />
+              ))}
             </div>
             <div className="flex justify-center gap-4">
-              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/hombre-3-ZqcQl2yRkCXaz0y9iuSdqQSDEXKWnp.png" alt="Man in patterned shirt" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
-              <Image src="https://uxsi5qpvaazgwqzm.public.blob.vercel-storage.com/landing-page/mujer-2-NsKJNMQGhCOzUfqjR862Bl4ltREm4f.png" alt="Blonde woman with tattoos on red background" width={155} height={226} sizes="(max-width: 768px) 33vw, 15vw" className="rounded-lg object-cover w-[155px] h-[226px]" />
+              {personajesFavoritos.slice(3, 6).map((personaje, index) => (
+                <Image
+                  key={index}
+                  src={personaje.photo}
+                  alt={personaje.alternativeText}
+                  className="rounded-lg object-cover w-[155px] h-[226px]"
+                />
+              ))}
             </div>
           </div>
           <Button 
@@ -61,33 +141,25 @@ export function FotoGenioLandingComponent() {
           </p>
           <div className="flex flex-col items-center space-y-4 w-full max-w-md">
             <Image 
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-uM386HQLvMXAreCPoLHmqgRzWgQwKm.png" 
-              alt="Young man with dark hair smiling in a restaurant" 
-              width={225} 
-              height={400} 
+              src={santiago} 
+              alt="Selfie de Santiago"
               className="rounded-lg w-[225px] h-[400px] object-cover"
             />
             <ArrowDown className="text-[#8E54E9] w-8 h-8" />
             <Image 
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NlUQiMtWgr1Bv37dmoiEDRSk1HE3cG.png" 
-              alt="Muscular man posing in a gym" 
-              width={225} 
-              height={400} 
+              src={santiagoGym} 
+              alt="Santiago posando en el gimnasio"
               className="rounded-lg w-[225px] h-[400px] object-cover"
             />
             <Image 
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-j88v8EkPTzSD3yARcQ783slKFP7zl5.png" 
-              alt="Young woman with long dark hair wearing a purple sweater" 
-              width={225} 
-              height={400} 
+              src={diana} 
+              alt="Selfie de Diana"
               className="rounded-lg w-[225px] h-[400px] object-cover"
             />
             <ArrowDown className="text-[#8E54E9] w-8 h-8" />
             <Image 
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jHDDBHF7I51o7P6I05ExEyu4NCYmJj.png" 
-              alt="Young blonde woman in a white lace dress holding white tulips" 
-              width={225} 
-              height={400} 
+              src={dianaVestidoBlanco} 
+              alt="Diana con vestido blanco"
               className="rounded-lg w-[225px] h-[400px] object-cover"
             />
           </div>
@@ -98,11 +170,9 @@ export function FotoGenioLandingComponent() {
               </p>
               <div className="flex items-center justify-center">
                 <Image 
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ZYDAQYQ8JPRRmvl6KqRkBELQCutOpM.png" 
-                  alt="Oscar Gutierrez" 
-                  width={45} 
-                  height={45} 
-                  className="rounded-full mr-4"
+                  src={reseñaOscarGutierrez} 
+                  alt="Imagen de Oscar Gutiérrez para la reseña."
+                  className="rounded-full mr-4 w-[45px] h-[45px] object-cover object-top"
                 />
                 <p className="text-white font-bold text-[14px] leading-[29px] tracking-[-0.2px]">
                   Oscar Gutierrez
@@ -117,29 +187,7 @@ export function FotoGenioLandingComponent() {
           </div>
           <div className="flex justify-center items-end w-full max-w-md h-40 mt-12">
             <div className="relative w-[120px] h-[114px]">
-              {[
-                { 
-                  rotate: -15, 
-                  left: -10, 
-                  zIndex: 1, 
-                  src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-QE7kUjqWaaj4P2Ry9qix9zDgnNSncO.png",
-                  alt: "Blonde woman in a black dress at a dining table"
-                },
-                { 
-                  rotate: 0, 
-                  left: 0, 
-                  zIndex: 2, 
-                  src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-klogHJaO107IfQWEFPLLOEf5jD7RsR.png",
-                  alt: "Woman with long dark hair and glasses"
-                },
-                { 
-                  rotate: 15, 
-                  left: 10, 
-                  zIndex: 3, 
-                  src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-SkZbmDzysqmDA4duEybo3tM0ufD6v9.png",
-                  alt: "Woman in a black fur coat on wooden steps"
-                },
-              ].map((style, index) => (
+              {rotatedPhotos.map((style, index) => (
                 <div
                   key={index}
                   style={{
@@ -153,10 +201,9 @@ export function FotoGenioLandingComponent() {
                   }}
                 >
                   <Image
-                    src={style.src}
-                    alt={style.alt}
-                    width={100}
-                    height={114}
+                    src={style.photo}
+                    alt={style.alternativeText}
+                    className="rounded-lg object-cover w-[100px] h-[114px]"
                   />
                 </div>
               ))}
@@ -165,14 +212,7 @@ export function FotoGenioLandingComponent() {
           <ArrowDown className="text-white w-8 h-8 mt-8" />
           
           <div className="w-full max-w-2xl mt-12 grid grid-cols-2 gap-4">
-            {[
-              { label: "Princesa", emoji: "👑", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-LQ1b2ZwdgIkkzzHQMAQz1sWfiLBLFb.png", alt: "Woman with dark hair and golden jewelry" },
-              { label: "Avatar", emoji: "🦹", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ppuifls2gKu8UvGL9VB9mAtN1p5cjh.png", alt: "Man with long hair in a cyberpunk setting" },
-              { label: "México", emoji: "🇲🇽", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-hflAUSjyvUiNlqelxdGYcywR0qB8DH.png", alt: "Woman in a colorful Mexican dress with flowers" },
-              { label: "GYM", emoji: "💪", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jl6iTPKTjzcsw8sPS2LXpl84EJKIRs.png", alt: "Muscular man lifting weights" },
-              { label: "Sexy", emoji: "👗", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ugKNbZLizWFZ8N5nahKe3BNnTFLMkh.png", alt: "Woman in a black dress on a green couch" },
-              { label: "SuperHeroe", emoji: "🦸", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-j832p9V84OvtW8dvnQoGQus1HGL69e.png", alt: "Superman in a dark suit" },
-            ].map((item, index) => (
+            {estilos.map((item, index) => (
               <div key={index} className="flex flex-col items-center">
                 <Image
                   src={item.src}
