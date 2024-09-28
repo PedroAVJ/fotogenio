@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import Image from 'next/image'
 import { useLocalStorage } from 'react-use-storage'
+import hombre from './fotos/hombre.png'
+import mujer from './fotos/mujer.png'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -61,9 +63,8 @@ export function ChooseGender() {
           className="relative h-56 w-72 md:h-72 md:w-96 p-0 hover:bg-[#8CF486] data-[state=on]:bg-[#8CF486]"
         >
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-DgiC6O5i2MQTLIxkUEpvpbUvwXWcON.png"
-            alt="Male character - Asian man in a black coat"
-            fill
+            src={hombre}
+            alt="Personaje masculino - Hombre asiático con abrigo negro"
             className="size-full rounded-md object-cover p-0.5"
           />
         </ToggleGroupItem>
@@ -73,9 +74,8 @@ export function ChooseGender() {
           className="relative h-56 w-72 md:h-72 md:w-96 p-0 hover:bg-[#8CF486] data-[state=on]:bg-[#8CF486]"
         >
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-in6wI8Org9scHHjYf0SUXAel8KcQC9.png"
-            alt="Female character - Fantasy warrior woman in red and black outfit"
-            fill
+            src={mujer}
+            alt="Personaje femenino - Mujer asiática con vestido blanco"
             className="size-full rounded-md object-cover p-0.5"
           />
         </ToggleGroupItem>
