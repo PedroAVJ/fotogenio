@@ -7,7 +7,7 @@ import { ArrowDown } from 'lucide-react'
 import diana from './mujeres/diana.png'
 import dianaVestidoBlanco from './mujeres/diana-vestido-blanco.png'
 import santiago from './hombres/santiago.png'
-import santiagoGym from './hombres/santiago-gym.png'
+import santiagoSuperman from './hombres/santiago-superman.png'
 import reseñaOscarGutierrez from './hombres/reseña-oscar-gutierrez.png'
 
 const workSans = Work_Sans({ 
@@ -154,8 +154,8 @@ export function FotoGenioLandingComponent() {
             />
             <ArrowDown className="text-[#8E54E9] w-8 h-8" />
             <Image 
-              src={santiagoGym} 
-              alt="Santiago posando en el gimnasio"
+              src={santiagoSuperman} 
+              alt="Santiago posando como superman"
               className="rounded-lg w-[225px] h-[400px] object-cover"
             />
             <Image 
