@@ -4,22 +4,22 @@ import { Work_Sans } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowDown } from 'lucide-react'
-import diana from './diana.png'
-import dianaVestidoBlanco from './diana-vestido-blanco.png'
-import santiago from './santiago.png'
-import santiagoGym from './santiago-gym.png'
-import reseñaOscarGutierrez from './reseña-oscar-gutierrez.png'
+import diana from './mujeres/diana.png'
+import dianaVestidoBlanco from './mujeres/diana-vestido-blanco.png'
+import santiago from './hombres/santiago.png'
+import santiagoGym from './hombres/santiago-gym.png'
+import reseñaOscarGutierrez from './hombres/reseña-oscar-gutierrez.png'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
   variable: '--font-work-sans',
 })
 
-import mujerAsombradaEnLaCama from './mujer-asombrada-en-la-cama.png'
-import hombreEleganteConTatuajes from './hombre-elegante-con-tatuajes.png'
-import mujerRubiaConTatuajesYFondoRojo from './mujer-rubia-con-tatuajes-y-fondo-rojo.png'
-import hombreCyberpunkConLuces from './hombre-cyberpunk-con-luces.png'
-import hombreConCamisaEstampada from './hombre-con-camisa-estampada.png'
+import mujerAsombradaEnLaCama from './mujeres/mujer-asombrada-en-la-cama.png'
+import hombreEleganteConTatuajes from './hombres/hombre-elegante-con-tatuajes.png'
+import mujerRubiaConTatuajesYFondoRojo from './mujeres/mujer-rubia-con-tatuajes-y-fondo-rojo.png'
+import hombreCyberpunkConLuces from './hombres/hombre-cyberpunk-con-luces.png'
+import hombreConCamisaEstampada from './hombres/hombre-con-camisa-estampada.png'
 
 const personajesFavoritos = [
   {
@@ -44,9 +44,9 @@ const personajesFavoritos = [
   },
 ]
 
-import glamourEnAmbienteLujoso from './glamour-en-ambiente-lujoso.png'
-import mujerConGafasEnJardin from './mujer-con-gafas-en-jardin.png'
-import mujerEleganteEnAbrigo from './mujer-elegante-en-abrigo-de-piel.png'
+import glamourEnAmbienteLujoso from './mujeres/glamour-en-ambiente-lujoso.png'
+import mujerConGafasEnJardin from './mujeres/mujer-con-gafas-en-jardin.png'
+import mujerEleganteEnAbrigo from './mujeres/mujer-elegante-en-abrigo-de-piel.png'
 
 const rotatedPhotos = [
   {
