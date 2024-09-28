@@ -9,6 +9,7 @@ import { ArrowDown, Loader2 } from 'lucide-react'
 import { createCheckoutSessionAction } from './actions'
 import { toast } from "sonner"
 import { useMutation } from '@tanstack/react-query'
+import mujer from './fotos/mujer.png'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -42,9 +43,8 @@ export function ChoosePaymentComponent() {
       <div className="flex flex-col items-center w-full max-w-md">
         <div className="relative w-64 h-64 mb-4">
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-in6wI8Org9scHHjYf0SUXAel8KcQC9.png"
-            alt="Female character - Fantasy warrior woman in red and black outfit"
-            fill
+            src={mujer}
+            alt="Mujer de fondo"
             className="rounded-md object-cover"
           />
         </div>

@@ -11,6 +11,22 @@ import { useLocalStorage } from 'react-use-storage'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
+import ejemploMalo1 from './fotos/ejemplo-malo-1.png'
+import ejemploMalo2 from './fotos/ejemplo-malo-2.png'
+import ejemploMalo3 from './fotos/ejemplo-malo-3.png'
+import ejemploBueno1 from './fotos/ejemplo-bueno-1.png'
+import ejemploBueno2 from './fotos/ejemplo-bueno-2.png'
+import ejemploBueno3 from './fotos/ejemplo-bueno-3.png'
+
+const placeholderImages = [
+  { foto: ejemploMalo1, status: 'rejected' },
+  { foto: ejemploMalo2, status: 'rejected' },
+  { foto: ejemploMalo3, status: 'rejected' },
+  { foto: ejemploBueno1, status: 'accepted' },
+  { foto: ejemploBueno2, status: 'accepted' },
+  { foto: ejemploBueno3, status: 'accepted' },
+]
+
 export function UploadPhotosComponent() {
   const [step, setStep] = useLocalStorage<number>('step', 4)
   const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([])
@@ -55,15 +71,6 @@ export function UploadPhotosComponent() {
     return 'text-yellow-500' // This case should not occur now
   }
 
-  const placeholderImages = [
-    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-QTSU0OCBEghGuESy0sc9HnScS08Dq4.png", status: 'rejected' },
-    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wTrLSZQpwybyB8BPmROpU4XhREVsGF.png", status: 'rejected' },
-    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-b6SBw2k13WjOastTp1BYAIjyAFGyIp.png", status: 'rejected' },
-    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-yggqGpcbigSYdq0o2dxcormJsaTrNY.png", status: 'accepted' },
-    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Q2p7wOGYwuCZ4dK2O9ubINsJOfoPbo.png", status: 'accepted' },
-    { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-C1Lj3ycrLHJuhk2qEwmwaLWjAxklUX.png", status: 'accepted' },
-  ]
-
   return (
     <main className={`
       ${workSans.className}
@@ -89,15 +96,14 @@ export function UploadPhotosComponent() {
           <p>2. Sube entre 10 y 20 fotos.</p>
         </div>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4 gap-y-8 w-full">
-          {placeholderImages.map((img, index) => (
+          {placeholderImages.map((placeholderImage, index) => (
             <div key={index} className="relative aspect-square overflow-visible">
               <Image
-                src={img.src}
-                alt={`Placeholder ${index + 1}`}
-                fill
+                src={placeholderImage.foto}
+                alt={`Ejemplo ${index + 1}`}
                 className="rounded-md object-cover"
               />
-              {img.status === 'rejected' ? (
+              {placeholderImage.status === 'rejected' ? (
                 <div className="absolute -top-4 -right-4 w-8 h-8 flex items-center justify-center rounded-full border border-red-500">
                   <X className="text-red-500" size={20} />
                 </div>

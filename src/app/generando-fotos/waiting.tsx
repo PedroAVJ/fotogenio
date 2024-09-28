@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Work_Sans } from 'next/font/google'
 import Lottie from 'lottie-react'
+import animation from './animacion.json'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -12,15 +13,6 @@ interface WaitingComponentProps {
 }
 
 export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
-  const [animationData, setAnimationData] = useState(null)
-
-  useEffect(() => {
-    fetch('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Animation%20-%201725891597214-LLEgcagqDJnN7MxXTFFqf3x2rU2qcQ.json')
-      .then(response => response.json())
-      .then(data => setAnimationData(data))
-      .catch(error => console.error('Error fetching animation data:', error))
-  }, [])
-
   return (
     <main className={`
       ${workSans.className}
@@ -45,13 +37,9 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
         <h2 className="font-semibold text-[20px] tracking-[0.02em] text-center mb-4">
           ¡Tus fotos se estan generando!
         </h2>
-        {animationData ? (
-          <div className="w-full max-w-md flex-grow flex items-center justify-center">
-            <Lottie animationData={animationData} loop={true} />
-          </div>
-        ) : (
-          <div className="flex justify-center items-center h-32">Cargando animación...</div>
-        )}
+        <div className="w-full max-w-md flex-grow flex items-center justify-center">
+          <Lottie animationData={animation} loop={true} />
+        </div>
         <p className="font-semibold text-[12px] leading-[20px] tracking-[0.02em] mt-4">
           Tiempo aprox. {aproxTime} min
         </p>
