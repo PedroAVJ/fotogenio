@@ -26,7 +26,7 @@ export const uploadPhotosAction = api
     }));
     const zipContent = await zip.generateAsync({ type: 'blob' });
     await Promise.all(photos.map(async (photo) => {
-      const path = `user/uploads/${userId}/${photo.name}`
+      const path = `fotos-subidas/${photo.name}`
       const blob = await put(path, photo, {
         access: "public",
       })
@@ -37,7 +37,7 @@ export const uploadPhotosAction = api
         }
       })
     }))
-    const zipPath = `user/uploads/${userId}/all_photos.zip`;
+    const zipPath = `zips/all_photos.zip`;
     const zipBlob = await put(zipPath, zipContent, {
       access: "public",
     });

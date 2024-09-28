@@ -82,8 +82,7 @@ export async function POST(request: NextRequest) {
   if (generatedPhoto) {
     return NextResponse.json({ error: 'Generated photo already exists' }, { status: 400 });
   }
-  const folder = `user/generations/${userId}`;
-  const blob = await addWatermark(photoUrl, `${folder}/${body.id}`);
+  const blob = await addWatermark(photoUrl, `generaciones/${body.id}`);
   await db.generatedPhoto.create({
     data: {
       userId,
