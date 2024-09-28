@@ -16,7 +16,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'
 import { useSignUp } from '@clerk/nextjs'
-import { addUserSettingsAction } from '@/app/generar-imagenes/actions'
+import { addUserSettingsAction } from './actions'
 import { Gender } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'

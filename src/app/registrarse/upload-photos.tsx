@@ -5,7 +5,7 @@ import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
 import { CloudUpload, X, Check, Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import { uploadPhotosAction } from '@/app/generar-imagenes/actions'
+import { uploadPhotosAction } from './actions'
 import { useMutation } from '@tanstack/react-query'
 import { useLocalStorage } from 'react-use-storage'
 
