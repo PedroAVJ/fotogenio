@@ -72,13 +72,20 @@ const rotatedPhotos = [
   },
 ]
 
+import personajeAnimadoConAtuendoOriental from './mujeres/personaje-animado-con-atuendo-oriental.png'
+import hombreEnCiudadLluviosaFuturista from './hombres/hombre-en-ciudad-lluviosa-futurista.png'
+import mujerConTrajeTradicionalMexicano from './mujeres/mujer-con-traje-tradicional-mexicano.png'
+import hombreFuerteLevantandoPesas from './hombres/hombre-fuerte-levantando-pesas.png'
+import mujerEleganteConBotasPlateadas from './mujeres/mujer-elegante-con-botas-plateadas.png'
+import superman from './hombres/superman.jpg'
+
 const estilos = [
-  { label: "Princesa", emoji: "👑", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-LQ1b2ZwdgIkkzzHQMAQz1sWfiLBLFb.png", alt: "Mujer con cabello oscuro y joyas doradas" },
-  { label: "Avatar", emoji: "🦹", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ppuifls2gKu8UvGL9VB9mAtN1p5cjh.png", alt: "Hombre con pelo largo en un escenario cyberpunk" },
-  { label: "México", emoji: "🇲🇽", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-hflAUSjyvUiNlqelxdGYcywR0qB8DH.png", alt: "Mujer con un vestido mexicano colorido y flores" },
-  { label: "GYM", emoji: "💪", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-jl6iTPKTjzcsw8sPS2LXpl84EJKIRs.png", alt: "Hombre musculoso levantando pesas" },
-  { label: "Sexy", emoji: "👗", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-ugKNbZLizWFZ8N5nahKe3BNnTFLMkh.png", alt: "Mujer con vestido negro en un sofá verde" },
-  { label: "Superhéroe", emoji: "🦸", src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-j832p9V84OvtW8dvnQoGQus1HGL69e.png", alt: "Superman con un traje oscuro" },
+  { label: "Princesa", emoji: "👑", src: personajeAnimadoConAtuendoOriental, alt: "Mujer con cabello oscuro y joyas doradas" },
+  { label: "Avatar", emoji: "🦹", src: hombreEnCiudadLluviosaFuturista, alt: "Hombre con pelo largo en un escenario cyberpunk" },
+  { label: "México", emoji: "🇲🇽", src: mujerConTrajeTradicionalMexicano, alt: "Mujer con un vestido mexicano colorido y flores" },
+  { label: "GYM", emoji: "💪", src: hombreFuerteLevantandoPesas, alt: "Hombre musculoso levantando pesas" },
+  { label: "Sexy", emoji: "👗", src: mujerEleganteConBotasPlateadas, alt: "Mujer con vestido negro en un sofá verde" },
+  { label: "Superhéroe", emoji: "🦸", src: superman, alt: "Superman con un traje oscuro" },
 ]
 
 export function FotoGenioLandingComponent() {
@@ -217,8 +224,6 @@ export function FotoGenioLandingComponent() {
                 <Image
                   src={item.src}
                   alt={item.alt}
-                  width={155}
-                  height={226}
                   className="rounded-lg object-cover w-[155px] h-[226px]"
                 />
                 <p className="text-white text-[20px] font-normal leading-[25px] tracking-[0.02em] mt-2 font-work-sans">
