@@ -1,4 +1,4 @@
-import { FotoGenioLandingComponent } from "@/components/foto-genio-landing";
+import { FotoGenioLandingComponent } from "./foto-genio-landing";
 
 export default function Page() {
   return <FotoGenioLandingComponent />;

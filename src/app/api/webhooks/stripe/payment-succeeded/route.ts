@@ -4,6 +4,8 @@ import { env } from '@/lib/env';
 import { headers } from 'next/headers';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
+import { getBaseUrl } from '@/lib/utils';
+import md5 from 'md5';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -27,12 +29,18 @@ export async function POST(request: NextRequest) {
   if (!operation) {
     return NextResponse.json({ error: 'Missing operation' }, { status: 400 });
   }
-  const { zippedPhotosUrl } = await db.userSettings.findUniqueOrThrow({
-    where: { userId, modelStatus: 'pending' },
-    select: { zippedPhotosUrl: true },
-  });
   if (operation === 'create-model') {
-    const modelName = `flux-${userId}`;
+    const userSettings = await db.userSettings.findUnique({
+      where: { userId, modelStatus: 'pending' },
+    });
+    if (!userSettings) {
+      return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
+    }
+    await db.userSettings.update({
+      where: { userId },
+      data: { credits: { increment: 25 }, modelStatus: 'training' },
+    });
+    const modelName = `flux-${md5(userId)}`;
     const model = await replicate.models.create(
       'pedroavj',
       modelName,
@@ -41,10 +49,7 @@ export async function POST(request: NextRequest) {
         hardware: 'gpu-t4'
       }
     )
-    const baseUrl = env.VERCEL_PROJECT_PRODUCTION_URL;
-    if (!baseUrl) {
-      return NextResponse.json({ error: 'Missing baseUrl' }, { status: 400 });
-    }
+    const baseUrl = getBaseUrl();
     await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",
@@ -60,7 +65,7 @@ export async function POST(request: NextRequest) {
           batch_size: 1,
           resolution: "512,768,1024",
           autocaption: true,
-          input_images: zippedPhotosUrl,
+          input_images: userSettings.zippedPhotosUrl,
           trigger_word: "TOK",
           learning_rate: 0.0004,
           wandb_project: "flux_train_replicate",
@@ -71,10 +76,6 @@ export async function POST(request: NextRequest) {
         }
       }
     );
-    await db.userSettings.update({
-      where: { userId },
-      data: { credits: { increment: 25 }, modelStatus: 'training' },
-    });
   } else if (operation === 'buy-credits') {
     await db.userSettings.update({
       where: { userId },
