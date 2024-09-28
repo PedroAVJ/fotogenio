@@ -18,8 +18,7 @@ interface HomeProps {
 }
 
 export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
-  const defaultImageUrl = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-rLbkqWY8hHDI8hltjJ1P1dNg58jQDC.png"
-  const images = imageUrls || Array(10).fill(defaultImageUrl)
+  const images = imageUrls || []
 
   const [touchedIndex, setTouchedIndex] = useState<number | null>(null)
 
