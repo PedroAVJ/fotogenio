@@ -231,14 +231,14 @@ export function FileUploader(props: FileUploaderProps) {
                 </div>
                 <div className="flex flex-col gap-px">
                   <p className="font-medium text-muted-foreground">
-                    Drag {`'n'`} drop files here, or click to select files
+                    Arrastra y suelta archivos aquí, o haz clic para seleccionar archivos
                   </p>
                   <p className="text-sm text-muted-foreground/70">
-                    You can upload
+                    Puedes subir
                     {maxFileCount > 1
-                      ? ` ${maxFileCount === Infinity ? "multiple" : maxFileCount}
-                      files (up to ${formatBytes(maxSize)} each)`
-                      : ` a file with ${formatBytes(maxSize)}`}
+                      ? ` ${maxFileCount === Infinity ? "varios" : maxFileCount}
+                      archivos (hasta ${formatBytes(maxSize)} cada uno)`
+                      : ` un archivo con ${formatBytes(maxSize)}`}
                   </p>
                 </div>
               </div>
