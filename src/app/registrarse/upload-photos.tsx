@@ -66,7 +66,6 @@ export function UploadPhotosComponent() {
 
   const getUploadCountColor = (count: number) => {
     if (count === 0) return 'text-white'
-    if (count < 10) return 'text-red-500'
     if (count <= 20) return 'text-green-500'
     return 'text-yellow-500' // This case should not occur now
   }
@@ -93,7 +92,7 @@ export function UploadPhotosComponent() {
       <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-md md:max-w-4xl px-4">
         <div className="text-sm mb-4 w-full text-left">
           <p>1. Sube Fotos Variadas.</p>
-          <p>2. Sube entre 10 y 20 fotos.</p>
+          <p>2. Sube entre 1 y 20 fotos.</p>
         </div>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4 gap-y-8 w-full">
           {placeholderImages.map((placeholderImage, index) => (
@@ -138,7 +137,7 @@ export function UploadPhotosComponent() {
       <Button
         size="lg"
         className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={uploadedPhotos.length < 10 || uploadedPhotos.length > 20 || isPending}
+        disabled={uploadedPhotos.length < 1 || uploadedPhotos.length > 20 || isPending}
         onClick={handleNextStep}
       >
         {isPending ? (
