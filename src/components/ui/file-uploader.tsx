@@ -117,12 +117,12 @@ export function FileUploader(props: FileUploaderProps) {
   const onDrop = React.useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
-        toast.error("Cannot upload more than 1 file at a time")
+        toast.error("No se puede subir más de un archivo a la vez")
         return
       }
 
       if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        toast.error(`Cannot upload more than ${maxFileCount} files`)
+        toast.error(`No se puede subir más de ${maxFileCount} archivos`)
         return
       }
 
@@ -138,7 +138,7 @@ export function FileUploader(props: FileUploaderProps) {
 
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach(({ file }) => {
-          toast.error(`File ${file.name} was rejected`)
+          toast.error(`El archivo ${file.name} fue rechazado`)
         })
       }
 
@@ -151,12 +151,12 @@ export function FileUploader(props: FileUploaderProps) {
           updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`
 
         toast.promise(onUpload(updatedFiles), {
-          loading: `Uploading ${target}...`,
+          loading: `Subiendo ${target}...`,
           success: () => {
             setFiles([])
-            return `${target} uploaded`
+            return `${target} subido`
           },
-          error: `Failed to upload ${target}`,
+          error: `Error al subir ${target}`,
         })
       }
     },
