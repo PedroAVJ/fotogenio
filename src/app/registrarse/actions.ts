@@ -19,12 +19,16 @@ const uploadPhotos = zfd.formData({
 export const uploadPhotosAction = api
   .input(uploadPhotos)
   .mutation(async ({ input: { photos }, ctx: { session: { userId } } }) => {
+    console.log('1')
     const zip = new JSZip();
+    console.log('2')
     await Promise.all(photos.map(async (photo) => {
       const arrayBuffer = await photo.arrayBuffer();
       zip.file(photo.name, arrayBuffer);
     }));
+    console.log('3')
     const zipContent = await zip.generateAsync({ type: 'blob' });
+    console.log('4')
     await Promise.all(photos.map(async (photo) => {
       const path = `fotos-subidas/${photo.name}`
       const blob = await put(path, photo, {
@@ -37,14 +41,18 @@ export const uploadPhotosAction = api
         }
       })
     }))
+    console.log('5')
     const zipPath = `zips/all_photos.zip`;
+    console.log('6')
     const zipBlob = await put(zipPath, zipContent, {
       access: "public",
     });
+    console.log('7')
     await db.userSettings.update({
       where: { userId },
       data: { zippedPhotosUrl: zipBlob.url },
     });
+    console.log('8')
   });
 
 const addUserSettings = z.object({
