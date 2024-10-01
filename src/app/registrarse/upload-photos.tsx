@@ -1,6 +1,5 @@
 'use client'
 
-import * as Sentry from "@sentry/nextjs";
 import React, { useState } from 'react'
 import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
@@ -49,16 +48,7 @@ export function UploadPhotosComponent() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: uploadPhotosAction,
-    onSuccess: (data, variables, context) => {
-      Sentry.captureMessage('uploadPhotosAction.onSuccess', {
-        level: 'info',
-        extra: {
-          data,
-          uploadedPhotosCount: uploadedPhotos.length,
-          variables,
-          context,
-        },
-      })
+    onSuccess: () => {
       setStep(5);
     },
     onError: (error) => {
