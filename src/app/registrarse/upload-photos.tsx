@@ -91,7 +91,7 @@ export function UploadPhotosComponent() {
   return (
     <main className={`
       ${workSans.className}
-      h-dvh w-dvw
+      h-screen w-full
       flex size-full flex-col items-center justify-between
       px-2 pb-8 pt-4
       text-[#F5F5F5]
