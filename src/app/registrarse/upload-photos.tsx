@@ -7,18 +7,8 @@ import Image from 'next/image'
 import { addPhotosToDb } from './actions'
 import { useMutation } from '@tanstack/react-query'
 import { useLocalStorage } from 'react-use-storage'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
 import { FileUploader } from "@/components/ui/file-uploader"
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { useUploadFile } from '@/hooks/use-upload-file'
 import JSZip from 'jszip';
 
@@ -30,6 +20,7 @@ import ejemploMalo3 from './fotos/ejemplo-malo-3.png'
 import ejemploBueno1 from './fotos/ejemplo-bueno-1.png'
 import ejemploBueno2 from './fotos/ejemplo-bueno-2.png'
 import ejemploBueno3 from './fotos/ejemplo-bueno-3.png'
+import { useState } from 'react'
 
 const placeholderImages = [
   { foto: ejemploMalo1, status: 'rejected' },
@@ -40,19 +31,8 @@ const placeholderImages = [
   { foto: ejemploBueno3, status: 'accepted' },
 ]
 
-const subirFotosSchema = z.object({
-  images: z.array(z.instanceof(File)),
-})
-
-type SubirFotosSchema = z.infer<typeof subirFotosSchema>
-
 export function UploadPhotosComponent() {
-  const form = useForm<SubirFotosSchema>({
-    resolver: zodResolver(subirFotosSchema),
-    defaultValues: {
-      images: [],
-    },
-  })
+  const [files, setFiles] = useState<File[]>([])
   const [step, setStep] = useLocalStorage<number>('step', 4)
   const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
     "subirFotos",
@@ -64,7 +44,7 @@ export function UploadPhotosComponent() {
   )
   async function zipFiles() {
     const zip = new JSZip();
-    for (const file of form.getValues('images')) {
+    for (const file of files) {
       zip.file(file.name, file);
     }
     const content = await zip.generateAsync({ type: 'arraybuffer' });
@@ -85,9 +65,6 @@ export function UploadPhotosComponent() {
       setStep(5);
     },
   });
-  function onSubmit() {
-    mutate();
-  }
   return (
     <ScrollArea>
       <main className={`
@@ -132,41 +109,21 @@ export function UploadPhotosComponent() {
                 </div>
               ))}
             </div>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex w-full flex-col gap-6"
-              >
-                <FormField
-                  control={form.control}
-                  name="images"
-                  render={({ field }) => (
-                    <div className="space-y-6">
-                      <FormItem className="w-full">
-                        <FormControl>
-                          <FileUploader
-                            value={field.value}
-                            onValueChange={field.onChange}
-                            maxFileCount={20}
-                            maxSize={8 * 1024 * 1024}
-                            progresses={progresses}
-                            onUpload={onUpload}
-                            disabled={isUploading}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    </div>
-                  )}
-                />
-              </form>
-            </Form>
+            <FileUploader
+              value={files}
+              onValueChange={setFiles}
+              maxFileCount={20}
+              maxSize={8 * 1024 * 1024}
+              progresses={progresses}
+              onUpload={onUpload}
+              disabled={isUploading}
+            />
           </div>
           <Button
             size="lg"
             className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!form.formState.isValid || isPending}
-            onClick={() => form.handleSubmit(onSubmit)}
+            disabled={!uploadedFiles.length || isUploading || isPending}
+            onClick={() => mutate()}
           >
             {isPending ? (
               <>

@@ -37,8 +37,7 @@ export function useUploadFile(
           setProgresses((prev) => {
             return {
               ...prev,
-              // @ts-expect-error Obviosuly the type is not correct, but it works
-              [file]: progress,
+              [file.name]: progress,
             }
           })
         },

@@ -12,7 +12,7 @@ export const fileRouter = {
     .onUploadComplete(async () => {
       return {};
     }),
-  subirZip: f({ image: { maxFileSize: "256MB", maxFileCount: 1 } })
+  subirZip: f({ "application/zip": { maxFileSize: "256MB", maxFileCount: 1 } })
     .middleware(async () => {
       auth().protect();
       return {};

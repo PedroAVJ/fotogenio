@@ -30,7 +30,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example onValueChange={(files) => setFiles(files)}
    */
-  onValueChange: (files: File[]) => void
+  onValueChange?: (files: File[]) => void
 
   /**
    * Function to be called when files are uploaded.
@@ -110,19 +110,19 @@ export function FileUploader(props: FileUploaderProps) {
   } = props
 
   const [files, setFiles] = useControllableState({
-    prop: valueProp,
-    onChange: onValueChange,
+    prop: valueProp ?? [],
+    onChange: onValueChange ?? (() => {}),
   })
 
   const onDrop = React.useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
-        toast.error("No se puede subir más de un archivo a la vez")
+        toast.error("No se puede subir más de un archivo a la vez", { dismissible: true })
         return
       }
 
       if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        toast.error(`No se puede subir más de ${maxFileCount} archivos`)
+        toast.error(`No se puede subir más de ${maxFileCount} archivos`, { dismissible: true })
         return
       }
 
@@ -138,7 +138,7 @@ export function FileUploader(props: FileUploaderProps) {
 
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach(({ file }) => {
-          toast.error(`El archivo ${file.name} fue rechazado`)
+          toast.error(`El archivo ${file.name} fue rechazado`, { dismissible: true })
         })
       }
 
@@ -157,6 +157,7 @@ export function FileUploader(props: FileUploaderProps) {
             return updatedFiles.length > 0 ? `${target} subidos` : `subido`
           },
           error: `Error al subir ${target}`,
+          dismissible: true,
         })
       }
     },
