@@ -20,6 +20,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useUploadFile } from '@/hooks/use-upload-file'
+import JSZip from 'jszip';
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -57,6 +58,20 @@ export function UploadPhotosComponent() {
     "subirFotos",
     { defaultUploadedFiles: [] }
   )
+  async function zipAndDownloadFiles() {
+    const zip = new JSZip();
+    
+    // Add each file to the zip
+    for (const file of form.getValues('images')) {
+      zip.file(file.name, file);
+    }
+    
+    // Generate the zip file
+    const content = await zip.generateAsync({ type: 'blob' });
+    
+    // Save and download the zip file
+    saveAs(content, 'uploaded_photos.zip');
+  };
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const photoUrls = uploadedFiles.map((file) => file.url);
