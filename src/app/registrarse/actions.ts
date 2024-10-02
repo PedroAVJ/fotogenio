@@ -11,8 +11,8 @@ import { getBaseUrl } from "@/lib/utils";
 
 export const addPhotosToDb = api
   .input(z.object({
-    photoUrls: z.array(z.string()),
-    zippedPhotosUrl: z.string(),
+    photoUrls: z.array(z.string().url()).min(1).max(20),
+    zippedPhotosUrl: z.string().url(),
   }))
   .mutation(async ({ input: { photoUrls, zippedPhotosUrl }, ctx: { session: { userId } } }) => {
     await db.uploadedPhoto.createMany({
