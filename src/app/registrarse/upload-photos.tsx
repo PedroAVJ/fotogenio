@@ -58,13 +58,16 @@ export function UploadPhotosComponent() {
     { defaultUploadedFiles: [] }
   )
   const { mutate, isPending } = useMutation({
-    mutationFn: addPhotosToDb,
+    mutationFn: async () => {
+      const photoUrls = uploadedFiles.map((file) => file.url);
+      await addPhotosToDb({ photoUrls });
+    },
     onSuccess: () => {
       setStep(5);
     },
   });
-  function onSubmit(data: SubirFotosSchema) {
-    mutate(data);
+  function onSubmit() {
+    mutate();
   }
   return (
     <main className={`
