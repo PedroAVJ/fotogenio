@@ -1,13 +1,25 @@
 'use client'
 
-import React, { useState } from 'react'
 import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
-import { CloudUpload, X, Check, Loader2 } from 'lucide-react'
+import { X, Check, Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import { uploadPhotosAction } from './actions'
+import { addPhotosToDb } from './actions'
 import { useMutation } from '@tanstack/react-query'
 import { useLocalStorage } from 'react-use-storage'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { FileUploader } from "@/components/ui/file-uploader"
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useUploadFile } from '@/hooks/use-upload-file'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -27,49 +39,33 @@ const placeholderImages = [
   { foto: ejemploBueno3, status: 'accepted' },
 ]
 
+const subirFotosSchema = z.object({
+  images: z.array(z.instanceof(File)),
+})
+
+type SubirFotosSchema = z.infer<typeof subirFotosSchema>
+
 export function UploadPhotosComponent() {
+  const form = useForm<SubirFotosSchema>({
+    resolver: zodResolver(subirFotosSchema),
+    defaultValues: {
+      images: [],
+    },
+  })
   const [step, setStep] = useLocalStorage<number>('step', 4)
-  const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([])
-  const [error, setError] = useState<string | null>(null)
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (files) {
-      const newPhotos = Array.from(files).map(file => URL.createObjectURL(file))
-      const totalPhotos = uploadedPhotos.length + newPhotos.length
-      if (totalPhotos > 20) {
-        setError(`You can only upload up to 20 photos. You've selected ${totalPhotos} photos.`)
-        return
-      }
-      setUploadedPhotos(Array.from(files))
-      setError(null)
-    }
-  }
-
+  const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
+    "subirFotos",
+    { defaultUploadedFiles: [] }
+  )
   const { mutate, isPending } = useMutation({
-    mutationFn: uploadPhotosAction,
+    mutationFn: addPhotosToDb,
     onSuccess: () => {
       setStep(5);
     },
-    onError: (error) => {
-      setError(error.message);
-    },
   });
-
-  async function handleNextStep() {
-    const formData = new FormData();
-    uploadedPhotos.forEach((photo) => {
-      formData.append('photos', photo);
-    });
-    mutate(formData);
+  function onSubmit(data: SubirFotosSchema) {
+    mutate(data);
   }
-
-  const getUploadCountColor = (count: number) => {
-    if (count === 0) return 'text-white'
-    if (count <= 20) return 'text-green-500'
-    return 'text-yellow-500' // This case should not occur now
-  }
-
   return (
     <main className={`
       ${workSans.className}
@@ -114,39 +110,50 @@ export function UploadPhotosComponent() {
             </div>
           ))}
         </div>
-        <label htmlFor="photo-upload" className="cursor-pointer w-full md:w-1/3">
-          <div className="flex flex-col items-center justify-center w-full h-32 md:h-24 border-2 border-dashed border-white rounded-lg hover:bg-white/10 transition-colors">
-            <CloudUpload size={24} className="text-white transform scale-x-[-1] mb-2" />
-            <p className={`text-sm ${getUploadCountColor(uploadedPhotos.length)}`}>
-              {uploadedPhotos.length > 0
-                ? `${uploadedPhotos.length} foto${uploadedPhotos.length !== 1 ? 's' : ''} subida${uploadedPhotos.length !== 1 ? 's' : ''}`
-                : 'Aún no se han subido fotos'}
-            </p>
-          </div>
-          <input
-            id="photo-upload"
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={handleFileUpload}
-          />
-        </label>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex w-full flex-col gap-6"
+          >
+            <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <div className="space-y-6">
+                  <FormItem className="w-full">
+                    <FormLabel>Images</FormLabel>
+                    <FormControl>
+                      <FileUploader
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        maxFileCount={20}
+                        maxSize={8 * 1024 * 1024}
+                        progresses={progresses}
+                        onUpload={onUpload}
+                        disabled={isUploading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </div>
+              )}
+            />
+          </form>
+        </Form>
       </div>
       <Button
         size="lg"
         className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={uploadedPhotos.length < 1 || uploadedPhotos.length > 20 || isPending}
-        onClick={handleNextStep}
+        disabled={!form.formState.isValid || isPending}
+        onClick={() => form.handleSubmit(onSubmit)}
       >
         {isPending ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Cargando...
+            Subiendo...
           </>
         ) : (
-          'Siguiente'
+          'Subir fotos'
         )}
       </Button>
     </main>
