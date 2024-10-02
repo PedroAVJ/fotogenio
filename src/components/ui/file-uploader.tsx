@@ -154,7 +154,7 @@ export function FileUploader(props: FileUploaderProps) {
           loading: `Subiendo ${target}...`,
           success: () => {
             setFiles([])
-            return `${target} subido`
+            return updatedFiles.length > 0 ? `${target} subidos` : `subido`
           },
           error: `Error al subir ${target}`,
         })
