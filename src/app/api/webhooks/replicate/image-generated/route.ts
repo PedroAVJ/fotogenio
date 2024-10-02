@@ -58,8 +58,8 @@ async function addWatermark(imageUrl: string){
 
   // Now you can use the 'file' with utapi.uploadFiles()
   const response = await utapi.uploadFiles([file]);
-  const url = response[0]?.data?.url;
-  return url;
+  const appUrl = response[0]?.data?.appUrl;
+  return appUrl;
 }
 
 export async function POST(request: NextRequest) {
