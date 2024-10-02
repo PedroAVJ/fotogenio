@@ -1,5 +1,6 @@
 import { createUploadthing, type FileRouter as UploadThingFileRouter } from "uploadthing/next";
 import { auth } from "@clerk/nextjs/server";
+import { db } from "@/server/db";
 
 const f = createUploadthing();
 
@@ -14,10 +15,14 @@ export const fileRouter = {
     }),
   subirZip: f({ "application/zip": { maxFileSize: "256MB", maxFileCount: 1 } })
     .middleware(async () => {
-      auth().protect();
-      return {};
+      const { userId } = auth().protect();
+      return { userId };
     })
-    .onUploadComplete(async () => {
+    .onUploadComplete(async ({ metadata: { userId }, file }) => {
+      await db.userSettings.update({
+        where: { userId },
+        data: { zippedPhotosUrl: file.url },
+      });
       return {};
     }),
 } satisfies UploadThingFileRouter;

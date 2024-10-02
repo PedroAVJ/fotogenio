@@ -12,18 +12,13 @@ import { getBaseUrl } from "@/lib/utils";
 export const addPhotosToDb = api
   .input(z.object({
     photoUrls: z.array(z.string().url()).min(1).max(20),
-    zippedPhotosUrl: z.string().url(),
   }))
-  .mutation(async ({ input: { photoUrls, zippedPhotosUrl }, ctx: { session: { userId } } }) => {
+  .mutation(async ({ input: { photoUrls }, ctx: { session: { userId } } }) => {
     await db.uploadedPhoto.createMany({
       data: photoUrls.map((photoUrl) => ({
         photoUrl,
         userId,
       })),
-    });
-    await db.userSettings.update({
-      where: { userId },
-      data: { zippedPhotosUrl },
     });
   });
 

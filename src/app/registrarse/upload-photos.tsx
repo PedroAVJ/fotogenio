@@ -11,6 +11,8 @@ import { FileUploader } from "@/components/ui/file-uploader"
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useUploadFile } from '@/hooks/use-upload-file'
 import JSZip from 'jszip';
+import { useState } from 'react'
+import { useUploadThing } from "@/lib/uploadthing"
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -20,7 +22,6 @@ import ejemploMalo3 from './fotos/ejemplo-malo-3.png'
 import ejemploBueno1 from './fotos/ejemplo-bueno-1.png'
 import ejemploBueno2 from './fotos/ejemplo-bueno-2.png'
 import ejemploBueno3 from './fotos/ejemplo-bueno-3.png'
-import { useState } from 'react'
 
 const placeholderImages = [
   { foto: ejemploMalo1, status: 'rejected' },
@@ -33,37 +34,40 @@ const placeholderImages = [
 
 export function UploadPhotosComponent() {
   const [files, setFiles] = useState<File[]>([])
+  const [zipUploaded, setZipUploaded] = useState(false)
+  const { startUpload } = useUploadThing("subirZip", {
+    onClientUploadComplete: () => {
+      setZipUploaded(true)
+    },
+    onUploadError: () => {
+      console.log("upload error");
+    },
+    onUploadBegin: (file) => {
+      console.log("upload has begun for", file);
+    },
+  });
   const [step, setStep] = useLocalStorage<number>('step', 4)
   const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
     "subirFotos",
     { defaultUploadedFiles: [] }
   )
-  const zipUpload = useUploadFile(
-    "subirZip",
-    { defaultUploadedFiles: [] }
-  )
-  async function zipFiles() {
+  async function zipFiles(files: File[]) {
     const zip = new JSZip();
     for (const file of files) {
       zip.file(file.name, file);
     }
     const content = await zip.generateAsync({ type: 'arraybuffer' });
-    return new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
+    const zippedPhotos = new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
+    await startUpload([zippedPhotos]);
   };
   const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      const photoUrls = uploadedFiles.map((file) => file.url);
-      const zippedPhotos = await zipFiles();
-      await zipUpload.onUpload([zippedPhotos]);
-      const zippedPhotosUrl = zipUpload.uploadedFiles[0]?.url;
-      if (!zippedPhotosUrl) {
-        throw new Error("Failed to upload zipped photos");
-      }
-      await addPhotosToDb({ photoUrls, zippedPhotosUrl });
-    },
+    mutationFn: addPhotosToDb,
     onSuccess: () => {
       setStep(5);
     },
+    onError: (error) => {
+      console.error(error);
+    }
   });
   return (
     <ScrollArea>
@@ -111,7 +115,12 @@ export function UploadPhotosComponent() {
             </div>
             <FileUploader
               value={files}
-              onValueChange={setFiles}
+              onValueChange={async(files) => {
+                setFiles(files)
+                if (files.length > 0) {
+                  await zipFiles(files)
+                }
+              }}
               maxFileCount={20}
               maxSize={8 * 1024 * 1024}
               progresses={progresses}
@@ -122,8 +131,8 @@ export function UploadPhotosComponent() {
           <Button
             size="lg"
             className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!uploadedFiles.length || isUploading || isPending}
-            onClick={() => mutate()}
+            disabled={!uploadedFiles.length || isUploading || isPending || !zipUploaded}
+            onClick={() => mutate({ photoUrls: uploadedFiles.map(file => file.url) })}
           >
             {isPending ? (
               <>
