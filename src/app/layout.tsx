@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 import { Toaster } from "@/components/ui/sonner"
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { fileRouter } from "@/app/api/uploadthing/core";
 
 import { QueryClientProvider } from './query-client-provider';
 import type { Metadata } from 'next'
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <body className="h-dvh w-dvw">
           <QueryClientProvider>
             <NextSSRPlugin
-              routerConfig={extractRouterConfig(ourFileRouter)}
+              routerConfig={extractRouterConfig(fileRouter)}
             />
             {children}
           </QueryClientProvider>

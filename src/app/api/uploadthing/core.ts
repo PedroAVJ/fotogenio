@@ -1,17 +1,17 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { createUploadthing, type FileRouter as UploadThingFileRouter } from "uploadthing/next";
 import { auth } from "@clerk/nextjs/server";
 
 const f = createUploadthing();
 
-export const ourFileRouter = {
+export const fileRouter = {
   imageUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 2 } })
     .middleware(async () => {
-      // auth().protect();
+      auth().protect();
       return {};
     })
     .onUploadComplete(async () => {
       return {};
     }),
-} satisfies FileRouter;
+} satisfies UploadThingFileRouter;
 
-export type OurFileRouter = typeof ourFileRouter;
+export type FileRouter = typeof fileRouter;
