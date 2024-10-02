@@ -153,6 +153,7 @@ export function FileUploader(props: FileUploaderProps) {
         toast.promise(onUpload(updatedFiles), {
           loading: `Subiendo ${target}...`,
           success: () => {
+            setFiles([])
             return updatedFiles.length > 0 ? `${target} subidos` : `subido`
           },
           error: `Error al subir ${target}`,
