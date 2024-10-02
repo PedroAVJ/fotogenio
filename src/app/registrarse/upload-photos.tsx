@@ -58,24 +58,28 @@ export function UploadPhotosComponent() {
     "subirFotos",
     { defaultUploadedFiles: [] }
   )
-  async function zipAndDownloadFiles() {
+  const zipUpload = useUploadFile(
+    "subirZip",
+    { defaultUploadedFiles: [] }
+  )
+  async function zipFiles() {
     const zip = new JSZip();
-    
-    // Add each file to the zip
     for (const file of form.getValues('images')) {
       zip.file(file.name, file);
     }
-    
-    // Generate the zip file
-    const content = await zip.generateAsync({ type: 'blob' });
-    
-    // Save and download the zip file
-    saveAs(content, 'uploaded_photos.zip');
+    const content = await zip.generateAsync({ type: 'arraybuffer' });
+    return new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
   };
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const photoUrls = uploadedFiles.map((file) => file.url);
-      await addPhotosToDb({ photoUrls });
+      const zippedPhotos = await zipFiles();
+      await zipUpload.onUpload([zippedPhotos]);
+      const zippedPhotosUrl = zipUpload.uploadedFiles[0]?.url;
+      if (!zippedPhotosUrl) {
+        throw new Error("Failed to upload zipped photos");
+      }
+      await addPhotosToDb({ photoUrls, zippedPhotosUrl });
     },
     onSuccess: () => {
       setStep(5);
