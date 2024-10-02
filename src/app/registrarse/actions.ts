@@ -1,49 +1,29 @@
 'use server';
 
 import { api } from "@/server/trpc";
-import { zfd } from "zod-form-data";
 import { db } from "@/server/db";
-import { put } from "@vercel/blob";
 import { z } from "zod";
 import { Gender } from "@prisma/client";
 import Stripe from 'stripe';
 import { env } from '@/lib/env';
 import { redirect } from 'next/navigation';
-import JSZip from 'jszip';
 import { getBaseUrl } from "@/lib/utils";
 
-const uploadPhotos = zfd.formData({
-  photos: zfd.repeatableOfType(zfd.file())
-});
-
-export const uploadPhotosAction = api
-  .input(uploadPhotos)
-  .mutation(async ({ input: { photos }, ctx: { session: { userId } } }) => {
-    const zip = new JSZip();
-    await Promise.all(photos.map(async (photo) => {
-      const arrayBuffer = await photo.arrayBuffer();
-      zip.file(photo.name, arrayBuffer);
-    }));
-    const zipContent = await zip.generateAsync({ type: 'blob' });
-    await Promise.all(photos.map(async (photo) => {
-      const path = `fotos-subidas/${photo.name}`
-      const blob = await put(path, photo, {
-        access: "public",
-      })
-      await db.uploadedPhoto.create({
-        data: {
-          photoUrl: blob.url,
-          userId,
-        }
-      })
-    }))
-    const zipPath = `zips/all_photos.zip`;
-    const zipBlob = await put(zipPath, zipContent, {
-      access: "public",
+export const addPhotosToDb = api
+  .input(z.object({
+    photoUrls: z.array(z.string()),
+    zippedPhotosUrl: z.string(),
+  }))
+  .mutation(async ({ input: { photoUrls, zippedPhotosUrl }, ctx: { session: { userId } } }) => {
+    await db.uploadedPhoto.createMany({
+      data: photoUrls.map((photoUrl) => ({
+        photoUrl,
+        userId,
+      })),
     });
     await db.userSettings.update({
       where: { userId },
-      data: { zippedPhotosUrl: zipBlob.url },
+      data: { zippedPhotosUrl },
     });
   });
 
