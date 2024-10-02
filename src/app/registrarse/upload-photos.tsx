@@ -97,7 +97,7 @@ export function UploadPhotosComponent() {
       text-[#F5F5F5]
       bg-gradient-to-b from-[#534E4E] to-[#171717]
     `}>
-      <ScrollArea className="h-full">
+      <ScrollArea className="h-full flex flex-col items-center">
         <div className="flex w-full space-x-2">
           <h1 
             className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
