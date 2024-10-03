@@ -3,11 +3,11 @@ import { env } from '@/lib/env';
 import { db } from '@/server/db';
 import { validateWebhook } from "replicate";
 import sharp from 'sharp';
-import { put } from '@vercel/blob';
 import { readFile } from 'fs/promises';
 import path from 'path';
+import { utapi } from "@/server/uploadthing";
 
-async function addWatermark(imageUrl: string, outputPath: string){
+async function addWatermark(imageUrl: string){
   // Fetch the input image from the provided URL
   const imageResponse = await fetch(imageUrl);
   const imageBuffer = await imageResponse.arrayBuffer();
@@ -47,8 +47,19 @@ async function addWatermark(imageUrl: string, outputPath: string){
       { input: transparentWatermark, gravity: 'southeast' }
     ])
 
-  const blob = await put(outputPath, image, { access: 'public' });
-  return blob;
+  // Convert Sharp image to Buffer
+  const watermarkedImageBuffer = await image.toBuffer();
+
+  // Create a Blob from the Buffer
+  const watermarkedBlob = new Blob([watermarkedImageBuffer], { type: 'image/webp' }); // Adjust the MIME type if necessary
+
+  // Create a File from the Blob
+  const file = new File([watermarkedBlob], 'watermarked-image.webp', { type: 'image/webp' });
+
+  // Now you can use the 'file' with utapi.uploadFiles()
+  const response = await utapi.uploadFiles([file]);
+  const appUrl = response[0]?.data?.appUrl;
+  return appUrl;
 }
 
 export async function POST(request: NextRequest) {
@@ -82,12 +93,15 @@ export async function POST(request: NextRequest) {
   if (generatedPhoto) {
     return NextResponse.json({ error: 'Generated photo already exists' }, { status: 400 });
   }
-  const blob = await addWatermark(photoUrl, `generaciones/${body.id}`);
+  const photoUrlWithWatermark = await addWatermark(photoUrl);
+  if (!photoUrlWithWatermark) {
+    return NextResponse.json({ error: 'Failed to add watermark' }, { status: 500 });
+  }
   await db.generatedPhoto.create({
     data: {
       userId,
       promptId,
-      photoUrl: blob.url,
+      photoUrl: photoUrlWithWatermark,
     },
   });
   await db.userSettings.update({
