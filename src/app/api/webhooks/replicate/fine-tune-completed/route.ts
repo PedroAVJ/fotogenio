@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
   if (!version) {
     return NextResponse.json({ error: 'Version not found' }, { status: 400 });
   }
-  await Promise.all(prompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
+  await Promise.all(prompts.map(async ({ id, prompt }) => {
     await replicate.predictions.create(
       {
         model: `pedroavj/${modelName}`,
@@ -68,7 +68,6 @@ export async function POST(request: NextRequest) {
         webhook_events_filter: ['completed'],
         input: {
           prompt,
-          image: inpaintPhotoUrl,
           num_inference_steps: 50,
           seed: 42,
           output_quality: 100,

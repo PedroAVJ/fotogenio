@@ -61,7 +61,7 @@ export const createImages = api
     if (!version) {
       return { message: 'La ultima versión del modelo no se encontró' }
     }
-    await Promise.all(filteredPrompts.map(async ({ id, prompt, inpaintPhotoUrl }) => {
+    await Promise.all(filteredPrompts.map(async ({ id, prompt }) => {
       await replicate.predictions.create(
         {
           model: `pedroavj/${modelName}`,
@@ -70,7 +70,6 @@ export const createImages = api
           webhook_events_filter: ['completed'],
           input: {
             prompt,
-            image: inpaintPhotoUrl,
             num_inference_steps: 50,
             seed: 42,
             output_quality: 100,
