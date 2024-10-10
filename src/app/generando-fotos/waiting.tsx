@@ -41,7 +41,7 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
           <Lottie animationData={animation} loop={true} />
         </div>
         <p className="font-semibold text-[12px] leading-[20px] tracking-[0.02em] mt-4">
-          Tiempo aprox. {aproxTime} min
+          Puedes salir de esta pagina y volver en {aproxTime} minutos aprox.
         </p>
       </div>
     </main>

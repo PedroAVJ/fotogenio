@@ -21,7 +21,7 @@ export const fileRouter = {
     .onUploadComplete(async ({ metadata: { userId }, file }) => {
       await db.userSettings.update({
         where: { userId },
-        data: { zippedPhotosUrl: file.url },
+        data: { zippedPhotosUrl: file.appUrl },
       });
       return {};
     }),
