@@ -179,7 +179,10 @@ Tips for Success
 
 const main = async () => {
   const prompts = await db.prompt.findMany();
+  let i = 0;
   for (const prompt of prompts) {
+    i++;
+    console.log(i);
     const completion = await openai.beta.chat.completions.parse({
       model: 'gpt-4o-2024-08-06',
       messages: [
