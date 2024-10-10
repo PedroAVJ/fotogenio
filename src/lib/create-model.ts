@@ -14,7 +14,7 @@ const userId = 'user_2nEGVSXzK0Qs918afjV75q3KgIJ';
 const modelName = `flux-${md5(userId)}`;
 
 const baseUrl = 'https://fotogenio-git-staging-pedroavjs-projects.vercel.app';
-const zippedPhotosUrl = 'https://utfs.io/f/wB1nfjdKLAC8TQ2lhQWdkF9lGJgtZOM3vLW4nIwhez5x0VXi';
+const zippedPhotosUrl = 'https://utfs.io/f/wB1nfjdKLAC8e6nKojagxoyUu925OCphs7BkHinW8Mb0INmK';
 
 await replicate.trainings.create(
   "ostris",
