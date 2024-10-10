@@ -132,7 +132,7 @@ export function UploadPhotosComponent() {
             size="lg"
             className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!uploadedFiles.length || isUploading || isPending || !zipUploaded}
-            onClick={() => mutate({ photoUrls: uploadedFiles.map(file => file.url) })}
+            onClick={() => mutate({ photoUrls: uploadedFiles.map(file => file.appUrl) })}
           >
             {isPending ? (
               <>
