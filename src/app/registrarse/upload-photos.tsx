@@ -90,8 +90,17 @@ export function UploadPhotosComponent() {
           </div>
           <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-md md:max-w-4xl px-4">
             <div className="text-sm mb-4 w-full text-left">
-              <p>1. Sube Fotos Variadas.</p>
-              <p>2. Sube entre 1 y 20 fotos.</p>
+              <p>1. Sube entre 12 y 20 fotos variadas de ti mismo.</p>
+              <p>2. Incluye fotos en diferentes:</p>
+              <ul className="list-disc list-inside pl-4">
+                <li>Poses y expresiones</li>
+                <li>Ángulos (frente, perfil, cuerpo completo)</li>
+                <li>Entornos (interior, exterior)</li>
+                <li>Iluminaciones</li>
+                <li>Vestuarios</li>
+              </ul>
+              <p>3. Usa imágenes de alta calidad y bien enfocadas.</p>
+              <p>4. Evita fotos con múltiples personas o fondos muy complejos.</p>
             </div>
             <div className="grid grid-cols-3 md:grid-cols-6 gap-4 gap-y-8 w-full">
               {placeholderImages.map((placeholderImage, index) => (
