@@ -1,30 +1,23 @@
-import { list } from '@vercel/blob';
 import dotenv from 'dotenv';
+
+dotenv.config();
+
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
+import { PrismaClient } from '@prisma/client';
 
-import { db } from '@/server/db';
+const db = new PrismaClient();
 
 const Prompt = z.object({
   description: z.string(),
 });
 
-// Load environment variables from .env.local
-dotenv.config({ path: '.env.local' });
-
 const openai = new OpenAI();
 
 const main = async () => {
-  const images = await list({
-    prefix: 'male/',
-  });
-
-  // Always skip the first image
-  // eslint-disable-next-line no-restricted-syntax
-  for (const blob of images.blobs.slice(3, 4)) {
-    console.log(blob.url);
-    // eslint-disable-next-line no-await-in-loop
+  const prompts = await db.prompt.findMany();
+  for (const prompt of prompts) {
     const completion = await openai.beta.chat.completions.parse({
       model: 'gpt-4o-2024-08-06',
       messages: [
@@ -39,7 +32,7 @@ const main = async () => {
             {
               type: 'image_url',
               image_url: {
-                url: blob.url,
+                url: prompt.inpaintPhotoUrl,
               },
             },
           ],
@@ -48,8 +41,15 @@ const main = async () => {
       response_format: zodResponseFormat(Prompt, 'prompt'),
     });
 
-    const event = completion.choices[0]?.message.parsed;
-    console.log(event);
+    const promptText = completion.choices[0]?.message.parsed?.description ?? '';
+    await db.prompt.update({
+      where: {
+        id: prompt.id,
+      },
+      data: {
+        prompt: promptText,
+      },
+    });
   }
 };
 
