@@ -11,6 +11,7 @@ import JSZip from 'jszip';
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import * as Sentry from '@sentry/nextjs';
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -47,10 +48,15 @@ export function UploadPhotosComponent() {
     toast.promise(onUpload([zippedPhotos]), {
       loading: "Uploading images...",
       success: () => {
+        const zip = uploadedFiles[0]
+        if (!zip) {
+          Sentry.captureMessage('No zip file uploaded', 'error');
+          return "Las fotos no se pudieron subir"
+        }
         const params = new URLSearchParams(searchParams);
-        params.set('zippedPhotosUrl', file.appUrl);
+        params.set('zippedPhotosUrl', zip.appUrl);
         router.push(`/registrarse/agrega-tu-correo?${params.toString()}`);
-        return "Images uploaded"
+        return "Las fotos se han subido con éxito!"
       },
     })
   }
