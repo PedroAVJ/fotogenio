@@ -19,10 +19,9 @@ if (!version) {
   console.log('Version not found');
   process.exit(1);
 }
-const prediction = await replicate.predictions.create(
+const prediction = await replicate.run(
+  `pedroavj/${modelName}:${version.id}`,
   {
-    model: `pedroavj/${modelName}`,
-    version: version.id,
     input: {
       prompt: 'TOK smiling',
       num_inference_steps: 50,
