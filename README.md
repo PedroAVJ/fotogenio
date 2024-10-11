@@ -1,5 +1,6 @@
 # TODO
 
+- Change from local storage to query params
 - Setup grok for webhooks
 - Change example photos for user uploads so it makes more sense
 - Don't upload user images, since we only need the zip file
