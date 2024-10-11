@@ -2,30 +2,44 @@ import { NextResponse, NextRequest } from 'next/server';
 import { env } from '@/lib/env';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
+import { Training } from 'replicate';
 import { validateWebhook } from "replicate";
 import { getBaseUrl } from '@/lib/utils';
 import md5 from 'md5';
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(request: NextRequest) {
-  const isValid = validateWebhook(request, env.REPLICATE_WEBHOOK_SECRET);
+  const requestClone = request.clone();
+  const isValid = validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
-    return NextResponse.json({ error: 'Invalid webhook' }, { status: 400 });
+    Sentry.captureMessage('Invalid webhook', 'error');
+    return NextResponse.json({ recieved: true });
   }
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId');
   if (!userId) {
-    return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+    Sentry.captureMessage('Missing userId', 'error');
+    return NextResponse.json({ recieved: true });
+  }
+  const { status } = await request.json() as Training;
+  if (status !== 'succeeded') {
+    Sentry.captureMessage(`Fine-tuning failed: Unexpected status '${status}'`, 'error');
+    return NextResponse.json({ recieved: true });
   }
   const userSettings = await db.userSettings.findUnique({
     where: { userId, modelStatus: 'training' },
   });
   if (!userSettings) {
-    return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
+    Sentry.captureMessage('Webhook has already been received', 'error');
+    return NextResponse.json({ recieved: true });
   }
-  await db.userSettings.update({
-    where: { userId },
-    data: { modelStatus: 'ready' },
-  });
+  const modelName = `flux-${md5(userId)}`;
+  const model = await replicate.models.get('pedroavj', modelName);
+  const version = model.latest_version;
+  if (!version) {
+    Sentry.captureMessage('Version not found', 'error');
+    return NextResponse.json({ recieved: true });
+  }
   const prompts = await db.prompt.findMany({
     where: {
       style: {
@@ -39,37 +53,34 @@ export async function POST(request: NextRequest) {
     include: {
       style: {
         include: {
-          chosenStyles: {
-            where: {
-              userId,
-            },
-          },
+          chosenStyles: true,
         },
       },
     },
   });
-  await db.userSettings.update({
-    where: { userId },
-    data: { pendingPhotos: { increment: prompts.length } },
+  await db.$transaction(async (tx) => {
+    await tx.userSettings.update({
+      where: { userId },
+      data: { modelStatus: 'ready' },
+    });
+    await tx.generatedPhoto.createMany({
+      data: prompts.map(({ id }) => ({ userId, promptId: id })),
+    });
   });
-  const modelName = `flux-${md5(userId)}`;
   const baseUrl = getBaseUrl();
-  const model = await replicate.models.get('pedroavj', modelName);
-  const version = model.latest_version;
-  if (!version) {
-    return NextResponse.json({ error: 'Version not found' }, { status: 400 });
-  }
   await Promise.all(prompts.map(async ({ id, prompt }) => {
+    const webhookUrl = new URL('/api/webhooks/replicate/image-generated', baseUrl);
+    webhookUrl.searchParams.set('userId', userId);
+    webhookUrl.searchParams.set('promptId', id);
     await replicate.predictions.create(
       {
         model: `pedroavj/${modelName}`,
         version: version.id,
-        webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
+        webhook: webhookUrl.toString(),
         webhook_events_filter: ['completed'],
         input: {
           prompt,
           num_inference_steps: 50,
-          seed: 42,
           output_quality: 100,
         }
       }

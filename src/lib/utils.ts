@@ -26,9 +26,9 @@ export function formatBytes(
 
 export function getBaseUrl() {
   if (env.VERCEL_ENV === 'preview') {
-    return `https://${env.VERCEL_BRANCH_URL}`;
+    return new URL(`https://${env.VERCEL_BRANCH_URL}`);
   } else if (env.VERCEL_ENV === 'production') {
-    return `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
+    return new URL(`https://${env.VERCEL_PROJECT_PRODUCTION_URL}`);
   }
   throw new Error('Invalid environment');
 }
