@@ -24,3 +24,5 @@ prompts.forEach(async ({ id, inpaintPhotoUrl }, index) => {
     data: { inpaintPhotoUrl: appUrl },
   });
 });
+
+console.log(failedUploads);
