@@ -9,19 +9,6 @@ import { env } from '@/lib/env';
 import { redirect } from 'next/navigation';
 import { getBaseUrl } from "@/lib/utils";
 
-export const addPhotosToDb = api
-  .input(z.object({
-    photoUrls: z.array(z.string().url()).min(1).max(20),
-  }))
-  .mutation(async ({ input: { photoUrls }, ctx: { session: { userId } } }) => {
-    await db.uploadedPhoto.createMany({
-      data: photoUrls.map((photoUrl) => ({
-        photoUrl,
-        userId,
-      })),
-    });
-  });
-
 const addUserSettings = z.object({
   gender: z.nativeEnum(Gender),
   styleIds: z.array(z.string()),

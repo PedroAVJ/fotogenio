@@ -4,71 +4,56 @@ import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
 import { X, Check, Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import { addPhotosToDb } from './actions'
-import { useMutation } from '@tanstack/react-query'
-import { useLocalStorage } from 'react-use-storage'
 import { FileUploader } from "@/components/ui/file-uploader"
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useUploadFile } from '@/hooks/use-upload-file'
 import JSZip from 'jszip';
+import { toast } from 'sonner'
 import { useState } from 'react'
-import { useUploadThing } from "@/lib/uploadthing"
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
-import ejemploMalo1 from './fotos/ejemplo-malo-1.png'
-import ejemploMalo2 from './fotos/ejemplo-malo-2.png'
-import ejemploMalo3 from './fotos/ejemplo-malo-3.png'
-import ejemploBueno1 from './fotos/ejemplo-bueno-1.png'
-import ejemploBueno2 from './fotos/ejemplo-bueno-2.png'
-import ejemploBueno3 from './fotos/ejemplo-bueno-3.png'
+import malo1 from './ejemplos/malo-1.png'
+import malo2 from './ejemplos/malo-2.png'
+import malo3 from './ejemplos/malo-3.png'
+import bueno1 from './ejemplos/bueno-1.png'
+import bueno2 from './ejemplos/bueno-2.png'
+import bueno3 from './ejemplos/bueno-3.png'
 
 const placeholderImages = [
-  { foto: ejemploMalo1, status: 'rejected' },
-  { foto: ejemploMalo2, status: 'rejected' },
-  { foto: ejemploMalo3, status: 'rejected' },
-  { foto: ejemploBueno1, status: 'accepted' },
-  { foto: ejemploBueno2, status: 'accepted' },
-  { foto: ejemploBueno3, status: 'accepted' },
+  { foto: malo1, status: 'rejected' },
+  { foto: malo2, status: 'rejected' },
+  { foto: malo3, status: 'rejected' },
+  { foto: bueno1, status: 'accepted' },
+  { foto: bueno2, status: 'accepted' },
+  { foto: bueno3, status: 'accepted' },
 ]
 
 export function UploadPhotosComponent() {
   const [files, setFiles] = useState<File[]>([])
-  const [zipUploaded, setZipUploaded] = useState(false)
-  const { startUpload } = useUploadThing("subirZip", {
-    onClientUploadComplete: () => {
-      setZipUploaded(true)
-    },
-    onUploadError: () => {
-      console.log("upload error");
-    },
-    onUploadBegin: (file) => {
-      console.log("upload has begun for", file);
-    },
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { onUpload, isUploading, uploadedFiles, progresses } = useUploadFile("subirZip", {
+    defaultUploadedFiles: []
   });
-  const [step, setStep] = useLocalStorage<number>('step', 4)
-  const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
-    "subirFotos",
-    { defaultUploadedFiles: [] }
-  )
-  async function zipFiles(files: File[]) {
+  async function handleUpload() {
     const zip = new JSZip();
     for (const file of files) {
       zip.file(file.name, file);
     }
     const content = await zip.generateAsync({ type: 'arraybuffer' });
     const zippedPhotos = new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
-    await startUpload([zippedPhotos]);
-  };
-  const { mutate, isPending } = useMutation({
-    mutationFn: addPhotosToDb,
-    onSuccess: () => {
-      setStep(5);
-    },
-    onError: (error) => {
-      console.error(error);
-    }
-  });
+    toast.promise(onUpload([zippedPhotos]), {
+      loading: "Uploading images...",
+      success: () => {
+        const params = new URLSearchParams(searchParams);
+        params.set('zippedPhotosUrl', file.appUrl);
+        router.push(`/registrarse/agrega-tu-correo?${params.toString()}`);
+        return "Images uploaded"
+      },
+    })
+  }
   return (
     <ScrollArea>
       <main className={`
@@ -82,7 +67,7 @@ export function UploadPhotosComponent() {
             <h1 
               className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
             >
-              {step}
+              3
             </h1>
             <h3 className="scroll-m-20 text-xl tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 font-semibold [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
               Sube Tus Fotos
@@ -124,26 +109,18 @@ export function UploadPhotosComponent() {
             </div>
             <FileUploader
               value={files}
-              onValueChange={async(files) => {
-                setFiles(files)
-                if (files.length > 0) {
-                  await zipFiles(files)
-                }
-              }}
+              onValueChange={setFiles}
               maxFileCount={20}
               maxSize={8 * 1024 * 1024}
-              progresses={progresses}
-              onUpload={onUpload}
-              disabled={isUploading}
             />
           </div>
           <Button
             size="lg"
             className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!uploadedFiles.length || isUploading || isPending || !zipUploaded}
-            onClick={() => mutate({ photoUrls: uploadedFiles.map(file => file.appUrl) })}
+            disabled={files.length < 12 || isUploading}
+            onClick={handleUpload}
           >
-            {isPending ? (
+            {isUploading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Subiendo...
