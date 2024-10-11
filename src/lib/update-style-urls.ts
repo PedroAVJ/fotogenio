@@ -7,21 +7,21 @@ import { utapi } from '@/server/uploadthing';
 
 const db = new PrismaClient();
 
-const prompts = await db.prompt.findMany();
+const styles = await db.style.findMany();
 
 const failedUploads = new Set<string>();
 
-for (const [index, { id, inpaintPhotoUrl }] of prompts.entries()) {
+for (const [index, { id, coverPhotoUrl }] of styles.entries()) {
   console.log(index);
-  const blob = await utapi.uploadFilesFromUrl(inpaintPhotoUrl);
+  const blob = await utapi.uploadFilesFromUrl(coverPhotoUrl);
   const appUrl = blob.data?.appUrl;
   if (!appUrl) {
     failedUploads.add(id);
     continue;
   }
-  await db.prompt.update({
+  await db.style.update({
     where: { id },
-    data: { inpaintPhotoUrl: appUrl },
+    data: { coverPhotoUrl: appUrl },
   });
 }
 
