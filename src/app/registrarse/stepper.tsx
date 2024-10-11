@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use-storage'
 import { Style } from '@prisma/client';
 
 import { ChooseGender } from './selecciona-genero/choose-gender';
-import { ChooseStyles } from './choose-styles';
+import { ChooseStyles } from './selecciona-estilos/choose-styles';
 import { CreateAccountComponent } from './create-account';
 import { UploadPhotosComponent } from './upload-photos';
 import { ChoosePaymentComponent } from './choose-payment';
