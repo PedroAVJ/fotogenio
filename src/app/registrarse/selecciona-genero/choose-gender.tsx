@@ -1,11 +1,11 @@
 'use client'
 
-import React from 'react'
+import { useState } from 'react'
+import Link from "next/link"
 import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import Image from 'next/image'
-import { useLocalStorage } from 'react-use-storage'
 import hombre from './fotos/hombre.png'
 import mujer from './fotos/mujer.png'
 
@@ -17,9 +17,7 @@ enum Gender {
 }
 
 export function ChooseGender() {
-  const [selectedGender, setSelectedGender] = useLocalStorage<Gender | null>('selectedGender', null)
-  const [step, setStep] = useLocalStorage<number>('step', 1)
-
+  const [selectedGender, setSelectedGender] = useState<Gender | null>(null)
   const handleGenderChange = (value: string) => {
     if (value === '') {
       setSelectedGender(null)
@@ -27,11 +25,6 @@ export function ChooseGender() {
       setSelectedGender(value as Gender)
     }
   }
-
-  const handleNextStep = () => {
-    setStep(2)
-  }
-
   return (
     <main className={`
       ${workSans.className}
@@ -45,7 +38,7 @@ export function ChooseGender() {
         <h1
           className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
         >
-          {step}
+          1
         </h1>
         <h3 className="scroll-m-20 text-xl tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 font-semibold [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
           Escoge Tu Género
@@ -84,9 +77,8 @@ export function ChooseGender() {
         size="lg"
         className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={!selectedGender}
-        onClick={handleNextStep}
       >
-        Siguiente
+        <Link href="/registrarse/selecciona-estilos">Siguiente</Link>
       </Button>
     </main>
   )
