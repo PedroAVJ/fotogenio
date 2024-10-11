@@ -9,7 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useUploadFile } from '@/hooks/use-upload-file'
 import JSZip from 'jszip';
 import { toast } from 'sonner'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import * as Sentry from '@sentry/nextjs';
 
@@ -31,6 +31,13 @@ const placeholderImages = [
   { foto: bueno3, status: 'accepted' },
 ]
 
+function LoadingToastContent({ progress, length }: { progress: number | undefined, length: number }): ReactNode {
+  if (!progress) {
+    return 'Subiendo fotos...'
+  }
+  return `Subiendo ${length} fotos... ${Math.round(progress * 100)}%`
+}
+
 export function UploadPhotosComponent() {
   const [files, setFiles] = useState<File[]>([])
   const router = useRouter()
@@ -38,6 +45,7 @@ export function UploadPhotosComponent() {
   const { onUpload, isUploading, uploadedFiles, progresses } = useUploadFile("subirZip", {
     defaultUploadedFiles: []
   });
+  const progress = progresses['uploaded_photos.zip']
   async function handleUpload() {
     const zip = new JSZip();
     for (const file of files) {
@@ -46,7 +54,7 @@ export function UploadPhotosComponent() {
     const content = await zip.generateAsync({ type: 'arraybuffer' });
     const zippedPhotos = new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
     toast.promise(onUpload([zippedPhotos]), {
-      loading: "Uploading images...",
+      loading: <LoadingToastContent progress={progress} length={files.length} />,
       success: () => {
         const zip = uploadedFiles[0]
         if (!zip) {
