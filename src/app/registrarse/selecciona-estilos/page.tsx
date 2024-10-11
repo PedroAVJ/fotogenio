@@ -11,9 +11,15 @@ export default async function Page({
 }) {
   let styles: Style[] = [];
   if (gender === Gender.male) {
-    styles = await db.style.findMany({ where: { gender: Gender.male } });
+    styles = await db.style.findMany({
+      where: { gender: Gender.male },
+      take: 4,
+    });
   } else if (gender === Gender.female) {
-    styles = await db.style.findMany({ where: { gender: Gender.female } });
+    styles = await db.style.findMany({
+      where: { gender: Gender.female },
+      take: 4,
+    });
   }
   return <ChooseStyles styles={styles} />;
 }
