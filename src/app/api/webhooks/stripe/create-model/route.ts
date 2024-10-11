@@ -6,37 +6,38 @@ import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
 import { getBaseUrl } from '@/lib/utils';
 import md5 from 'md5';
+import * as Sentry from '@sentry/nextjs';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const signature = headers().get('stripe-signature');
   if (!signature) {
-    return NextResponse.json({ error: 'Missing stripe-signature' }, { status: 400 });
+    Sentry.captureMessage('Missing stripe-signature', 'error');
+    return NextResponse.json({ received: true });
   }
   const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-06-20',
   });
   const event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET);
   if (event.type !== 'payment_intent.succeeded') {
-    return NextResponse.json({ error: 'Invalid event type' }, { status: 400 });
+    Sentry.captureMessage('Invalid event type', 'error');
+    return NextResponse.json({ received: true });
   }
   const paymentIntent = event.data.object;
   const userId = paymentIntent.metadata['userId'];
   if (!userId) {
-    return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+    Sentry.captureMessage('Missing userId', 'error');
+    return NextResponse.json({ received: true });
   }
-  const operation = paymentIntent.metadata['operation'];
-  if (!operation) {
-    return NextResponse.json({ error: 'Missing operation' }, { status: 400 });
+  const userSettings = await db.userSettings.findUnique({
+    where: { userId, modelStatus: 'pending' },
+  });
+  if (!userSettings) {
+    Sentry.captureMessage('Model is already training', 'error');
+    return NextResponse.json({ received: true });
   }
-  if (operation === 'create-model') {
-    const userSettings = await db.userSettings.findUnique({
-      where: { userId, modelStatus: 'pending' },
-    });
-    if (!userSettings) {
-      return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
-    }
-    await db.userSettings.update({
+  await db.$transaction(async (tx) => {
+    await tx.userSettings.update({
       where: { userId },
       data: { credits: { increment: 25 }, modelStatus: 'training' },
     });
@@ -50,13 +51,15 @@ export async function POST(request: NextRequest) {
       }
     )
     const baseUrl = getBaseUrl();
+    const webhookUrl = new URL(`${baseUrl}/api/webhooks/replicate/fine-tune-completed`);
+    webhookUrl.searchParams.set('userId', userId);
     await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",
       "885394e6a31c6f349dd4f9e6e7ffbabd8d9840ab2559ab78aed6b2451ab2cfef",
       {
         destination: `${model.owner}/${model.name}`,
-        webhook: `${baseUrl}/api/webhooks/replicate/fine-tune-completed?userId=${userId}`,
+        webhook: webhookUrl.toString(),
         webhook_events_filter: ['completed'],
         input: {
           steps: 1000,
@@ -76,11 +79,6 @@ export async function POST(request: NextRequest) {
         }
       }
     );
-  } else if (operation === 'buy-credits') {
-    await db.userSettings.update({
-      where: { userId },
-      data: { credits: { increment: 25 } },
-    });
-  }
+  });
   return NextResponse.json({ received: true });
 }
