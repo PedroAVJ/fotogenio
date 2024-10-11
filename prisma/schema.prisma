@@ -17,9 +17,13 @@ model Style {
   id            String        @id @default(uuid())
   coverPhotoUrl String        @unique
   gender        Gender
-  description   String        @unique
+  description   String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
   prompts       Prompt[]
   chosenStyles  ChosenStyle[]
+
+  @@unique([gender, description])
 }
 
 model Prompt {
@@ -28,14 +32,18 @@ model Prompt {
   prompt          String           @unique
   styleId         String
   style           Style            @relation(fields: [styleId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
   generatedPhotos GeneratedPhoto[]
 }
 
 model ChosenStyle {
-  id      String @id @default(uuid())
-  userId  String
-  styleId String
-  style   Style  @relation(fields: [styleId], references: [id])
+  id        String   @id @default(uuid())
+  userId    String
+  styleId   String
+  style     Style    @relation(fields: [styleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([userId, styleId])
 }
@@ -51,24 +59,25 @@ model UserSettings {
   userId          String      @unique
   gender          Gender
   credits         Int
-  pendingPhotos   Int
   modelStatus     ModelStatus
-  zippedPhotosUrl String?     @unique
+  zippedPhotosUrl String      @unique
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @default(now()) @updatedAt
 }
 
-model UploadedPhoto {
-  id       String @id @default(uuid())
-  userId   String
-  photoUrl String @unique
+enum Feedback {
+  positive
+  neutral
+  negative
 }
 
 model GeneratedPhoto {
   id        String   @id @default(uuid())
   userId    String
-  photoUrl  String   @unique
+  photoUrl  String?  @unique
   promptId  String
   prompt    Prompt   @relation(fields: [promptId], references: [id])
+  feedback  Feedback @default(neutral)
   createdAt DateTime @default(now())
-
-  @@unique([userId, promptId])
+  updatedAt DateTime @default(now()) @updatedAt
 }
