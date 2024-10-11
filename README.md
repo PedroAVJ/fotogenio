@@ -1,5 +1,6 @@
 # TODO
 
+- Think if I should migrate from local storage to cookies
 - Create development database and create seed script
 - Change example photos for user uploads so it makes more sense
 - Don't upload user images, since we only need the zip file
