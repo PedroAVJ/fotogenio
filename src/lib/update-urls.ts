@@ -11,18 +11,18 @@ const prompts = await db.prompt.findMany();
 
 const failedUploads = new Set<string>();
 
-prompts.forEach(async ({ id, inpaintPhotoUrl }, index) => {
+for (const [index, { id, inpaintPhotoUrl }] of prompts.entries()) {
   console.log(index);
   const blob = await utapi.uploadFilesFromUrl(inpaintPhotoUrl);
   const appUrl = blob.data?.appUrl;
   if (!appUrl) {
     failedUploads.add(id);
-    return;
+    continue;
   }
   await db.prompt.update({
     where: { id },
     data: { inpaintPhotoUrl: appUrl },
   });
-});
+}
 
 console.log(failedUploads);
