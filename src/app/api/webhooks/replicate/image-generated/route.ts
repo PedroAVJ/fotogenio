@@ -6,6 +6,8 @@ import sharp from 'sharp';
 import { readFile } from 'fs/promises';
 import path from 'path';
 import { utapi } from "@/server/uploadthing";
+import * as Sentry from "@sentry/nextjs";
+import { Prediction } from 'replicate';
 
 async function addWatermark(imageUrl: string){
   // Fetch the input image from the provided URL
@@ -64,58 +66,65 @@ async function addWatermark(imageUrl: string){
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
-
   const isValid = validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
-    return NextResponse.json({ error: 'Invalid webhook' }, { status: 400 });
+    Sentry.captureMessage('Invalid webhook', 'error');
+    return NextResponse.json({ received: true }, { status: 200 });
   }
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId');
   if (!userId) {
-    return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+    Sentry.captureMessage('Missing userId', 'error');
+    return NextResponse.json({ received: true }, { status: 200 });
   }
   const promptId = searchParams.get('promptId');
   if (!promptId) {
-    return NextResponse.json({ error: 'Missing promptId' }, { status: 400 });
+    Sentry.captureMessage('Missing promptId', 'error');
+    return NextResponse.json({ received: true }, { status: 200 });
   }
-  interface Body {
-    output: string[];
-    id: string;
+  const { status, output } = await request.json() as Prediction;
+  if (status !== 'succeeded') {
+    Sentry.captureMessage(`Fine-tuning failed: Unexpected status '${status}'`, 'error');
+    return NextResponse.json({ received: true });
   }
-  const body = await request.json() as Body;
-  const photoUrl = body.output[0];
+  if (!Array.isArray(output) || !output.every(item => typeof item === 'string')) {
+    Sentry.captureMessage('Invalid output format', 'error');
+    return NextResponse.json({ received: true });
+  }
+  const photoUrl = output[0];
   if (!photoUrl) {
-    return NextResponse.json({ error: 'Missing photoUrl' }, { status: 400 });
-  }
-  const generatedPhoto = await db.generatedPhoto.findUnique({
-    where: { userId_promptId: { userId, promptId } },
-  });
-  if (generatedPhoto) {
-    return NextResponse.json({ error: 'Generated photo already exists' }, { status: 400 });
+    Sentry.captureMessage('Missing photoUrl', 'error');
+    return NextResponse.json({ received: true });
   }
   const photoUrlWithWatermark = await addWatermark(photoUrl);
   if (!photoUrlWithWatermark) {
-    return NextResponse.json({ error: 'Failed to add watermark' }, { status: 500 });
+    Sentry.captureMessage('Failed to add watermark', 'error');
+    return NextResponse.json({ received: true });
   }
-  await db.generatedPhoto.create({
-    data: {
-      userId,
-      promptId,
-      photoUrl: photoUrlWithWatermark,
-    },
-  });
-  await db.userSettings.update({
+  const generatedPhoto = await db.generatedPhoto.findFirst({
     where: {
       userId,
+      promptId,
+      photoUrl: null,
     },
-    data: {
-      credits: {
-        decrement: 1,
-      },
-      pendingPhotos: {
-        decrement: 1,
+  });
+  if (!generatedPhoto) {
+    Sentry.captureMessage('Generated photo already exists', 'error');
+    return NextResponse.json({ received: true });
+  }
+  await db.$transaction(async (tx) => {
+    await tx.generatedPhoto.update({
+      where: { id: generatedPhoto.id },
+      data: { photoUrl: photoUrlWithWatermark },
+    });
+    await tx.userSettings.update({
+      where: { userId },
+      data: {
+        credits: {
+          decrement: 1,
+        },
       }
-    }
-  })
+    });
+  });
   return NextResponse.json({ received: true });
 }
