@@ -18,12 +18,6 @@ const nextConfig = {
         hostname: "utfs.io",
         pathname: "/a/a434r2h4ho/*",
       },
-      {
-        protocol: 'https',
-        hostname: 'uxsi5qpvaazgwqzm.public.blob.vercel-storage.com',
-        port: '',
-        pathname: '/**',
-      },
     ],
   },
 };
