@@ -9,9 +9,19 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useUploadFile } from '@/hooks/use-upload-file'
 import JSZip from 'jszip';
 import { toast } from 'sonner'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import * as Sentry from '@sentry/nextjs';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -38,8 +48,23 @@ function LoadingToastContent({ progress, length }: { progress: number | undefine
   return `Subiendo ${length} fotos... ${Math.round(progress * 100)}%`
 }
 
+const schema = z.object({
+  photos: z.array(z.instanceof(File))
+    .min(12, { message: 'Debes subir al menos 12 fotos' })
+    .max(20, { message: 'Debes subir como máximo 20 fotos' }),
+})
+
+type Schema = z.infer<typeof schema>;
+
 export function UploadPhotosComponent() {
-  const [files, setFiles] = useState<File[]>([])
+  const form = useForm<Schema>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      photos: [],
+    },
+    mode: 'onChange',
+  })
+  const photos = form.watch('photos')
   const router = useRouter()
   const searchParams = useSearchParams()
   const { onUpload, isUploading, uploadedFiles, progresses } = useUploadFile("subirZip", {
@@ -48,13 +73,13 @@ export function UploadPhotosComponent() {
   const progress = progresses['uploaded_photos.zip']
   async function handleUpload() {
     const zip = new JSZip();
-    for (const file of files) {
+    for (const file of photos) {
       zip.file(file.name, file);
     }
     const content = await zip.generateAsync({ type: 'arraybuffer' });
     const zippedPhotos = new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
     toast.promise(onUpload([zippedPhotos]), {
-      loading: <LoadingToastContent progress={progress} length={files.length} />,
+      loading: <LoadingToastContent progress={progress} length={photos.length} />,
       success: () => {
         const zip = uploadedFiles[0]
         if (!zip) {
@@ -77,8 +102,9 @@ export function UploadPhotosComponent() {
         text-[#F5F5F5]
         bg-gradient-to-b from-[#534E4E] to-[#171717]
       `}>
+        <Form {...form}>
           <div className="flex w-full space-x-2">
-            <h1 
+            <h1
               className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
             >
               3
@@ -108,21 +134,32 @@ export function UploadPhotosComponent() {
                 </div>
               ))}
             </div>
-            <FileUploader
-              value={files}
-              accept={{
-                'image/jpeg': ['.jpg', '.jpeg'],
-                'image/png': ['.png'],
-              }}
-              onValueChange={setFiles}
-              maxFileCount={20}
-              maxSize={8 * 1024 * 1024}
+            <FormField
+              control={form.control}
+              name="photos"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <FileUploader
+                      {...field}
+                      onValueChange={field.onChange}
+                      accept={{
+                        'image/jpeg': ['.jpg', '.jpeg'],
+                        'image/png': ['.png'],
+                      }}
+                      maxFileCount={20}
+                      maxSize={8 * 1024 * 1024}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           <Button
             size="lg"
             className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={files.length < 12 || isUploading}
+            disabled={!form.formState.isValid || isUploading}
             onClick={handleUpload}
           >
             {isUploading ? (
@@ -134,6 +171,7 @@ export function UploadPhotosComponent() {
               'Subir fotos'
             )}
           </Button>
+        </Form>
       </main>
     </ScrollArea>
   )

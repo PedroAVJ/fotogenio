@@ -235,10 +235,10 @@ export function FileUploader(props: FileUploaderProps) {
                     Arrastra y suelta archivos aquí, o haz clic para seleccionar archivos
                   </p>
                   <p className="text-sm text-muted-foreground/70">
-                    Puedes subir
+                    Puedes subir hasta
                     {maxFileCount > 1
                       ? ` ${maxFileCount === Infinity ? "varios" : maxFileCount}
-                      archivos (hasta ${formatBytes(maxSize)} cada uno)`
+                      archivos (maximo ${formatBytes(maxSize)} cada uno)`
                       : ` un archivo con ${formatBytes(maxSize)}`}
                   </p>
                 </div>
