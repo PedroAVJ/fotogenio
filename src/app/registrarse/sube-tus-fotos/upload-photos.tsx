@@ -123,6 +123,10 @@ export function UploadPhotosComponent() {
             </div>
             <FileUploader
               value={files}
+              accept={{
+                'image/jpeg': ['.jpg', '.jpeg'],
+                'image/png': ['.png'],
+              }}
               onValueChange={setFiles}
               maxFileCount={20}
               maxSize={8 * 1024 * 1024}
