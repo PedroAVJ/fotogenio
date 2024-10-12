@@ -33,7 +33,7 @@ const placeholderImages = [
 
 function LoadingToastContent({ progress, length }: { progress: number | undefined, length: number }): ReactNode {
   if (!progress) {
-    return 'Subiendo fotos...'
+    return 'Preparando fotos...'
   }
   return `Subiendo ${length} fotos... ${Math.round(progress * 100)}%`
 }
