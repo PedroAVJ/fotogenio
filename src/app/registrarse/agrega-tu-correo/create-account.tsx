@@ -20,17 +20,19 @@ import { Gender } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import * as Sentry from '@sentry/nextjs'
+import { translateZodErrors } from '@/lib/es-zod'
 import { useQueryState, parseAsString, parseAsStringEnum, parseAsArrayOf } from 'nuqs'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
 const formSchema = z.object({
-  emailAddress: z.string().email('Por favor ingresa una dirección de correo electrónico válida'),
+  emailAddress: z.string().email(),
 })
 
 type FormData = z.infer<typeof formSchema>
 
 export function CreateAccountComponent() {
+  translateZodErrors()
   const { signUp, setActive, isLoaded } = useSignUp()
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
