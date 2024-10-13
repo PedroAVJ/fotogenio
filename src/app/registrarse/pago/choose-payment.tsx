@@ -22,7 +22,7 @@ export function ChoosePaymentComponent({ clientSecret }: { clientSecret: string 
     <ScrollArea>
       <main className={`
         ${workSans.className}
-        min-h-dvh
+        min-h-dvh w-full
         flex flex-col items-center justify-between space-y-8
         px-2 pb-8 pt-4
         text-[#F5F5F5]
@@ -38,8 +38,8 @@ export function ChoosePaymentComponent({ clientSecret }: { clientSecret: string 
             Forma de Pago
           </h3>
         </div>
-        <div className="flex flex-col items-center w-full max-w-md">
-          <div className="relative w-64 h-64 mb-4">
+        <div className="flex flex-col items-center w-full">
+          <div className="relative size-80 mb-4">
             <Image
               src={mujer}
               alt="Mujer de fondo"
@@ -55,7 +55,7 @@ export function ChoosePaymentComponent({ clientSecret }: { clientSecret: string 
               stripe={stripePromise}
               options={{ clientSecret }}
             >
-              <EmbeddedCheckout className="py-6" />
+              <EmbeddedCheckout className="p-6 w-full" />
             </EmbeddedCheckoutProvider>
           )}
           {!clientSecret && (
