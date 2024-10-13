@@ -4,7 +4,7 @@ import { env } from '@/server/env';
 import { headers } from 'next/headers';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
-import { getBaseUrl } from '@/lib/utils';
+import { webhookBaseUrl } from '@/server/urls';
 import md5 from 'md5';
 import * as Sentry from '@sentry/nextjs';
 
@@ -53,8 +53,7 @@ export async function POST(request: NextRequest) {
           hardware: 'gpu-t4'
         }
       )
-      const baseUrl = getBaseUrl();
-      const webhookUrl = new URL(`${baseUrl}/api/webhooks/replicate/fine-tune-completed`);
+      const webhookUrl = new URL('/replicate/fine-tune-completed', webhookBaseUrl);
       webhookUrl.searchParams.set('userId', userId);
       await replicate.trainings.create(
         "ostris",

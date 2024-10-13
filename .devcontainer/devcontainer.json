@@ -2,7 +2,8 @@
 	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
 	"postCreateCommand": "npm install",
 	"features": {
-		"ghcr.io/nullcoder/devcontainer-features/stripe-cli:1": {}
+		"ghcr.io/nullcoder/devcontainer-features/stripe-cli:1": {},
+		"ghcr.io/jckimble/devcontainer-features/ngrok:3": {}
 	},
 	"customizations": {
 			"vscode": {
