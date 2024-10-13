@@ -1,14 +1,10 @@
 'use server';
 
 import { api } from "@/server/trpc";
-import Stripe from 'stripe';
+import { stripe } from '@/server/stripe';
 import { env } from '@/lib/env';
 import { redirect } from 'next/navigation';
 import { getBaseUrl } from "@/lib/utils";
-
-const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
-});
 
 export const createCheckoutSessionAction = api
   .mutation(async ({ ctx: { session: { userId } } }) => {

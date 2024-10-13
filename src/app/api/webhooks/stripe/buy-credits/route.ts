@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import Stripe from 'stripe';
+import { stripe } from '@/server/stripe';
 import { env } from '@/lib/env';
 import { headers } from 'next/headers';
 import { db } from '@/server/db';
@@ -12,9 +12,6 @@ export async function POST(request: NextRequest) {
     Sentry.captureMessage('Missing stripe-signature', 'error');
     return NextResponse.json({ received: true });
   }
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-06-20',
-  });
   const event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET);
   if (event.type !== 'payment_intent.succeeded') {
     Sentry.captureMessage('Invalid event type', 'error');

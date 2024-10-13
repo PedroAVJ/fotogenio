@@ -3,7 +3,7 @@
 import { api } from "@/server/trpc";
 import { db } from "@/server/db";
 import { z } from "zod";
-import Stripe from 'stripe';
+import { stripe } from '@/server/stripe';
 import { env } from '@/lib/env';
 import { redirect } from 'next/navigation';
 import { replicate } from "@/server/replicate";
@@ -79,10 +79,6 @@ export const createImages = api
     }));
     redirect('/generando-fotos')
   });
-
-const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
-});
 
 export const createCheckoutSessionAction = api
   .mutation(async ({ ctx: { session: { userId } } }) => {
