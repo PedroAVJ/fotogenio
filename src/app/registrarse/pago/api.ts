@@ -10,6 +10,7 @@ export const procederAPago = api
   .mutation(async ({ ctx: { session: { userId } } }) => {
     const baseUrl = getBaseUrl();
     const { url } = await stripe.checkout.sessions.create({
+      ui_mode: 'embedded',
       line_items: [
         {
           price: env.CREDITS_PRICE_ID,
@@ -17,8 +18,7 @@ export const procederAPago = api
         },
       ],
       mode: 'payment',
-      success_url: `${baseUrl}/generando-fotos`,
-      cancel_url: `${baseUrl}/generar-imagenes`,
+      return_url: `${baseUrl}/generando-fotos`,
       payment_intent_data: {
         metadata: {
           userId,
