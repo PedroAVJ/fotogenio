@@ -8,11 +8,12 @@ import { Gender } from "@prisma/client";
 const createUserSchema = z.object({
   gender: z.nativeEnum(Gender),
   styleIds: z.array(z.string()),
+  zippedPhotosUrl: z.string()
 });
 
 export const createUser = api
   .input(createUserSchema)
-  .mutation(async ({ input: { gender, styleIds }, ctx: { session: { userId } } }) => {
+  .mutation(async ({ input: { gender, styleIds, zippedPhotosUrl }, ctx: { session: { userId } } }) => {
     await db.chosenStyle.createMany({
       data: styleIds.map((styleId) => ({
         userId,
@@ -23,8 +24,8 @@ export const createUser = api
       data: {
         userId,
         gender,
+        zippedPhotosUrl,
         credits: 0,
-        pendingPhotos: 0,
         modelStatus: 'pending',
       },
     });
