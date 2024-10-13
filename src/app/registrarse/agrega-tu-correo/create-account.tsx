@@ -9,7 +9,6 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp"
-import { useLocalStorage } from 'react-use-storage'
 import { Mail, Loader2 } from 'lucide-react'
 import { Form, FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
@@ -20,6 +19,8 @@ import { createUser } from './api'
 import { Gender } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import * as Sentry from '@sentry/nextjs'
+import { useQueryState, parseAsString, parseAsStringEnum, parseAsArrayOf } from 'nuqs'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -38,42 +39,40 @@ export function CreateAccountComponent() {
       emailAddress: '',
     },
   })
-
-  const [step, setStep] = useLocalStorage<number>('step', 3)
-  const [gender] = useLocalStorage<Gender>('selectedGender')
-  const [styleIds] = useLocalStorage<string[]>('selectedStyles')
   const [codeSent, setCodeSent] = useState(false)
-
   async function handleSendCode() {
-    if (!isLoaded) return
-    setCodeSent(true)
+    if (!isLoaded) {
+      Sentry.captureMessage('El componente de autenticación no está cargado')
+      toast.error('Hubo un error al enviar el código')
+      return
+    }
     await signUp.create({
       emailAddress: form.getValues('emailAddress'),
     })
     await signUp.prepareEmailAddressVerification()
+    setCodeSent(true)
   }
-
-  const mutation = useMutation({
-    mutationFn: async (code: string) => {
-      if (!isLoaded) {
-        toast.error('El componente de autenticación no está cargado')
-        return
-      }
-      const signInAttempt = await signUp.attemptEmailAddressVerification({ code });
-      await setActive({ session: signInAttempt.createdSessionId });
-      await createUser({ gender, styleIds });
-    },
-    onSuccess: () => {
-      setStep(4)
+  const [gender] = useQueryState('gender', parseAsStringEnum(Object.values(Gender)).withDefault(Gender.male))
+  const [styleIds] = useQueryState('styleIds', parseAsArrayOf(parseAsString).withDefault([]))
+  const [zippedPhotosUrl] = useQueryState('zippedPhotosUrl', parseAsString.withDefault(''))
+  async function handleSignUp(code: string) {
+    if (!isLoaded) {
+      Sentry.captureMessage('El componente de autenticación no está cargado')
+      toast.error('Hubo un error al crear la cuenta')
+      return
     }
+    const signInAttempt = await signUp.attemptEmailAddressVerification({ code });
+    await setActive({ session: signInAttempt.createdSessionId });
+    await createUser({ gender, styleIds, zippedPhotosUrl });
+  }
+  const mutation = useMutation({
+    mutationFn: handleSignUp,
   });
-
   async function handleCodeChange(code: string) {
     if (code.length !== 6) return;
     mutation.mutate(code);
   }
   const isValid = form.formState.isValid
-
   return (
     <main className={`
       ${workSans.className}
@@ -88,7 +87,7 @@ export function CreateAccountComponent() {
           <h1 
             className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
           >
-            {step}
+            4
           </h1>
           <h3 className="scroll-m-20 text-xl tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 font-semibold [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
             Crea tu cuenta

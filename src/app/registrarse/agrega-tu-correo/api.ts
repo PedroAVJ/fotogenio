@@ -4,6 +4,7 @@ import { api } from "@/server/trpc";
 import { db } from "@/server/db";
 import { z } from "zod";
 import { Gender } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 const createUserSchema = z.object({
   gender: z.nativeEnum(Gender),
@@ -29,4 +30,5 @@ export const createUser = api
         modelStatus: 'pending',
       },
     });
+    redirect('/registrarse/pago')
   });
