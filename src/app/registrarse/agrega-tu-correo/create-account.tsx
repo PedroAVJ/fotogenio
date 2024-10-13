@@ -114,6 +114,7 @@ export function CreateAccountComponent() {
                         <Input
                           type="email"
                           {...field}
+                          disabled={codeSent || field.disabled}
                           className="bg-transparent text-white py-6 px-6 w-full text-lg"
                           placeholder="Ingresa tu dirección de correo electrónico"
                         />
