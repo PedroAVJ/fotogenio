@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import { useLocalStorage } from 'react-use-storage'
 import { ArrowDown, Loader2 } from 'lucide-react'
-import { createCheckoutSessionAction } from './actions'
+import { createCheckoutSessionAction } from './api'
 import { toast } from "sonner"
 import { useMutation } from '@tanstack/react-query'
 import mujer from './fotos/mujer.png'
