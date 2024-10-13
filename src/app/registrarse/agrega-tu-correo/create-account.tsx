@@ -16,7 +16,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from 'zod'
 import { useSignUp } from '@clerk/nextjs'
-import { addUserSettingsAction } from './actions'
+import { createUser } from './api'
 import { Gender } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -61,7 +61,7 @@ export function CreateAccountComponent() {
       }
       const signInAttempt = await signUp.attemptEmailAddressVerification({ code });
       await setActive({ session: signInAttempt.createdSessionId });
-      await addUserSettingsAction({ gender, styleIds });
+      await createUser({ gender, styleIds });
     },
     onSuccess: () => {
       setStep(4)

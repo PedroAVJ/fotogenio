@@ -1,38 +1,10 @@
 'use server';
 
 import { api } from "@/server/trpc";
-import { db } from "@/server/db";
-import { z } from "zod";
-import { Gender } from "@prisma/client";
 import Stripe from 'stripe';
 import { env } from '@/lib/env';
 import { redirect } from 'next/navigation';
 import { getBaseUrl } from "@/lib/utils";
-
-const addUserSettings = z.object({
-  gender: z.nativeEnum(Gender),
-  styleIds: z.array(z.string()),
-});
-
-export const addUserSettingsAction = api
-  .input(addUserSettings)
-  .mutation(async ({ input: { gender, styleIds }, ctx: { session: { userId } } }) => {
-    await db.chosenStyle.createMany({
-      data: styleIds.map((styleId) => ({
-        userId,
-        styleId,
-      })),
-    });
-    await db.userSettings.create({
-      data: {
-        userId,
-        gender,
-        credits: 0,
-        pendingPhotos: 0,
-        modelStatus: 'pending',
-      },
-    });
-  });
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: '2024-06-20',
