@@ -8,3 +8,6 @@
 - Prompt engineering
 - Curate style selections for each gender
 - Pay for sentry
+- Change stripe payment to an embedded form
+- Add more stripe payment methods
+- Shouldn't we just use google for sign ups?
