@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { env } from '@/server/env';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,13 +21,4 @@ export function formatBytes(
   return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
     sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
   }`
-}
-
-export function getBaseUrl() {
-  if (env.VERCEL_ENV === 'preview') {
-    return new URL(`https://${env.VERCEL_BRANCH_URL}`);
-  } else if (env.VERCEL_ENV === 'production') {
-    return new URL(`https://${env.VERCEL_PROJECT_PRODUCTION_URL}`);
-  }
-  throw new Error('Invalid environment');
 }

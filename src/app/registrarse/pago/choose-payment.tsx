@@ -2,26 +2,24 @@
 
 import React from 'react'
 import { Work_Sans } from 'next/font/google'
-import { Button } from "@/components/ui/button"
 import Image from 'next/image'
-import { useLocalStorage } from 'react-use-storage'
-import { ArrowDown, Loader2 } from 'lucide-react'
-import { createCheckoutSessionAction } from './api'
-import { toast } from "sonner"
-import { useMutation } from '@tanstack/react-query'
-import mujer from './fotos/mujer.png'
+import { ArrowDown } from 'lucide-react'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import mujer from './mujer.png'
+import { loadStripe } from '@stripe/stripe-js';
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout
+} from '@stripe/react-stripe-js';
+import { env } from '@/server/env'
+
+const stripePromise = loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
-export function ChoosePaymentComponent() {
-  const [step] = useLocalStorage<number>('step', 5)
-  const mutation = useMutation({
-    mutationFn: createCheckoutSessionAction,
-    onSuccess: ({ message }) => {
-      toast.error(message)
-    },
-  })
+export function ChoosePaymentComponent({ clientSecret }: { clientSecret: string | null }) {
   return (
+    <ScrollArea>
     <main className={`
       ${workSans.className}
       h-dvh w-dvw
@@ -34,7 +32,7 @@ export function ChoosePaymentComponent() {
         <h1 
           className="scroll-m-20 text-4xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-medium text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
         >
-          {step}
+          5
         </h1>
         <h3 className="scroll-m-20 text-xl font-semibold tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
           Forma de Pago
@@ -52,15 +50,19 @@ export function ChoosePaymentComponent() {
         <p className="text-xl font-semibold mb-4">
           <span className="text-purple-500">$99 pesos</span> por <span className="text-purple-500">25 fotos</span>
         </p>
+        {clientSecret && (
+          <EmbeddedCheckoutProvider
+            stripe={stripePromise}
+            options={{ clientSecret }}
+          >
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        )}
+        {!clientSecret && (
+          <div>Ocurrió un error al crear la sesión de pago</div>
+        )}
       </div>
-      <Button
-        size="lg"
-        onClick={() => mutation.mutate()}
-        disabled={mutation.isPending}
-        className="flex w-36 rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 font-semibold"
-      >
-        {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : '¡Crear Fotos!'}
-      </Button>
     </main>
+    </ScrollArea>
   )
 }

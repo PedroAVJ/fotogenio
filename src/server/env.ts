@@ -13,7 +13,13 @@ export const env = createEnv({
       .enum(['development', 'test', 'production'])
       .default('development'),
   },
-  experimental__runtimeEnv: {},
+  client: {
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
+  },
+  experimental__runtimeEnv: {
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+      process.env['NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY'],
+  },
   emptyStringAsUndefined: true,
   isServer: typeof window === "undefined",
   extends: [vercel()],

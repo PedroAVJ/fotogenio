@@ -22,11 +22,13 @@ const nextConfig = {
   },
 };
 
+export default nextConfig;
+
 // Injected content via Sentry wizard below
 
 import { withSentryConfig } from "@sentry/nextjs";
 
-export default withSentryConfig(
+withSentryConfig(
   nextConfig,
   {
     // For all available options, see:
