@@ -9,7 +9,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useUploadFile } from '@/hooks/use-upload-file'
 import JSZip from 'jszip';
 import { toast } from 'sonner'
-import { ReactNode } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import * as Sentry from '@sentry/nextjs';
 import { z } from 'zod';
@@ -41,17 +40,17 @@ const placeholderImages = [
   { foto: bueno3, status: 'accepted' },
 ]
 
-function LoadingToastContent({ progress, length }: { progress: number | undefined, length: number }): ReactNode {
-  if (!progress) {
-    return 'Preparando fotos...'
-  }
-  return `Subiendo ${length} fotos... ${Math.round(progress * 100)}%`
-}
-
 const schema = z.object({
   photos: z.array(z.instanceof(File))
-    .min(12, { message: 'Debes subir al menos 12 fotos' })
-    .max(20, { message: 'Debes subir como máximo 20 fotos' }),
+    .max(20, { message: 'Debes subir como máximo 20 fotos' })
+    .refine(
+      (files) => files.length >= 12,
+      (files) => ({
+        message: files.length === 0
+          ? 'No has agregado ninguna foto. Debes subir al menos 12 fotos.'
+          : `Debes subir al menos 12 fotos. Te ${12 - files.length === 1 ? 'falta 1 foto' : `faltan ${12 - files.length} fotos`}.`
+      })
+    )
 })
 
 type Schema = z.infer<typeof schema>;
@@ -70,7 +69,13 @@ export function UploadPhotosComponent() {
   const { onUpload, isUploading, uploadedFiles, progresses } = useUploadFile("subirZip", {
     defaultUploadedFiles: []
   });
-  const progress = progresses['uploaded_photos.zip']
+  function loadingText() {
+    const progress = progresses['uploaded_photos.zip']
+    if (!progress) {
+      return 'Preparando fotos...'
+    }
+    return `Subiendo... ${progress}%`
+  }
   async function handleUpload() {
     const zip = new JSZip();
     for (const file of photos) {
@@ -78,20 +83,20 @@ export function UploadPhotosComponent() {
     }
     const content = await zip.generateAsync({ type: 'arraybuffer' });
     const zippedPhotos = new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
-    toast.promise(onUpload([zippedPhotos]), {
-      loading: <LoadingToastContent progress={progress} length={photos.length} />,
-      success: () => {
-        const zip = uploadedFiles[0]
-        if (!zip) {
-          Sentry.captureMessage('No zip file uploaded', 'error');
-          return "Las fotos no se pudieron subir"
-        }
-        const params = new URLSearchParams(searchParams);
-        params.set('zippedPhotosUrl', zip.appUrl);
-        router.push(`/registrarse/agrega-tu-correo?${params.toString()}`);
-        return "Las fotos se han subido con éxito!"
-      },
-    })
+    await onUpload([zippedPhotos])
+    
+    // Add a small delay to allow React to update the state
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    const uploadedZip = uploadedFiles[0]
+    if (!uploadedZip) {
+      Sentry.captureMessage('No zip file uploaded', 'error');
+      toast.error('Las fotos no se pudieron subir')
+    } else {
+      const params = new URLSearchParams(searchParams);
+      params.set('zippedPhotosUrl', uploadedZip.appUrl);
+      router.push(`/registrarse/agrega-tu-correo?${params.toString()}`);
+    }
   }
   return (
     <ScrollArea>
@@ -137,12 +142,14 @@ export function UploadPhotosComponent() {
             <FormField
               control={form.control}
               name="photos"
-              render={({ field }) => (
+              render={({ field: { onChange, onBlur, value, disabled } }) => (
                 <FormItem>
                   <FormControl>
                     <FileUploader
-                      {...field}
-                      onValueChange={field.onChange}
+                      onValueChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      disabled={disabled ?? false}
                       accept={{
                         'image/jpeg': ['.jpg', '.jpeg'],
                         'image/png': ['.png'],
@@ -160,12 +167,12 @@ export function UploadPhotosComponent() {
             size="lg"
             className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!form.formState.isValid || isUploading}
-            onClick={handleUpload}
+            onClick={form.handleSubmit(handleUpload)}
           >
             {isUploading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Subiendo...
+                {loadingText()}
               </>
             ) : (
               'Subir fotos'

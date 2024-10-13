@@ -232,14 +232,14 @@ export function FileUploader(props: FileUploaderProps) {
                 </div>
                 <div className="flex flex-col gap-px">
                   <p className="font-medium text-muted-foreground">
-                    Arrastra y suelta archivos aquí, o haz clic para seleccionar archivos
+                    Cuantas más fotos subas, mejor será el resultado.
                   </p>
                   <p className="text-sm text-muted-foreground/70">
                     Puedes subir hasta
                     {maxFileCount > 1
                       ? ` ${maxFileCount === Infinity ? "varios" : maxFileCount}
-                      archivos (maximo ${formatBytes(maxSize)} cada uno)`
-                      : ` un archivo con ${formatBytes(maxSize)}`}
+                      imágenes (máximo ${formatBytes(maxSize)} cada una)`
+                      : ` una imagen con ${formatBytes(maxSize)}`}.
                   </p>
                 </div>
               </div>
