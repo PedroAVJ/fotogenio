@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbo",
+    "stripe:login": "stripe login",
+    "stripe:listen": "stripe listen --load-from-webhooks-api --forward-to localhost:3000",
     "vercel:pull": "vercel env pull .env --environment=development",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
