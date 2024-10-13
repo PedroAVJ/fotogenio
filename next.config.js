@@ -22,13 +22,12 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
-
 // Injected content via Sentry wizard below
 
 import { withSentryConfig } from "@sentry/nextjs";
 
-withSentryConfig(
+// Add this conditional export at the end of the file
+export default process.env['TURBOPACK'] ? nextConfig : withSentryConfig(
   nextConfig,
   {
     // For all available options, see:
