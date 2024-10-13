@@ -95,7 +95,7 @@ export function UploadPhotosComponent() {
     } else {
       const params = new URLSearchParams(searchParams);
       params.set('zippedPhotosUrl', uploadedZip.appUrl);
-      router.push(`/registrarse/agrega-tu-correo?${params.toString()}`);
+      router.push(`/registrarse/crear-cuenta?${params.toString()}`);
     }
   }
   return (
