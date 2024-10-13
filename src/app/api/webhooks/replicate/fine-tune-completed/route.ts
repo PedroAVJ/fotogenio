@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { env } from '@/lib/env';
+import { env } from '@/server/env';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
 import { Training } from 'replicate';

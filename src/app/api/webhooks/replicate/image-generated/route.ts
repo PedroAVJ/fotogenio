@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { env } from '@/lib/env';
+import { env } from '@/server/env';
 import { db } from '@/server/db';
 import { validateWebhook } from "replicate";
 import sharp from 'sharp';

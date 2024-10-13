@@ -2,11 +2,11 @@
 
 import { api } from "@/server/trpc";
 import { stripe } from '@/server/stripe';
-import { env } from '@/lib/env';
+import { env } from '@/server/env';
 import { redirect } from 'next/navigation';
 import { getBaseUrl } from "@/lib/utils";
 
-export const createCheckoutSessionAction = api
+export const procederAPago = api
   .mutation(async ({ ctx: { session: { userId } } }) => {
     const baseUrl = getBaseUrl();
     const { url } = await stripe.checkout.sessions.create({
@@ -22,7 +22,6 @@ export const createCheckoutSessionAction = api
       payment_intent_data: {
         metadata: {
           userId,
-          operation: 'create-model',
         },
       },
       locale: 'es'

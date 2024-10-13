@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { stripe } from '@/server/stripe';
-import { env } from '@/lib/env';
+import { env } from '@/server/env';
 import { headers } from 'next/headers';
 import { db } from '@/server/db';
 import * as Sentry from '@sentry/nextjs';

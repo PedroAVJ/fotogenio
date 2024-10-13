@@ -4,7 +4,7 @@ import { api } from "@/server/trpc";
 import { db } from "@/server/db";
 import { z } from "zod";
 import { stripe } from '@/server/stripe';
-import { env } from '@/lib/env';
+import { env } from '@/server/env';
 import { redirect } from 'next/navigation';
 import { replicate } from "@/server/replicate";
 import { getBaseUrl } from "@/lib/utils";
