@@ -1,5 +1,6 @@
 # TODO
 
+- Fix react state not updating fast enough when uploading photos
 - Change example photos for user uploads so it makes more sense
 - Shouldn't we just use google for sign ups?
 - Prompt engineering
