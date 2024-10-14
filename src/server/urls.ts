@@ -1,21 +1,18 @@
 import { env } from '@/server/env';
 
-let baseUrl: URL;
-let webhookBaseUrl: URL;
+let baseUrl: string;
+let webhookBaseUrl: string;
 
 if (env.VERCEL_ENV === 'production') {
-  const url = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
-  baseUrl = new URL(url);
-  webhookBaseUrl = new URL('/api/webhooks', baseUrl);
+  const baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  webhookBaseUrl = `${baseUrl}/api/webhooks`;
 } else if (env.VERCEL_ENV === 'preview') {
-  const url = `https://${env.VERCEL_BRANCH_URL}`;
-  baseUrl = new URL(url);
-  webhookBaseUrl = new URL('/api/webhooks', baseUrl);
+  const baseUrl = `https://${env.VERCEL_BRANCH_URL}`;
+  webhookBaseUrl = `${baseUrl}/api/webhooks`;
 } else {
-  const localhostUrl = 'http://localhost:3000';
-  baseUrl = new URL(localhostUrl);
+  baseUrl = 'http://localhost:3000';
   const ngrokUrl = `https://${process.env['NGROK_URL']}`;
-  webhookBaseUrl = new URL('/api/webhooks', ngrokUrl);
+  webhookBaseUrl = `${ngrokUrl}/api/webhooks`;
 }
 
 export { baseUrl, webhookBaseUrl };

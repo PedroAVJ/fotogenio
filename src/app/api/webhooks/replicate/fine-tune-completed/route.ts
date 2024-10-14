@@ -68,14 +68,12 @@ export async function POST(request: NextRequest) {
     });
   });
   await Promise.all(prompts.map(async ({ id, prompt }) => {
-    const webhookUrl = new URL('/replicate/image-generated', webhookBaseUrl);
-    webhookUrl.searchParams.set('userId', userId);
-    webhookUrl.searchParams.set('promptId', id);
+    const webhookUrl = `${webhookBaseUrl}/replicate/image-generated?userId=${userId}&promptId=${id}`;
     await replicate.predictions.create(
       {
         model: `pedroavj/${modelName}`,
         version: version.id,
-        webhook: webhookUrl.toString(),
+        webhook: webhookUrl,
         webhook_events_filter: ['completed'],
         input: {
           prompt,

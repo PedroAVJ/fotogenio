@@ -53,15 +53,14 @@ export async function POST(request: NextRequest) {
           hardware: 'gpu-t4'
         }
       )
-      const webhookUrl = new URL('/replicate/fine-tune-completed', webhookBaseUrl);
-      webhookUrl.searchParams.set('userId', userId);
+      const webhookUrl = `${webhookBaseUrl}/replicate/fine-tune-completed?userId=${userId}`;
       await replicate.trainings.create(
         "ostris",
         "flux-dev-lora-trainer",
         "885394e6a31c6f349dd4f9e6e7ffbabd8d9840ab2559ab78aed6b2451ab2cfef",
         {
           destination: `${model.owner}/${model.name}`,
-          webhook: webhookUrl.toString(),
+          webhook: webhookUrl,
           webhook_events_filter: ['completed'],
           input: {
             steps: 1000,
