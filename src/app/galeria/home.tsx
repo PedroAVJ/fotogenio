@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Camera, ArrowDown } from 'lucide-react'
 import Image from 'next/image'
 import { GeneratedPhoto } from '@prisma/client'
+import { saveAs } from 'file-saver'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
@@ -24,14 +25,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
   async function handleDownload(url: string) {
     const response = await fetch(url);
     const blob = await response.blob();
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = `fotogenio-${Date.now()}.png`; // Unique filename
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(downloadUrl);
+    saveAs(blob, `fotogenio-${Date.now()}.png`);
   }
 
   const handleTouchStart = (index: number) => {
