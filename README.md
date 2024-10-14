@@ -6,3 +6,4 @@
 - Curate style selections for each gender
 - Pay for sentry
 - Optimize performance by using sizes prop
+- Figure out why fotogenio doesn't appear on search results
