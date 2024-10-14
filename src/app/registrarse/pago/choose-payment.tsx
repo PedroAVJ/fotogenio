@@ -5,7 +5,7 @@ import { Work_Sans } from 'next/font/google'
 import Image from 'next/image'
 import { ArrowDown } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import mujer from './mujer.png'
+import mujer from '../mujer.png'
 import { loadStripe } from '@stripe/stripe-js';
 import {
   EmbeddedCheckoutProvider,

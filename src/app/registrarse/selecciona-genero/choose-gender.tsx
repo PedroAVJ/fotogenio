@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import Image from 'next/image'
 import hombre from './hombre.png'
-import mujer from './mujer.png'
+import mujer from '../mujer.png'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 

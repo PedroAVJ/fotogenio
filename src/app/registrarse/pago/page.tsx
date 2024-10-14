@@ -9,6 +9,7 @@ import { clerkClient } from '@clerk/nextjs/server';
 export default async function Page() {
   const { userId } = auth().protect();
   const user = await clerkClient().users.getUser(userId);
+  const returnUrl = new URL('/generando-fotos', baseUrl);
   const { client_secret } = await stripe.checkout.sessions.create({
     ui_mode: 'embedded',
     customer_email: user.emailAddresses[0]?.emailAddress ?? '',
@@ -19,7 +20,7 @@ export default async function Page() {
       },
     ],
     mode: 'payment',
-    return_url: `${baseUrl}/generando-fotos?session_id={CHECKOUT_SESSION_ID}`,
+    return_url: `${returnUrl}?session_id={CHECKOUT_SESSION_ID}`,
     payment_intent_data: {
       metadata: {
         userId,

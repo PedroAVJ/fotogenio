@@ -4,7 +4,7 @@ import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
 import { Training } from 'replicate';
 import { validateWebhook } from "replicate";
-import { getBaseUrl } from '@/lib/utils';
+import { webhookBaseUrl } from '@/server/urls';
 import md5 from 'md5';
 import * as Sentry from "@sentry/nextjs";
 
@@ -67,9 +67,8 @@ export async function POST(request: NextRequest) {
       data: prompts.map(({ id }) => ({ userId, promptId: id })),
     });
   });
-  const baseUrl = getBaseUrl();
   await Promise.all(prompts.map(async ({ id, prompt }) => {
-    const webhookUrl = new URL('/api/webhooks/replicate/image-generated', baseUrl);
+    const webhookUrl = new URL('/replicate/image-generated', webhookBaseUrl);
     webhookUrl.searchParams.set('userId', userId);
     webhookUrl.searchParams.set('promptId', id);
     await replicate.predictions.create(

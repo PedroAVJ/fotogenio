@@ -11,12 +11,18 @@ export default async function Page() {
     },
   });
   if (!userSettings) {
-    redirect('/registrarse')
+    redirect('/registrarse/selecciona-genero')
   }
-  const { modelStatus, pendingPhotos } = userSettings;
+  const { modelStatus } = userSettings;
   if (modelStatus === 'pending' || modelStatus === 'training') {
     return <WaitingComponent aproxTime={30} />;
   }
+  const pendingPhotos = await db.generatedPhoto.count({
+    where: {
+      userId,
+      photoUrl: null,
+    },
+  });
   if (pendingPhotos > 0) {
     return <WaitingComponent aproxTime={5} />;
   }

@@ -7,19 +7,18 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Camera, ArrowDown } from 'lucide-react'
 import Image from 'next/image'
+import { GeneratedPhoto } from '@prisma/client'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
 })
 
 interface HomeProps {
-  numberOfPhotos?: number;
-  imageUrls?: string[];
+  credits: number;
+  generatedPhotos: GeneratedPhoto[];
 }
 
-export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
-  const images = imageUrls || []
-
+export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
   const [touchedIndex, setTouchedIndex] = useState<number | null>(null)
 
   async function handleDownload(url: string) {
@@ -56,7 +55,7 @@ export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
             <span className="inline-block">
               ¡Puedes generar{' '}
               <span className="inline-block bg-gradient-to-b from-[#8E54E9] to-white bg-clip-text text-transparent">
-                {numberOfPhotos}
+                {credits}
               </span>
               {' '}fotos más!
             </span>
@@ -72,16 +71,16 @@ export function HomeComponent({ numberOfPhotos = 100, imageUrls }: HomeProps) {
             </Link>
           </Button>
           <div className="flex flex-col items-center gap-4">
-            {images.map((url, index) => (
+            {generatedPhotos.map(({ photoUrl }, index) => (
               <div 
                 key={index} 
                 className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
-                onClick={() => handleDownload(url)}
+                onClick={() => handleDownload(photoUrl ?? '')}
                 onTouchStart={() => handleTouchStart(index)}
                 onTouchEnd={handleTouchEnd}
               >
                 <Image
-                  src={url}
+                  src={photoUrl ?? ''}
                   alt={`Generated image ${index + 1}`}
                   fill
                   className="object-cover rounded-[10px]"

@@ -9,16 +9,12 @@ export default async function Home() {
     where: { userId },
   });
   if (!userSettings) {
-    redirect('/registrarse')
+    redirect('/registrarse/selecciona-genero')
   }
-  const { pendingPhotos, credits } = userSettings;
-  if (pendingPhotos > 0) {
-    redirect("/generando-fotos");
-  }
+  const { credits } = userSettings;
   const generatedPhotos = await db.generatedPhoto.findMany({
-    where: { userId },
+    where: { userId, photoUrl: { not: null } },
     orderBy: { createdAt: "desc" },
   });
-  const imageUrls = generatedPhotos.map((generatedPhoto) => generatedPhoto.photoUrl);
-  return <HomeComponent numberOfPhotos={credits} imageUrls={imageUrls} />;
+  return <HomeComponent credits={credits} generatedPhotos={generatedPhotos} />;
 }
