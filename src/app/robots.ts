@@ -13,9 +13,10 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         '/api/',
         '/generando-fotos',
-        '/inicio',
+        '/galeria',
         '/nuevo-estilo',
         '/registrarse/pago',
+        '/comprar-creditos',
       ],
     },
   }
