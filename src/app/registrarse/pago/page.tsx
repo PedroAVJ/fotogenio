@@ -11,7 +11,7 @@ import { db } from '@/server/db';
 export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] } }) {
   const { userId } = auth().protect();
   const gender = searchParams['gender'] as Gender;
-  const choosenStyles = searchParams['choosenStyles'] as string[];
+  const styles = searchParams['style'] as string[];
   const zippedPhotosUrl = searchParams['zippedPhotosUrl'] as string;
   const userSettings = await db.userSettings.findUnique({
     where: { userId }
@@ -28,7 +28,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
         },
       });
       await tx.chosenStyle.createMany({
-        data: choosenStyles.map((style) => ({
+        data: styles.map((style) => ({
           userId,
           styleId: style,
         })),
