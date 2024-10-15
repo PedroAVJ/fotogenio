@@ -12,33 +12,49 @@ export async function POST(request: NextRequest) {
   const requestClone = request.clone();
   const isValid = validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
-    Sentry.captureMessage('Invalid webhook', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = 'Invalid webhook secret';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId');
   if (!userId) {
-    Sentry.captureMessage('Missing userId', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = 'Missing userId';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const { status } = await request.json() as Training;
   if (status !== 'succeeded') {
-    Sentry.captureMessage(`Fine-tuning failed: Unexpected status '${status}'`, 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = `Fine-tuning failed: Unexpected status '${status}'`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const userSettings = await db.userSettings.findUnique({
-    where: { userId, modelStatus: 'training' },
+    where: { userId },
   });
   if (!userSettings) {
-    Sentry.captureMessage('Webhook has already been received', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = `User settings for user id ${userId} not found`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
+  }
+  if (userSettings.modelStatus !== 'training') {
+    const errorMessage = `Expected model status: training, found: ${userSettings.modelStatus} for user id ${userId}`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const modelName = `flux-${md5(userId)}`;
   const model = await replicate.models.get('pedroavj', modelName);
   const version = model.latest_version;
   if (!version) {
-    Sentry.captureMessage('Version not found', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = `Version not found for model ${modelName}`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const prompts = await db.prompt.findMany({
     where: {
@@ -83,5 +99,5 @@ export async function POST(request: NextRequest) {
       }
     );
   }));
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ message: 'Webhook received' });
 }

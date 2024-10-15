@@ -68,38 +68,52 @@ export async function POST(request: NextRequest) {
   const requestClone = request.clone();
   const isValid = validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
-    Sentry.captureMessage('Invalid webhook', 'error');
-    return NextResponse.json({ received: true }, { status: 200 });
+    const errorMessage = 'Invalid webhook secret';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId');
   if (!userId) {
-    Sentry.captureMessage('Missing userId', 'error');
-    return NextResponse.json({ received: true }, { status: 200 });
+    const errorMessage = 'Missing userId';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const promptId = searchParams.get('promptId');
   if (!promptId) {
-    Sentry.captureMessage('Missing promptId', 'error');
-    return NextResponse.json({ received: true }, { status: 200 });
+    const errorMessage = 'Missing promptId';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const { status, output } = await request.json() as Prediction;
   if (status !== 'succeeded') {
-    Sentry.captureMessage(`Fine-tuning failed: Unexpected status '${status}'`, 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = `Expected status: succeeded, found: ${status}`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   if (!Array.isArray(output) || !output.every(item => typeof item === 'string')) {
-    Sentry.captureMessage('Invalid output format', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = `Expected output to be an array of strings, found: ${output}`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const photoUrl = output[0];
   if (!photoUrl) {
-    Sentry.captureMessage('Missing photoUrl', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = 'Missing photoUrl';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const photoUrlWithWatermark = await addWatermark(photoUrl);
   if (!photoUrlWithWatermark) {
-    Sentry.captureMessage('Failed to add watermark', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = 'Failed to add watermark';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const generatedPhoto = await db.generatedPhoto.findFirst({
     where: {
@@ -109,8 +123,10 @@ export async function POST(request: NextRequest) {
     },
   });
   if (!generatedPhoto) {
-    Sentry.captureMessage('Generated photo already exists', 'error');
-    return NextResponse.json({ received: true });
+    const errorMessage = 'Generated photo already exists';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   await db.$transaction(async (tx) => {
     await tx.generatedPhoto.update({
