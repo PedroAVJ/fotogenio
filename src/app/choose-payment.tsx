@@ -42,6 +42,7 @@ export function ChoosePaymentComponent({ clientSecret }: { clientSecret: string 
           <div className="relative size-80 mb-4">
             <Image
               src={mujer}
+              priority
               alt="Mujer de fondo"
               className="rounded-md object-cover"
             />

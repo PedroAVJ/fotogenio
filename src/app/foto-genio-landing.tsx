@@ -121,6 +121,7 @@ export function FotoGenioLandingComponent() {
                   key={index}
                   src={personaje.photo}
                   alt={personaje.alternativeText}
+                  priority
                   className="rounded-lg object-cover w-[155px] h-[226px]"
                 />
               ))}
@@ -131,6 +132,7 @@ export function FotoGenioLandingComponent() {
                   key={index}
                   src={personaje.photo}
                   alt={personaje.alternativeText}
+                  priority
                   className="rounded-lg object-cover w-[155px] h-[226px]"
                 />
               ))}

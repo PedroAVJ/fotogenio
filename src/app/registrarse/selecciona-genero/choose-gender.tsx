@@ -57,6 +57,7 @@ export function ChooseGender() {
         >
           <Image
             src={hombre}
+            priority
             alt="Personaje masculino - Hombre asiático con abrigo negro"
             className="size-full rounded-md object-cover p-0.5"
           />
@@ -68,6 +69,7 @@ export function ChooseGender() {
         >
           <Image
             src={mujer}
+            priority
             alt="Personaje femenino - Mujer asiática con vestido blanco"
             className="size-full rounded-md object-cover p-0.5"
           />

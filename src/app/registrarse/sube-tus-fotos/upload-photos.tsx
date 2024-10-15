@@ -24,12 +24,12 @@ import {
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
-import malo1 from './ejemplos/malo-1.png'
-import malo2 from './ejemplos/malo-2.png'
-import malo3 from './ejemplos/malo-3.png'
-import bueno1 from './ejemplos/bueno-1.png'
-import bueno2 from './ejemplos/bueno-2.png'
-import bueno3 from './ejemplos/bueno-3.png'
+import malo1 from './ejemplos/malo-1.jpeg'
+import malo2 from './ejemplos/malo-2.jpeg'
+import malo3 from './ejemplos/malo-3.jpeg'
+import bueno1 from './ejemplos/bueno-1.jpeg'
+import bueno2 from './ejemplos/bueno-2.jpeg'
+import bueno3 from './ejemplos/bueno-3.jpeg'
 
 const placeholderImages = [
   { foto: malo1, status: 'rejected' },
@@ -124,8 +124,9 @@ export function UploadPhotosComponent() {
                 <div key={index} className="relative aspect-square overflow-visible">
                   <Image
                     src={placeholderImage.foto}
+                    priority
                     alt={`Ejemplo ${index + 1}`}
-                    className="rounded-md object-cover"
+                    className="rounded-md object-cover h-32 w-24"
                   />
                   {placeholderImage.status === 'rejected' ? (
                     <div className="absolute -top-4 -right-4 w-8 h-8 flex items-center justify-center rounded-full border border-red-500">

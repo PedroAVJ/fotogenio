@@ -1,6 +1,5 @@
 # TODO
 
-- Change example photos for user uploads so it makes more sense
 - Fix react state not updating fast enough when uploading photos
 - Shouldn't we just use google for sign ups?
 - Optimize performance by using sizes prop
@@ -10,3 +9,4 @@
   - Prompt engineering
   - Curate style selections for each gender
 - Pay for sentry
+- Should we show different example photos for men and woman in the upload photos section?
