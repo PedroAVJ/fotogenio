@@ -43,10 +43,11 @@ function GoogleSignUpButton() {
   const { signUp } = useSignUp()
   if (!signUp) return null
   const signUpWithGoogle = () => {
+    const redirectUrl: Route = '/sso-callback'
     const redirectUrlComplete: Route = '/registrarse/pago'
     return signUp.authenticateWithRedirect({
       strategy: 'oauth_google',
-      redirectUrl: '/sign-up/sso-callback',
+      redirectUrl,
       redirectUrlComplete,
     })
   }
