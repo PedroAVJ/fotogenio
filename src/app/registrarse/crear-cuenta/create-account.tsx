@@ -38,13 +38,15 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import GoogleLogo from './google-logo.svg'
 import { Route } from 'next'
+import { useSearchParams } from 'next/navigation'
 
 function GoogleSignUpButton() {
   const { signUp } = useSignUp()
+  const searchParams = useSearchParams()
   if (!signUp) return null
   const signUpWithGoogle = () => {
     const redirectUrl: Route = '/sso-callback'
-    const redirectUrlComplete: Route = '/registrarse/pago'
+    const redirectUrlComplete: Route = `/registrarse/pago?${searchParams.toString()}`
     return signUp.authenticateWithRedirect({
       strategy: 'oauth_google',
       redirectUrl,
