@@ -1,12 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { env } from '@/server/env';
 import { db } from '@/server/db';
-import { replicate } from '@/server/replicate';
 import { Training } from 'replicate';
 import { validateWebhook } from "replicate";
-import { webhookBaseUrl } from '@/server/urls';
-import md5 from 'md5';
 import * as Sentry from "@sentry/nextjs";
+import { generateImages } from './generate-images';
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
@@ -47,15 +45,6 @@ export async function POST(request: NextRequest) {
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
-  const modelName = `flux-${md5(userId)}`;
-  const model = await replicate.models.get('pedroavj', modelName);
-  const version = model.latest_version;
-  if (!version) {
-    const errorMessage = `Version not found for model ${modelName}`;
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
   const prompts = await db.prompt.findMany({
     where: {
       style: {
@@ -83,21 +72,9 @@ export async function POST(request: NextRequest) {
       data: prompts.map(({ id }) => ({ userId, promptId: id })),
     });
   });
-  await Promise.all(prompts.map(async ({ id, prompt }) => {
-    const webhookUrl = `${webhookBaseUrl}/replicate/image-generated?userId=${userId}&promptId=${id}`;
-    await replicate.predictions.create(
-      {
-        model: `pedroavj/${modelName}`,
-        version: version.id,
-        webhook: webhookUrl,
-        webhook_events_filter: ['completed'],
-        input: {
-          prompt,
-          num_inference_steps: 50,
-          output_quality: 100,
-        }
-      }
-    );
-  }));
+  await generateImages({
+    userId,
+    prompts,
+  })
   return NextResponse.json({ message: 'Webhook received' });
 }
