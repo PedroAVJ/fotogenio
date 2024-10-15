@@ -6,59 +6,28 @@ import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
 import { webhookBaseUrl } from '@/server/urls';
 import md5 from 'md5';
-import * as Sentry from '@sentry/nextjs';
+import Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const signature = headers().get('stripe-signature');
-  if (!signature) {
-    const errorMessage = 'Missing stripe-signature';
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
-  const event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET);
-  if (event.type !== 'payment_intent.succeeded') {
-    const errorMessage = `Unexpected event type: ${event.type}`;
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
-  const paymentIntent = event.data.object;
-  const userId = paymentIntent.metadata['userId'];
-  if (!userId) {
-    const errorMessage = 'Missing userId';
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
-  const operation = paymentIntent.metadata['operation'];
-  if (!operation) {
-    const errorMessage = 'Missing operation';
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
-  const userSettings = await db.userSettings.findUnique({
-    where: { userId },
-  });
-  if (!userSettings) {
-    const errorMessage = `User settings for user id ${userId} not found`;
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
-  if (userSettings.modelStatus !== 'pending') {
-    const errorMessage = `Expected model status: pending, found: ${userSettings.modelStatus} for user id ${userId}`;
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
-  if (env.NODE_ENV === 'test') {
+  const event = stripe.webhooks.constructEvent(
+    body,
+    signature ?? '',
+    env.STRIPE_WEBHOOK_SECRET
+  ) as Stripe.PaymentIntentSucceededEvent;
+  const { userId = '', operation, environment } = event.data.object.metadata;
+  if (environment === 'test') {
     return NextResponse.json({ message: 'Test webhook received' });
   }
   if (operation === 'create-model') {
     await db.$transaction(async (tx) => {
+      const userSettings = await tx.userSettings.findUniqueOrThrow({
+        where: {
+          userId,
+          modelStatus: 'pending'
+        },
+      });
       await tx.userSettings.update({
         where: { userId },
         data: { credits: { increment: 25 }, modelStatus: 'training' },
