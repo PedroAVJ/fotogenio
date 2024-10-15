@@ -54,6 +54,9 @@ export async function POST(request: NextRequest) {
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
+  if (env.NODE_ENV === 'test') {
+    return NextResponse.json({ message: 'Test webhook received' });
+  }
   if (operation === 'create-model') {
     await db.$transaction(async (tx) => {
       await tx.userSettings.update({
