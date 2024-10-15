@@ -24,6 +24,5 @@ export async function addWatermark(imageUrl: string): Promise<FileEsque> {
       { input: transparentWatermark, gravity: 'southeast' }
     ])
   const watermarkedImageBuffer = await image.toBuffer();
-  const watermarkedBlob = new Blob([watermarkedImageBuffer], { type: 'image/webp' });
-  return new File([watermarkedBlob], 'watermarked-image.webp', { type: 'image/webp' });
+  return new File([watermarkedImageBuffer], 'watermarked-image.webp', { type: 'image/webp' });
 }
