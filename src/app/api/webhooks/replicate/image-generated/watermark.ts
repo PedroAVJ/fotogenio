@@ -1,8 +1,9 @@
 import { readFile } from "fs/promises";
 import sharp from 'sharp';
 import path from 'path';
+import { FileEsque } from "uploadthing/types";
 
-export async function addWatermark(imageUrl: string){
+export async function addWatermark(imageUrl: string): Promise<FileEsque> {
   // Fetch the input image from the provided URL
   const imageResponse = await fetch(imageUrl);
   const imageBuffer = await imageResponse.arrayBuffer();
