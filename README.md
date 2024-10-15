@@ -1,6 +1,5 @@
 # TODO
 
-- Fix react state not updating fast enough when uploading photos
 - Shouldn't we just use google for sign ups?
 - Optimize performance by using sizes prop
 - Figure out why fotogenio doesn't appear on search results

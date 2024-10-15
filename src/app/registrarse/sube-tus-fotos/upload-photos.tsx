@@ -121,7 +121,7 @@ export function UploadPhotosComponent() {
           <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-md md:max-w-4xl px-4">
             <div className="grid grid-cols-3 md:grid-cols-6 gap-4 gap-y-8 w-full">
               {placeholderImages.map((placeholderImage, index) => (
-                <div key={index} className="relative aspect-square overflow-visible">
+                <div key={index} className="relative aspect-square overflow-visible h-32 w-24">
                   <Image
                     src={placeholderImage.foto}
                     priority
