@@ -1,11 +1,15 @@
-# TODO
+# Project Tasks
 
+## To Do
 - Optimize performance by using sizes prop
 - Figure out why fotogenio doesn't appear on search results
-
-- Image generation
+- Image generation:
   - Prompt engineering
   - Curate style selections for each gender
-- Pay for sentry
-- Setup production google oauth
-- Should we show different example photos for men and woman in the upload photos section?
+
+## User Questions
+- Should we show different example photos for men and women in the upload photos section?
+
+## Production Tasks
+- Setup production Google OAuth
+- Pay for Sentry
