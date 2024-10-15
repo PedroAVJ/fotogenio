@@ -6,7 +6,8 @@ import { X, Check, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { FileUploader } from "@/components/ui/file-uploader"
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useUploadFile } from '@/hooks/use-upload-file'
+import { uploadFiles } from '@/lib/uploadthing'
+import { useState } from 'react'
 import JSZip from 'jszip';
 import { toast } from 'sonner'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -66,11 +67,9 @@ export function UploadPhotosComponent() {
   const photos = form.watch('photos')
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { onUpload, isUploading, uploadedFiles, progresses } = useUploadFile("subirZip", {
-    defaultUploadedFiles: []
-  });
+  const [isUploading, setIsUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
   function loadingText() {
-    const progress = progresses['uploaded_photos.zip']
     if (!progress) {
       return 'Preparando fotos...'
     }
@@ -83,11 +82,11 @@ export function UploadPhotosComponent() {
     }
     const content = await zip.generateAsync({ type: 'arraybuffer' });
     const zippedPhotos = new File([content], 'uploaded_photos.zip', { type: 'application/zip' });
-    await onUpload([zippedPhotos])
-    
-    // Add a small delay to allow React to update the state
-    await new Promise(resolve => setTimeout(resolve, 100))
-
+    setIsUploading(true)
+    const uploadedFiles = await uploadFiles("subirZip", {
+      files: [zippedPhotos],
+      onUploadProgress: ({ progress }) => setProgress(progress),
+    })
     const uploadedZip = uploadedFiles[0]
     if (!uploadedZip) {
       Sentry.captureMessage('No zip file uploaded', 'error');
@@ -97,6 +96,7 @@ export function UploadPhotosComponent() {
       params.set('zippedPhotosUrl', uploadedZip.appUrl);
       router.push(`/registrarse/crear-cuenta?${params.toString()}`);
     }
+    setIsUploading(false)
   }
   return (
     <ScrollArea>
