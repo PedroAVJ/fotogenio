@@ -65,6 +65,8 @@ export function ChooseStyles({
                 src={style.coverPhotoUrl}
                 alt={style.description}
                 fill
+                priority
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="size-full rounded-md object-cover p-0.5"
               />
             </ToggleGroupItem>
