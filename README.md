@@ -1,7 +1,6 @@
 # Project Tasks
 
 ## To Do
-- Add tests for the image generation flow
 - Optimize performance by using sizes prop
 - Figure out why fotogenio doesn't appear on search results
 - Image generation:
