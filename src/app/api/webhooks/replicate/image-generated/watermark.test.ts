@@ -6,17 +6,11 @@ import path from 'path'
 const TEN_SECONDS = 10000
 
 test('addWatermark function', async function () {
-  // Use a real image URL for testing
-  const testImageUrl = 'https://utfs.io/f/wB1nfjdKLAC8CRRQGby5DeCAr32pMbqflQZJ9jHdoO8st74V'
-
-  // Load the expected result from the current folder
-  const expectedImagePath = path.join(__dirname, 'watermarked-image.example.webp')
+  const expectedImagePath = path.join(__dirname, 'watermarked-image.test.webp')
   const expectedImageBuffer = await fs.readFile(expectedImagePath)
+  const expectedImageFile = new File([expectedImageBuffer], 'watermarked-image.test.webp', { type: 'image/webp' })
 
-  // If you need a File object instead, you can create one from the Blob
-  const expectedImageFile = new File([expectedImageBuffer], 'watermarked-image.example.webp', { type: 'image/webp' })
-
-  // Call the function with the test URL
+  const testImageUrl = 'https://utfs.io/f/wB1nfjdKLAC8CRRQGby5DeCAr32pMbqflQZJ9jHdoO8st74V'
   const result = await addWatermark(testImageUrl)
 
   expect(result).toEqual(expectedImageFile)

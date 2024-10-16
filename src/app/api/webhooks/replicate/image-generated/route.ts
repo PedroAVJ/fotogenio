@@ -6,6 +6,8 @@ import { utapi } from "@/server/uploadthing";
 import * as Sentry from "@sentry/nextjs";
 import { Prediction } from 'replicate';
 import { addWatermark } from './watermark';
+import fs from 'fs/promises';
+import path from 'path';
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
@@ -66,7 +68,21 @@ export async function POST(request: NextRequest) {
   }
   const { id, userId } = generatedPhoto;
   if (env.NODE_ENV === 'test') {
-    const message = 'Test webhook received';
+    const basePath = 'src/app/api/webhooks/replicate/image-generated'
+    const expectedImagePath = path.join(process.cwd(), basePath, 'generated-image.test.webp')
+    const expectedImageBuffer = await fs.readFile(expectedImagePath)
+    const expectedImageFile = new File([expectedImageBuffer], 'generated-image.test.webp', { type: 'image/webp' })
+  
+    const response = await fetch(photoUrl);
+    const arrayBuffer = await response.arrayBuffer();
+    const generatedImageFile = new File([arrayBuffer], 'generated-image.webp', { type: 'image/webp' })
+
+    if (generatedImageFile.size !== expectedImageFile.size) {
+      const message = 'Webhook test failed';
+      console.error(message);
+      return NextResponse.json({ message });
+    }
+    const message = 'Test webhook received.';
     console.log(message);
     return NextResponse.json({ message });
   }
