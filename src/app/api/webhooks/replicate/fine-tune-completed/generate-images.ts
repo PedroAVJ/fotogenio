@@ -14,7 +14,7 @@ interface GenerateImageParams {
   seed?: number;
 }
 
-export async function generateImages({ userId, prompts }: GenerateImageParams) {
+export async function generateImages({ userId, prompts, seed }: GenerateImageParams) {
   const generatedPhotos = await db.generatedPhoto.createManyAndReturn({
     data: prompts.map(({ id }) => ({ userId, promptId: id })),
     include: {
@@ -36,6 +36,7 @@ export async function generateImages({ userId, prompts }: GenerateImageParams) {
           prompt: generatedPhoto.prompt.prompt,
           num_inference_steps: 50,
           output_quality: 100,
+          seed,
         }
       }
     );

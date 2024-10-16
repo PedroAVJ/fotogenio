@@ -18,6 +18,6 @@ import { generateImages } from './generate-images';
 
 const userId = 'user_2nUeWSbipIiM3EK5QQH659qbRiq';
 
-await generateImages({ userId, prompts });
+await generateImages({ userId, prompts, seed: 42 });
 
 console.log('Images generated');
