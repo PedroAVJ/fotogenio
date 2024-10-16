@@ -10,31 +10,28 @@ import { Camera, Loader2, Plus } from 'lucide-react'
 import { createCheckoutSessionAction, createImages } from '@/app/nuevo-estilo/actions'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { Prisma } from '@prisma/client'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
-interface Style {
-  id: string;
-  coverPhotoUrl: string;
-  description: string;
-  imageCount: number;
-}
-
-const placeholderStyles: Style[] = Array.from({ length: 10 }, (_, index) => ({
-  id: `style-${index}`,
-  coverPhotoUrl: "/placeholder.svg?height=215&width=149",
-  description: `Style ${index + 1}: ${['Casual', 'Formal', 'Sporty', 'Vintage', 'Bohemian', 'Punk', 'Preppy', 'Grunge', 'Minimalist', 'Eclectic'][index % 10]} look`,
-  imageCount: Math.floor(Math.random() * 5) + 2 // Random number between 2 and 6
-}))
+type StyleWithCount = Prisma.StyleGetPayload<{
+  include: {
+    _count: {
+      select: {
+        prompts: true;
+      };
+    };
+  };
+}>;
 
 interface NewStyleProps {
-  initialCredits?: number;
-  styles?: Style[];
+  credits: number;
+  styles: StyleWithCount[];
 }
 
-export function NewStyleComponent({ initialCredits = 21, styles = placeholderStyles }: NewStyleProps) {
+export function NewStyleComponent({ credits, styles }: NewStyleProps) {
   const [selectedStyles, setSelectedStyles] = useState<string[]>([])
-  const [remainingCredits, setRemainingCredits] = useState(initialCredits)
+  const [remainingCredits, setRemainingCredits] = useState(credits)
 
   const handleStyleChange = (value: string[]) => {
     setSelectedStyles(value)
@@ -43,10 +40,10 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
   useEffect(() => {
     const usedCredits = selectedStyles.reduce((total, styleId) => {
       const style = styles.find(s => s.id === styleId)
-      return total + (style ? style.imageCount : 0)
+      return total + (style ? style._count.prompts : 0)
     }, 0)
-    setRemainingCredits(Math.max(0, initialCredits - usedCredits))
-  }, [selectedStyles, styles, initialCredits])
+    setRemainingCredits(Math.max(0, credits - usedCredits))
+  }, [selectedStyles, styles, credits])
 
   const mutation = useMutation({
     mutationFn: createImages,
@@ -108,7 +105,7 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
                   value={style.id}
                   aria-label={`Toggle ${style.description}`}
                   className="relative w-[149px] h-[215px] p-0 rounded-md overflow-hidden group data-[state=on]:ring-2 data-[state=on]:ring-[#8CF486]"
-                  disabled={!selectedStyles.includes(style.id) && remainingCredits < style.imageCount}
+                  disabled={!selectedStyles.includes(style.id) && remainingCredits < style._count.prompts}
                 >
                   <Image
                     src={style.coverPhotoUrl}
@@ -120,7 +117,7 @@ export function NewStyleComponent({ initialCredits = 21, styles = placeholderSty
                     <p className="text-white text-center font-semibold px-2">{style.description}</p>
                   </div>
                   <div className="absolute bottom-2 right-2 text-white text-xs font-semibold">
-                    x {style.imageCount}
+                    x {style._count.prompts}
                   </div>
                 </ToggleGroupItem>
               ))}
