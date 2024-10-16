@@ -63,14 +63,12 @@ export async function POST(request: NextRequest) {
       },
     },
   });
-  await db.$transaction(async (tx) => {
-    await tx.userSettings.update({
-      where: { userId },
-      data: { modelStatus: 'ready' },
-    });
-    await tx.generatedPhoto.createMany({
-      data: prompts.map(({ id }) => ({ userId, promptId: id })),
-    });
+  await db.userSettings.update({
+    where: { userId },
+    data: { modelStatus: 'ready' },
+  });
+  await db.generatedPhoto.createMany({
+    data: prompts.map(({ id }) => ({ userId, promptId: id })),
   });
   await generateImages({
     userId,

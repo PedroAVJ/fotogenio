@@ -17,22 +17,20 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     where: { userId }
   });
   if (!userSettings) {
-    await db.$transaction(async (tx) => {
-      await tx.userSettings.create({
-        data: {
-          userId,
-          gender,
-          zippedPhotosUrl,
-          credits: 0,
-          modelStatus: 'pending',
-        },
-      });
-      await tx.chosenStyle.createMany({
-        data: styles.map((style) => ({
-          userId,
-          styleId: style,
-        })),
-      });
+    await db.userSettings.create({
+      data: {
+        userId,
+        gender,
+        zippedPhotosUrl,
+        credits: 0,
+        modelStatus: 'pending',
+      },
+    });
+    await db.chosenStyle.createMany({
+      data: styles.map((style) => ({
+        userId,
+        styleId: style,
+      })),
     });
   }
   const user = await clerkClient().users.getUser(userId);

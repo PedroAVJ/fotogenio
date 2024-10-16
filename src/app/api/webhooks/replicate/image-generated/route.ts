@@ -73,19 +73,17 @@ export async function POST(request: NextRequest) {
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
-  await db.$transaction(async (tx) => {
-    await tx.generatedPhoto.update({
-      where: { id: generatedPhoto.id },
-      data: { photoUrl: photoUrlWithWatermark },
-    });
-    await tx.userSettings.update({
-      where: { userId },
-      data: {
-        credits: {
-          decrement: 1,
-        },
-      }
-    });
+  await db.generatedPhoto.update({
+    where: { id: generatedPhoto.id },
+    data: { photoUrl: photoUrlWithWatermark },
+  });
+  await db.userSettings.update({
+    where: { userId },
+    data: {
+      credits: {
+        decrement: 1,
+      },
+    }
   });
   return NextResponse.json({ received: true });
 }
