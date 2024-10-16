@@ -2,11 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { PrismaClient } from '@prisma/client';
-
-const db = new PrismaClient({
-  log: ['query', 'error', 'warn']
-});
+import { db } from '@/server/db';
 
 const promptIds = ['9a9f2124-921b-4da5-94ea-0f216f77fc50'];
 

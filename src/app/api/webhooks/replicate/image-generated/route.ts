@@ -17,16 +17,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: errorMessage });
   }
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
-  if (!userId) {
-    const errorMessage = 'Missing userId';
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
-  const promptId = searchParams.get('promptId');
-  if (!promptId) {
-    const errorMessage = 'Missing promptId';
+  const generatedPhotoId = searchParams.get('generatedPhotoId');
+  if (!generatedPhotoId) {
+    const errorMessage = 'Missing generatedPhotoId';
     Sentry.captureMessage(errorMessage, 'error');
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
@@ -62,9 +55,7 @@ export async function POST(request: NextRequest) {
   }
   const generatedPhoto = await db.generatedPhoto.findFirst({
     where: {
-      userId,
-      promptId,
-      photoUrl: null,
+      id: generatedPhotoId,
     },
   });
   if (!generatedPhoto) {
@@ -73,13 +64,14 @@ export async function POST(request: NextRequest) {
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
+  const { id, userId } = generatedPhoto;
   if (env.NODE_ENV === 'test') {
     const message = 'Test webhook received';
     console.log(message);
     return NextResponse.json({ message });
   }
   await db.generatedPhoto.update({
-    where: { id: generatedPhoto.id },
+    where: { id },
     data: { photoUrl: photoUrlWithWatermark },
   });
   await db.userSettings.update({

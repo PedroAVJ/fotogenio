@@ -1,7 +1,12 @@
 import { replicate } from "@/server/replicate";
 import md5 from "md5";
 import { webhookBaseUrl } from "@/server/urls";
-import { Prompt } from "@prisma/client";
+import { Prompt, Prisma } from "@prisma/client";
+import { db } from "@/server/db";
+
+type GeneratedPhotoWithPrompt = Prisma.GeneratedPhotoGetPayload<{
+  include: { prompt: true }
+}>;
 
 interface GenerateImageParams {
   userId: string;
@@ -10,11 +15,17 @@ interface GenerateImageParams {
 }
 
 export async function generateImages({ userId, prompts }: GenerateImageParams) {
+  const generatedPhotos = await db.generatedPhoto.createManyAndReturn({
+    data: prompts.map(({ id }) => ({ userId, promptId: id })),
+    include: {
+      prompt: true
+    }
+  });
   const modelName = `flux-${md5(userId)}`;
   const model = await replicate.models.get('pedroavj', modelName);
   const version = model.latest_version?.id ?? '';
-  async function generateImage(prompt: Prompt) {
-    const webhookUrl = `${webhookBaseUrl}/replicate/image-generated?userId=${userId}&promptId=${prompt.id}`;
+  async function generateImage(generatedPhoto: GeneratedPhotoWithPrompt) {
+    const webhookUrl = `${webhookBaseUrl}/replicate/image-generated?generatedPhotoId=${generatedPhoto.id}`;
     await replicate.predictions.create(
       {
         model: `pedroavj/${modelName}`,
@@ -22,12 +33,12 @@ export async function generateImages({ userId, prompts }: GenerateImageParams) {
         webhook: webhookUrl,
         webhook_events_filter: ['completed'],
         input: {
-          prompt: prompt.prompt,
+          prompt: generatedPhoto.prompt.prompt,
           num_inference_steps: 50,
           output_quality: 100,
         }
       }
     );
   }
-  await Promise.all(prompts.map(generateImage));
+  await Promise.all(generatedPhotos.map(generateImage));
 }

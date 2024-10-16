@@ -55,20 +55,10 @@ export async function POST(request: NextRequest) {
         },
       },
     },
-    include: {
-      style: {
-        include: {
-          chosenStyles: true,
-        },
-      },
-    },
   });
   await db.userSettings.update({
     where: { userId },
     data: { modelStatus: 'ready' },
-  });
-  await db.generatedPhoto.createMany({
-    data: prompts.map(({ id }) => ({ userId, promptId: id })),
   });
   await generateImages({
     userId,
