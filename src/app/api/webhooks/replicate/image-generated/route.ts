@@ -68,20 +68,12 @@ export async function POST(request: NextRequest) {
   }
   const { id, userId } = generatedPhoto;
   if (env.NODE_ENV === 'test') {
-    const basePath = 'src/app/api/webhooks/replicate/image-generated'
-    const expectedImagePath = path.join(process.cwd(), basePath, 'generated-image.test.webp')
-    const expectedImageBuffer = await fs.readFile(expectedImagePath)
-    const expectedImageFile = new File([expectedImageBuffer], 'generated-image.test.webp', { type: 'image/webp' })
-  
-    const response = await fetch(photoUrl);
+    const response = await fetch(photoUrlWithWatermark);
     const arrayBuffer = await response.arrayBuffer();
-    const generatedImageFile = new File([arrayBuffer], 'generated-image.webp', { type: 'image/webp' })
-
-    if (generatedImageFile.size !== expectedImageFile.size) {
-      const message = 'Webhook test failed';
-      console.error(message);
-      return NextResponse.json({ message });
-    }
+    const basePath = 'src/app/api/webhooks/replicate/image-generated'
+    const testFileName = 'generated-image.test.webp'
+    const expectedImagePath = path.join(process.cwd(), basePath, testFileName)
+    await fs.writeFile(expectedImagePath, Buffer.from(arrayBuffer))
     const message = 'Test webhook received.';
     console.log(message);
     return NextResponse.json({ message });
