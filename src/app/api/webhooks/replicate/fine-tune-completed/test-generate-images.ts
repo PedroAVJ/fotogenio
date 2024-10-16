@@ -14,7 +14,7 @@ const prompts = await db.prompt.findMany({
   },
 });
 
-import { generateImages } from './generate-images';
+import { generateImages } from '@/app/generate-images';
 
 const userId = 'user_2nUeWSbipIiM3EK5QQH659qbRiq';
 

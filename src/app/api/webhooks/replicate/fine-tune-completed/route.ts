@@ -4,7 +4,7 @@ import { db } from '@/server/db';
 import { Training } from 'replicate';
 import { validateWebhook } from "replicate";
 import * as Sentry from "@sentry/nextjs";
-import { generateImages } from './generate-images';
+import { generateImages } from '@/app/generate-images';
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();

@@ -77,7 +77,9 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                   src={photoUrl ?? ''}
                   alt={`Generated image ${index + 1}`}
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover rounded-[10px]"
+                  priority={index < 2}
                 />
                 <div className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center transition-opacity duration-300 ${
                   touchedIndex === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
