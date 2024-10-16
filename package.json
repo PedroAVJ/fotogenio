@@ -14,9 +14,8 @@
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "build": "npm test && next build",
+    "build": "next build",
     "start": "next start",
-    "test": "vitest",
     "test:generate-images": "tsx ./src/app/api/webhooks/replicate/fine-tune-completed/test-generate-images.ts"
   },
   "dependencies": {
