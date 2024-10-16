@@ -9,7 +9,7 @@ interface GenerateImageParams {
   seed?: number;
 }
 
-export async function generateImages({ userId, prompts, seed }: GenerateImageParams) {
+export async function generateImages({ userId, prompts }: GenerateImageParams) {
   const modelName = `flux-${md5(userId)}`;
   const model = await replicate.models.get('pedroavj', modelName);
   const version = model.latest_version?.id ?? '';
@@ -25,7 +25,6 @@ export async function generateImages({ userId, prompts, seed }: GenerateImagePar
           prompt: prompt.prompt,
           num_inference_steps: 50,
           output_quality: 100,
-          seed,
         }
       }
     );

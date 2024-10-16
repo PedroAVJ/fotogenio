@@ -16,7 +16,8 @@
     "lint": "next lint",
     "build": "npm test && next build",
     "start": "next start",
-    "test": "vitest"
+    "test": "vitest",
+    "test:generate-images": "tsx ./src/app/api/webhooks/replicate/fine-tune-completed/test-generate-images.ts"
   },
   "dependencies": {
     "@brianmmdev/clerk-webhooks-handler": "^1.0.5",

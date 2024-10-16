@@ -1,7 +1,13 @@
-import { generateImages } from './generate-images';
-import { db } from '@/server/db';
+import dotenv from 'dotenv';
 
-const userId = 'user_2n8UwFJPgTbq1iAgMwa9B4Ubo4q';
+dotenv.config();
+
+import { PrismaClient } from '@prisma/client';
+
+const db = new PrismaClient({
+  log: ['query', 'error', 'warn']
+});
+
 const promptIds = ['9a9f2124-921b-4da5-94ea-0f216f77fc50'];
 
 const prompts = await db.prompt.findMany({
@@ -12,6 +18,10 @@ const prompts = await db.prompt.findMany({
   },
 });
 
-await generateImages({ userId, prompts, seed: 42 });
+import { generateImages } from './generate-images';
 
-console.log('Image generated');
+const userId = 'user_2nUeWSbipIiM3EK5QQH659qbRiq';
+
+await generateImages({ userId, prompts });
+
+console.log('Images generated');

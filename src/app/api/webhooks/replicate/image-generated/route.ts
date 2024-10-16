@@ -73,6 +73,11 @@ export async function POST(request: NextRequest) {
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
+  if (env.NODE_ENV === 'test') {
+    const message = 'Test webhook received';
+    console.log(message);
+    return NextResponse.json({ message });
+  }
   await db.generatedPhoto.update({
     where: { id: generatedPhoto.id },
     data: { photoUrl: photoUrlWithWatermark },
