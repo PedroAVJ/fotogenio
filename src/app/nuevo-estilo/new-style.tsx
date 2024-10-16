@@ -85,7 +85,7 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
               onValueChange={handleStyleChange}
               className="grid grid-cols-2 gap-x-2 gap-y-4 w-full max-w-[320px] mb-20"
             >
-              {styles.map((style) => (
+              {styles.map((style, index) => (
                 <ToggleGroupItem
                   key={style.id}
                   value={style.id}
@@ -97,6 +97,8 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
                     src={style.coverPhotoUrl}
                     alt={style.description}
                     fill
+                    sizes="(min-width: 768px) 16.67vw, 50vw"
+                    priority={index < 6}
                     className="object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-75"
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
