@@ -1,5 +1,5 @@
 import { stripe } from '@/server/stripe';
-import { env } from '@/server/env';
+import { env } from '@/lib/env';
 import { baseUrl } from '@/server/urls';
 import { auth } from '@clerk/nextjs/server';
 import { ChoosePaymentComponent } from '@/app/choose-payment';

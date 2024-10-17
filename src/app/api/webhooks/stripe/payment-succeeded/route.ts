@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { stripe } from '@/server/stripe';
-import { env } from '@/server/env';
+import { env } from '@/lib/env';
 import { headers } from 'next/headers';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
