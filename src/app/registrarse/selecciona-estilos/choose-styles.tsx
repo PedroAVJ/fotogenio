@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Style } from '@prisma/client'
+import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs'
+import Link from 'next/link'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -15,19 +16,11 @@ export function ChooseStyles({
 }: {
   styles: Style[]
 }) {
-  const [selectedStyles, setSelectedStyles] = useState<string[]>([])
+  const [selectedStyles, setSelectedStyles] = useQueryState('styles', parseAsArrayOf(parseAsString).withDefault([]))
   const handleStyleChange = (value: string[]) => {
     setSelectedStyles(value)
   }
-  const router = useRouter()
   const searchParams = useSearchParams()
-  function handleNextStep() {
-    const params = new URLSearchParams(searchParams);
-    selectedStyles.forEach((style) => {
-      params.append('style', style);
-    });
-    router.push(`/registrarse/sube-tus-fotos?${params.toString()}`);
-  }
   return (
     <main className={`
       ${workSans.className}
@@ -76,10 +69,9 @@ export function ChooseStyles({
       <Button
         size="lg"
         className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-        disabled={selectedStyles.length === 0}
-        onClick={handleNextStep}
+        disabled={!selectedStyles}
       >
-        Siguiente
+        <Link href={`/registrarse/sube-tus-fotos?${searchParams.toString()}`}>Siguiente</Link>
       </Button>
     </main>
   )

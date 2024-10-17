@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from "next/link"
 import { Work_Sans } from 'next/font/google'
 import { Button } from "@/components/ui/button"
@@ -8,6 +7,8 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import Image from 'next/image'
 import hombre from './hombre.png'
 import mujer from '@/app/mujer.png'
+import { useQueryState, parseAsStringEnum } from 'nuqs'
+import { useSearchParams } from "next/navigation"
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -17,7 +18,8 @@ enum Gender {
 }
 
 export function ChooseGender() {
-  const [selectedGender, setSelectedGender] = useState<Gender | null>(null)
+  const searchParams = useSearchParams()
+  const [selectedGender, setSelectedGender] = useQueryState('gender', parseAsStringEnum<Gender>(Object.values(Gender)))
   const handleGenderChange = (value: string) => {
     if (value === '') {
       setSelectedGender(null)
@@ -80,7 +82,7 @@ export function ChooseGender() {
         className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={!selectedGender}
       >
-        <Link href={`/registrarse/selecciona-estilos?gender=${selectedGender}`}>Siguiente</Link>
+        <Link href={`/registrarse/selecciona-estilos?${searchParams.toString()}`}>Siguiente</Link>
       </Button>
     </main>
   )

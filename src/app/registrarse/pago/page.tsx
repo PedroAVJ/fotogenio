@@ -5,14 +5,18 @@ import { auth } from '@clerk/nextjs/server';
 import { ChoosePaymentComponent } from '@/app/choose-payment';
 import * as Sentry from '@sentry/nextjs';
 import { clerkClient } from '@clerk/nextjs/server';
-import { Gender } from '@prisma/client';
 import { db } from '@/server/db';
+import { searchParamsCache } from './searchParams'
+import { Gender } from '@prisma/client'
 
-export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] } }) {
+export default async function Page({
+  searchParams
+}: {
+  searchParams: Record<string, string | string[] | undefined>
+}) {
+  const { gender, styles, zippedPhotosUrl } = searchParamsCache.parse(searchParams)
+  console.log(gender, styles, zippedPhotosUrl)
   const { userId } = auth().protect();
-  const gender = searchParams['gender'] as Gender;
-  const styles = searchParams['style'] as string[];
-  const zippedPhotosUrl = searchParams['zippedPhotosUrl'] as string;
   const userSettings = await db.userSettings.findUnique({
     where: { userId }
   });
@@ -20,8 +24,8 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     await db.userSettings.create({
       data: {
         userId,
-        gender,
-        zippedPhotosUrl,
+        gender: gender ?? Gender.male,
+        zippedPhotosUrl: zippedPhotosUrl ?? '',
         credits: 0,
         modelStatus: 'pending',
       },
