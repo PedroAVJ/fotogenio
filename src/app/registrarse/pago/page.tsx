@@ -8,6 +8,7 @@ import { clerkClient } from '@clerk/nextjs/server';
 import { db } from '@/server/db';
 import { searchParamsCache } from './searchParams'
 import { Gender } from '@prisma/client'
+import { Route } from 'next';
 
 export default async function Page({
   searchParams
@@ -38,7 +39,7 @@ export default async function Page({
     });
   }
   const user = await clerkClient().users.getUser(userId);
-  const returnUrl = `${baseUrl}/generando-fotos?session_id={CHECKOUT_SESSION_ID}`;
+  const route: Route = '/generando-fotos'
   const { client_secret } = await stripe.checkout.sessions.create({
     ui_mode: 'embedded',
     customer_email: user.emailAddresses[0]?.emailAddress ?? '',
@@ -49,7 +50,7 @@ export default async function Page({
       },
     ],
     mode: 'payment',
-    return_url: returnUrl,
+    return_url: `${baseUrl}${route}?session_id={CHECKOUT_SESSION_ID}`,
     payment_intent_data: {
       metadata: {
         userId,

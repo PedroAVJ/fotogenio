@@ -4,9 +4,10 @@ import { env } from '@/lib/env';
 import { headers } from 'next/headers';
 import { db } from '@/server/db';
 import { replicate } from '@/server/replicate';
-import { webhookBaseUrl } from '@/server/urls';
+import { baseUrl } from '@/server/urls';
 import md5 from 'md5';
 import Stripe from 'stripe';
+import { Route } from 'next';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -40,14 +41,15 @@ export async function POST(request: NextRequest) {
         hardware: 'gpu-t4'
       }
     )
-    const webhookUrl = `${webhookBaseUrl}/replicate/fine-tune-completed?userId=${userId}`;
+    const url: Route = '/api/webhooks/replicate/fine-tune-completed'
+    const webhook = `${baseUrl}${url}?userId=${userId}`;
     await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",
       "885394e6a31c6f349dd4f9e6e7ffbabd8d9840ab2559ab78aed6b2451ab2cfef",
       {
         destination: `${model.owner}/${model.name}`,
-        webhook: webhookUrl,
+        webhook,
         webhook_events_filter: ['completed'],
         input: {
           steps: 1000,

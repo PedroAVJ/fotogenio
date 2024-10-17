@@ -1,8 +1,9 @@
 import { replicate } from "@/server/replicate";
 import md5 from "md5";
-import { webhookBaseUrl } from "@/server/urls";
+import { baseUrl } from "@/server/urls";
 import { Prompt, Prisma } from "@prisma/client";
 import { db } from "@/server/db";
+import { Route } from "next";
 
 type GeneratedPhotoWithPrompt = Prisma.GeneratedPhotoGetPayload<{
   include: { prompt: true }
@@ -25,7 +26,8 @@ export async function generateImages({ userId, prompts, seed }: GenerateImagePar
   const model = await replicate.models.get('pedroavj', modelName);
   const version = model.latest_version?.id ?? '';
   async function generateImage(generatedPhoto: GeneratedPhotoWithPrompt) {
-    const webhookUrl = `${webhookBaseUrl}/replicate/image-generated?generatedPhotoId=${generatedPhoto.id}`;
+    const path: Route = '/api/webhooks/replicate/image-generated'
+    const webhookUrl = `${baseUrl}${path}?generatedPhotoId=${generatedPhoto.id}`;
     await replicate.predictions.create(
       {
         model: `pedroavj/${modelName}`,
