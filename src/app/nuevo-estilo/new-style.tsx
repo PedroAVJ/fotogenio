@@ -118,7 +118,9 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
           size="lg"
           className="w-48 rounded-[12px] text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed text-[14px] leading-[102%] tracking-[0px] font-semibold"
           disabled={selectedStyles.length === 0 || mutation.isPending}
-          onClick={() => mutation.mutate({ styleIds: selectedStyles })}
+          onClick={function () {
+            mutation.mutate({ styleIds: selectedStyles });
+          }}
         >
           {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Generar imágenes'}
         </Button>

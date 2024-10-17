@@ -85,7 +85,9 @@ export function UploadPhotosComponent() {
     setIsUploading(true)
     const uploadedFiles = await uploadFiles("subirZip", {
       files: [zippedPhotos],
-      onUploadProgress: ({ progress }) => setProgress(progress),
+      onUploadProgress: function ({ progress }) {
+        setProgress(progress);
+      },
     })
     const uploadedZip = uploadedFiles[0]
     if (!uploadedZip) {

@@ -70,7 +70,9 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                 key={index} 
                 className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
                 onClick={() => handleDownload(photoUrl ?? '')}
-                onTouchStart={() => handleTouchStart(index)}
+                onTouchStart={function () {
+                  handleTouchStart(index);
+                }}
                 onTouchEnd={handleTouchEnd}
               >
                 <Image
