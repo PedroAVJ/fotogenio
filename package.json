@@ -14,6 +14,7 @@
     "lint": "next lint",
     "build": "next build",
     "start": "next start",
+    "test": "npx playwright test",
     "test:generate-images": "tsx ./src/app/api/webhooks/replicate/fine-tune-completed/test-generate-images.ts"
   },
   "dependencies": {
