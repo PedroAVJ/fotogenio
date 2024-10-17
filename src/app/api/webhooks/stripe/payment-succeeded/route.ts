@@ -1,9 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { stripe } from '@/server/stripe';
+import { stripe, db, replicate } from '@/server/clients';
 import { env } from '@/lib/env';
 import { headers } from 'next/headers';
-import { db } from '@/server/db';
-import { replicate } from '@/server/replicate';
 import { baseUrl } from '@/server/urls';
 import md5 from 'md5';
 import Stripe from 'stripe';

@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { env } from '@/lib/env';
-import { db } from '@/server/db';
+import { db } from '@/server/clients';
 import { Training } from 'replicate';
 import { validateWebhook } from "replicate";
 import * as Sentry from "@sentry/nextjs";

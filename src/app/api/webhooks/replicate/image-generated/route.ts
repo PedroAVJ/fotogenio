@@ -1,8 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { env } from '@/lib/env';
-import { db } from '@/server/db';
+import { db, utapi } from '@/server/clients';
 import { validateWebhook } from "replicate";
-import { utapi } from "@/server/uploadthing";
 import { Prediction } from 'replicate';
 import { addWatermark } from './watermark';
 

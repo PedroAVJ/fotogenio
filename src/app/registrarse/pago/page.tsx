@@ -1,11 +1,10 @@
-import { stripe } from '@/server/stripe';
+import { stripe, db } from '@/server/clients';
 import { env } from '@/lib/env';
 import { baseUrl } from '@/server/urls';
 import { auth } from '@clerk/nextjs/server';
 import { ChoosePaymentComponent } from '@/app/choose-payment';
 import * as Sentry from '@sentry/nextjs';
 import { clerkClient } from '@clerk/nextjs/server';
-import { db } from '@/server/db';
 import { searchParamsCache } from './searchParams'
 import { Gender } from '@prisma/client'
 import { Route } from 'next';

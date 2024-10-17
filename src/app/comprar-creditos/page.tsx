@@ -1,4 +1,4 @@
-import { stripe } from '@/server/stripe';
+import { stripe } from '@/server/clients';
 import { env } from '@/lib/env';
 import { baseUrl } from '@/server/urls';
 import { auth } from '@clerk/nextjs/server';
