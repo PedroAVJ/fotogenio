@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react'
+import { useEffect } from 'react'
 import { Work_Sans } from 'next/font/google'
 import Lottie from 'lottie-react'
 import animation from './animacion.json'
+import { useRouter } from 'next/navigation'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -13,6 +14,33 @@ interface WaitingComponentProps {
 }
 
 export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        router.refresh()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [router])
+
+  useEffect(() => {
+    const THIRTY_SECONDS = 30000
+    const intervalId = setInterval(() => {
+      router.refresh()
+    }, THIRTY_SECONDS)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [router])
+
   return (
     <main className={`
       ${workSans.className}

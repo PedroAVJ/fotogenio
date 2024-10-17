@@ -2,7 +2,6 @@
 
 ## To Do
 - Fix bug where image is downloaded twice on mobile
-- Make the waiting pages revalidate on window focus and revalidate every minute too
 - Add playwright tests
 - Image generation:
   - Prompt engineering
