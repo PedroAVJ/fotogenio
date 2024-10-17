@@ -2,11 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import Replicate from 'replicate';
-
-const replicate = new Replicate({
-  auth: env['REPLICATE_API_TOKEN'] ?? '',
-});
+import { replicate } from '@/server/clients';
 
 import md5 from 'md5';
 
