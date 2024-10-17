@@ -4,7 +4,7 @@ const f = createUploadthing();
 
 export const fileRouter = {
   subirZip: f({ "application/zip": { maxFileSize: "256MB", maxFileCount: 1 } })
-    .onUploadComplete(async () => {
+    .onUploadComplete(() => {
       return {};
     }),
 } satisfies UploadThingFileRouter;

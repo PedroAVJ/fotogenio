@@ -10,7 +10,7 @@ import path from 'path';
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
-  const isValid = validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
+  const isValid = await validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
     throw new Error('Invalid webhook secret');
   }

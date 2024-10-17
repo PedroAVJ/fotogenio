@@ -8,7 +8,7 @@ import { generateImages } from '@/app/generate-images';
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
-  const isValid = validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
+  const isValid = await validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
     const errorMessage = 'Invalid webhook secret';
     Sentry.captureMessage(errorMessage, 'error');
