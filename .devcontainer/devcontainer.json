@@ -1,6 +1,6 @@
 {
 	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
-	"postCreateCommand": "npm install",
+	"postCreateCommand": "npm install && npx playwright install --with-deps",
 	"features": {
 		"ghcr.io/nullcoder/devcontainer-features/stripe-cli:1": {},
 		"ghcr.io/jckimble/devcontainer-features/ngrok:3": {}
@@ -14,7 +14,8 @@
 							"esbenp.prettier-vscode",
 							"dbaeumer.vscode-eslint",
 							"vscode-icons-team.vscode-icons",
-							"formulahendry.auto-rename-tag"
+							"formulahendry.auto-rename-tag",
+							"github.vscode-github-actions"
 					],
 					"settings": {
 							"editor.defaultFormatter": "esbenp.prettier-vscode",

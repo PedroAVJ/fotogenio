@@ -109,6 +109,7 @@
     "zod-i18n-map": "^2.27.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.1",
     "@tanstack/eslint-plugin-query": "^5.43.1",
     "@testing-library/react": "^16.0.1",
     "@tsconfig/strictest": "^2.0.5",
