@@ -1,4 +1,4 @@
-import { vercel, uploadthing } from "@t3-oss/env-core/presets";
+import { vercel } from "@t3-oss/env-core/presets";
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
@@ -20,5 +20,5 @@ export const env = createEnv({
   },
   emptyStringAsUndefined: true,
   isServer: typeof window === "undefined",
-  extends: [vercel(), uploadthing()],
+  extends: [vercel()],
 });
