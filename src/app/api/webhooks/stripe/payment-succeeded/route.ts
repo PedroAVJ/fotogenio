@@ -17,11 +17,6 @@ export async function POST(request: NextRequest) {
     env.STRIPE_WEBHOOK_SECRET
   ) as Stripe.PaymentIntentSucceededEvent;
   const { userId = '', operation } = event.data.object.metadata;
-  if (env.NODE_ENV === 'test') {
-    const message = 'Test webhook received';
-    console.log(message);
-    return NextResponse.json({ message });
-  }
   if (operation === 'create-model') {
     const userSettings = await db.userSettings.findUnique({
       where: {
