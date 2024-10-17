@@ -1,6 +1,7 @@
 # Project Tasks
 
 ## To Do
+- What happens if I sign up in an incognito window?
 - Image generation:
   - Prompt engineering
   - Curate style selections for each gender
