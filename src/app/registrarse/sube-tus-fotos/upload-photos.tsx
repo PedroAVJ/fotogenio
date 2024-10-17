@@ -22,7 +22,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { useQueryState, parseAsString } from 'nuqs'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -68,7 +67,6 @@ export function UploadPhotosComponent() {
   const photos = form.watch('photos')
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [, setZippedPhotosUrl] = useQueryState('zippedPhotosUrl', parseAsString)
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   function loadingText() {
@@ -94,8 +92,9 @@ export function UploadPhotosComponent() {
       Sentry.captureMessage('No zip file uploaded', 'error');
       toast.error('Las fotos no se pudieron subir')
     } else {
-      setZippedPhotosUrl(uploadedZip.appUrl)
-      router.push(`/registrarse/crear-cuenta?${searchParams.toString()}`);
+      const params = new URLSearchParams(searchParams);
+      params.set('zippedPhotosUrl', uploadedZip.appUrl);
+      router.push(`/registrarse/crear-cuenta?${params.toString()}`);
     }
     setIsUploading(false)
   }
