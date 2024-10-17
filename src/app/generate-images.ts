@@ -1,8 +1,7 @@
-import { replicate } from "@/server/replicate";
+import { replicate, db } from "@/server/clients";
 import md5 from "md5";
 import { baseUrl } from "@/server/urls";
 import { Prompt, Prisma } from "@prisma/client";
-import { db } from "@/server/db";
 import { Route } from "next";
 
 type GeneratedPhotoWithPrompt = Prisma.GeneratedPhotoGetPayload<{

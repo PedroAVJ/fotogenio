@@ -1,5 +1,5 @@
 import { WaitingComponent } from "./waiting";
-import { db } from "@/server/db";
+import { db } from "@/server/clients";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Route } from "next";

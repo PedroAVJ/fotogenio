@@ -1,6 +1,6 @@
 import { ChooseStyles } from "./choose-styles";
 import { Gender, Style } from "@prisma/client";
-import { db } from "@/server/db";
+import { db } from "@/server/clients";
 
 export default async function Page({
   searchParams: { gender },

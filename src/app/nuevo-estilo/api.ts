@@ -1,7 +1,6 @@
 'use server';
 
-import { api } from "@/server/trpc";
-import { db } from "@/server/db";
+import { api, db } from "@/server/clients";
 import { z } from "zod";
 import { redirect } from 'next/navigation';
 import { generateImages } from "@/app/generate-images";

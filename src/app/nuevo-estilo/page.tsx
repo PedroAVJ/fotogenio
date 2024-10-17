@@ -1,5 +1,5 @@
 import { NewStyleComponent } from "./new-style";
-import { db } from "@/server/db";
+import { db } from "@/server/clients";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function NewStyle() {
