@@ -1,8 +1,8 @@
 # Project Tasks
 
 ## To Do
+- Remove type assertions for better type safety
 - Fix bug where image is downloaded twice on mobile
-- Add playwright tests
 - Image generation:
   - Prompt engineering
   - Curate style selections for each gender

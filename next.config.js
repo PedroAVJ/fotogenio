@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import createJiti from 'jiti';
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
-jiti('./src/server/env');
+jiti('./src/lib/env');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -27,7 +27,7 @@ const nextConfig = {
 import { withSentryConfig } from "@sentry/nextjs";
 
 // Add this conditional export at the end of the file
-export default process.env['TURBOPACK'] ? nextConfig : withSentryConfig(
+export default withSentryConfig(
   nextConfig,
   {
     // For all available options, see:

@@ -1,41 +1,36 @@
 {
 	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
-	"postCreateCommand": "npm install && npx playwright install --with-deps",
-	"features": {
-		"ghcr.io/nullcoder/devcontainer-features/stripe-cli:1": {},
-		"ghcr.io/jckimble/devcontainer-features/ngrok:3": {}
-	},
+	"postCreateCommand": "npm install",
 	"customizations": {
-			"vscode": {
-					"extensions": [
-							"bradlc.vscode-tailwindcss",
-							"prisma.prisma",
-							"yoavbls.pretty-ts-errors",
-							"esbenp.prettier-vscode",
-							"dbaeumer.vscode-eslint",
-							"vscode-icons-team.vscode-icons",
-							"formulahendry.auto-rename-tag",
-							"github.vscode-github-actions"
-					],
-					"settings": {
-							"editor.defaultFormatter": "esbenp.prettier-vscode",
-							"files.associations": {
-									"*.css": "tailwindcss"
-							},
-							"editor.quickSuggestions": {
-									"strings": "on"
-							},
-							"[typescript]": {
-									"editor.tabSize": 2
-							},
-							"[typescriptreact]": {
-									"editor.tabSize": 2
-							},
-							"typescript.tsdk": "node_modules/typescript/lib",
-							"[prisma]": {
-								"editor.defaultFormatter": "Prisma.prisma"
-							}
-					}
+		"vscode": {
+			"extensions": [
+				"bradlc.vscode-tailwindcss",
+				"prisma.prisma",
+				"yoavbls.pretty-ts-errors",
+				"esbenp.prettier-vscode",
+				"dbaeumer.vscode-eslint",
+				"vscode-icons-team.vscode-icons",
+				"formulahendry.auto-rename-tag"
+			],
+			"settings": {
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"files.associations": {
+					"*.css": "tailwindcss"
+				},
+				"editor.quickSuggestions": {
+					"strings": "on"
+				},
+				"[typescript]": {
+					"editor.tabSize": 2
+				},
+				"[typescriptreact]": {
+					"editor.tabSize": 2
+				},
+				"typescript.tsdk": "node_modules/typescript/lib",
+				"[prisma]": {
+					"editor.defaultFormatter": "Prisma.prisma"
+				}
 			}
+		}
 	}
 }

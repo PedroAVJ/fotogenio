@@ -11,7 +11,7 @@ if (env.VERCEL_ENV === 'production') {
   webhookBaseUrl = `${baseUrl}/api/webhooks`;
 } else {
   baseUrl = 'http://localhost:3000';
-  const ngrokUrl = `https://${process.env['NGROK_URL']}`;
+  const ngrokUrl = `https://${env['NGROK_URL']}`;
   webhookBaseUrl = `${ngrokUrl}/api/webhooks`;
 }
 

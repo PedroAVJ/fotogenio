@@ -1,5 +1,5 @@
+import { vercel, uploadthing } from "@t3-oss/env-core/presets";
 import { createEnv } from '@t3-oss/env-nextjs';
-import { vercel } from "@t3-oss/env-core/presets";
 import { z } from 'zod';
 
 export const env = createEnv({
@@ -9,9 +9,7 @@ export const env = createEnv({
     REPLICATE_API_TOKEN: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
-    NODE_ENV: z
-      .enum(['development', 'test', 'production'])
-      .default('development'),
+    NEXT_RUNTIME: z.enum(['nodejs', 'edge']),
   },
   client: {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
@@ -22,5 +20,5 @@ export const env = createEnv({
   },
   emptyStringAsUndefined: true,
   isServer: typeof window === "undefined",
-  extends: [vercel()],
+  extends: [vercel(), uploadthing()],
 });
