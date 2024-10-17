@@ -14,6 +14,12 @@ const addUserSettings = z.object({
 export const createImages = api
   .input(addUserSettings)
   .mutation(async ({ input: { styleIds }, ctx: { session: { userId } } }) => {
+    const { credits } = await db.userSettings.findUniqueOrThrow({
+      where: { userId }
+    });
+    if (credits < styleIds.length) {
+      throw new Error('Not enough credits');
+    }
     const prompts = await db.prompt.findMany({
       where: {
         style: {
