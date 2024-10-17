@@ -5,8 +5,6 @@ import { validateWebhook } from "replicate";
 import { utapi } from "@/server/uploadthing";
 import { Prediction } from 'replicate';
 import { addWatermark } from './watermark';
-import fs from 'fs/promises';
-import path from 'path';
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
@@ -28,15 +26,6 @@ export async function POST(request: NextRequest) {
   });
   if (photoUrl) {
     return NextResponse.json({ message: 'Webhook retry catched' });
-  }
-  if (env.NODE_ENV === 'test') {
-    const response = await fetch(photoUrlWithWatermark);
-    const arrayBuffer = await response.arrayBuffer();
-    const basePath = 'src/app/api/webhooks/replicate/image-generated'
-    const testFileName = 'generated-image.test.webp'
-    const expectedImagePath = path.join(process.cwd(), basePath, testFileName)
-    await fs.writeFile(expectedImagePath, Buffer.from(arrayBuffer))
-    return NextResponse.json({ message: 'Test webhook received' });
   }
   await db.generatedPhoto.update({
     where: { id },
