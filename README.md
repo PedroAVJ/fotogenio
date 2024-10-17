@@ -1,7 +1,6 @@
 # Project Tasks
 
 ## To Do
-- What happens if I sign up in an incognito window?
 - Add playwright tests
 - Image generation:
   - Prompt engineering
