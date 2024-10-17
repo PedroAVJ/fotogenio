@@ -1,7 +1,6 @@
 # Project Tasks
 
 ## To Do
-- Redirect logged in users to /galeria when they access root url
 - Fix bug where image is downloaded twice on mobile
 - Make the waiting pages revalidate on window focus and revalidate every minute too
 - Add playwright tests
