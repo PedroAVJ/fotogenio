@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { GeneratedPhoto } from '@prisma/client'
 import { saveAs } from 'file-saver'
 import { v4 as uuidv4 } from 'uuid'
+import { ThumbsUp, ThumbsDown } from 'lucide-react'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
@@ -84,6 +85,31 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                   className="object-cover rounded-[10px]"
                   priority={index < 2}
                 />
+                {/* Add the thumbs up and down icons */}
+                <div className="absolute bottom-2 right-2 flex space-x-2 z-10">
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="bg-white bg-opacity-50 hover:bg-opacity-75"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Handle thumbs up click
+                    }}
+                  >
+                    <ThumbsUp className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="bg-white bg-opacity-50 hover:bg-opacity-75"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Handle thumbs down click
+                    }}
+                  >
+                    <ThumbsDown className="h-4 w-4" />
+                  </Button>
+                </div>
                 <div className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center transition-opacity duration-300 ${
                   touchedIndex === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                 }`}>
