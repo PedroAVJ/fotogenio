@@ -1,7 +1,6 @@
 # Project Tasks
 
 ## To Do
-- Add a Like and Dislike button to the images
 - Image generation:
   - Prompt engineering
   - Curate style selections for each gender

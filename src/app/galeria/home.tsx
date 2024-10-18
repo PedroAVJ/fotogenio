@@ -1,16 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState, useOptimistic, useTransition } from 'react'
 import { Work_Sans } from 'next/font/google'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Camera, ArrowDown } from 'lucide-react'
 import Image from 'next/image'
-import { GeneratedPhoto } from '@prisma/client'
+import { Feedback, GeneratedPhoto } from '@prisma/client'
 import { saveAs } from 'file-saver'
 import { v4 as uuidv4 } from 'uuid'
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
+import { saveFeedback } from './api'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
@@ -22,6 +23,20 @@ interface HomeProps {
 }
 
 export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
+  let [optimisticGeneratedPhotos, setOptimisticGeneratedPhotos] = useOptimistic(generatedPhotos);
+  let [, startTransition] = useTransition();
+  async function handleFeedbackClick(feedback: Feedback, generatedPhotoId: string, index: number) {
+    const newGeneratedPhotos = optimisticGeneratedPhotos.map((photo, i) => 
+      i === index ? { ...photo, feedback } : photo
+    );
+    startTransition(async function () {
+      setOptimisticGeneratedPhotos(newGeneratedPhotos)
+      await saveFeedback({
+        feedback,
+        generatedPhotoId,
+      })
+    })
+  }
   const [touchedIndex, setTouchedIndex] = useState<number | null>(null)
 
   async function handleDownload(url: string) {
@@ -68,7 +83,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
             </Link>
           </Button>
           <div className="flex flex-col items-center gap-4">
-            {generatedPhotos.map(({ photoUrl, feedback }, index) => (
+            {optimisticGeneratedPhotos.map(({ photoUrl, feedback, id }, index) => (
               <div 
                 key={index} 
                 className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
@@ -92,6 +107,9 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     type="button"
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
+                    onClick={function () {
+                      void handleFeedbackClick('positive', id, index)
+                    }}
                   >
                     <ThumbsUp
                       className={`size-4 ${feedback === 'positive' ? 'text-blue-600' : ''}`}
@@ -102,6 +120,9 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     type="button"
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
+                    onClick={function () {
+                      void handleFeedbackClick('negative', id, index)
+                    }}
                   >
                     <ThumbsDown
                       className={`size-4 ${feedback === 'negative' ? 'text-red-500' : ''}`}
