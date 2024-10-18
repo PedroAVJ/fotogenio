@@ -23,9 +23,9 @@ interface HomeProps {
 }
 
 export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
-  let [optimisticGeneratedPhotos, setOptimisticGeneratedPhotos] = useOptimistic(generatedPhotos);
-  let [, startTransition] = useTransition();
-  async function handleFeedbackClick(feedback: Feedback, generatedPhotoId: string, index: number) {
+  const [optimisticGeneratedPhotos, setOptimisticGeneratedPhotos] = useOptimistic(generatedPhotos);
+  const [, startTransition] = useTransition();
+  function handleFeedbackClick(feedback: Feedback, generatedPhotoId: string, index: number) {
     const newGeneratedPhotos = optimisticGeneratedPhotos.map((photo, i) => 
       i === index ? { ...photo, feedback } : photo
     );
@@ -108,7 +108,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
                     onClick={function () {
-                      void handleFeedbackClick('positive', id, index)
+                      handleFeedbackClick('positive', id, index)
                     }}
                   >
                     <ThumbsUp
@@ -121,7 +121,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
                     onClick={function () {
-                      void handleFeedbackClick('negative', id, index)
+                      handleFeedbackClick('negative', id, index)
                     }}
                   >
                     <ThumbsDown
