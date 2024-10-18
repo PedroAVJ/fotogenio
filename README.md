@@ -11,7 +11,7 @@
 - Should we show different example photos for men and women in the upload photos section?
 
 ## Production Tasks
-- Figure out why fotogenio doesn't appear on search results
 - Setup production Google OAuth
 - Pay for Sentry
 - Change colors for stripe embedded checkout
+- Figure out why fotogenio doesn't appear on search results
