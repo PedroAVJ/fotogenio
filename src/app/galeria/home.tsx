@@ -68,7 +68,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
             </Link>
           </Button>
           <div className="flex flex-col items-center gap-4">
-            {generatedPhotos.map(({ photoUrl }, index) => (
+            {generatedPhotos.map(({ photoUrl, feedback }, index) => (
               <div 
                 key={index} 
                 className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
@@ -89,25 +89,23 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                 <div className="absolute bottom-2 right-2 flex space-x-2 z-10">
                   <Button
                     size="icon"
+                    type="button"
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Handle thumbs up click
-                    }}
                   >
-                    <ThumbsUp className="h-4 w-4" />
+                    <ThumbsUp
+                      className={`size-4 ${feedback === 'positive' ? 'text-blue-600' : ''}`}
+                    />
                   </Button>
                   <Button
                     size="icon"
+                    type="button"
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Handle thumbs down click
-                    }}
                   >
-                    <ThumbsDown className="h-4 w-4" />
+                    <ThumbsDown
+                      className={`size-4 ${feedback === 'negative' ? 'text-red-500' : ''}`}
+                    />
                   </Button>
                 </div>
                 <div className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center transition-opacity duration-300 ${
