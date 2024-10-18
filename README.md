@@ -14,3 +14,4 @@
 - Figure out why fotogenio doesn't appear on search results
 - Setup production Google OAuth
 - Pay for Sentry
+- Change colors for stripe embedded checkout
