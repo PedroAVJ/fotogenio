@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "vercel:pull": "vercel env pull .env --environment=development",
     "db:push": "prisma db push",
     "postinstall": "prisma generate",
