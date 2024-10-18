@@ -17,8 +17,8 @@ export function ChooseStyles({
   styles: Style[]
 }) {
   const [selectedStyles, setSelectedStyles] = useQueryState('styles', parseAsArrayOf(parseAsString).withDefault([]))
-  const handleStyleChange = (value: string[]) => {
-    setSelectedStyles(value)
+  async function handleStyleChange(value: string[]) {
+    await setSelectedStyles(value)
   }
   const searchParams = useSearchParams()
   return (
@@ -44,7 +44,9 @@ export function ChooseStyles({
         <ToggleGroup
           type="multiple"
           value={selectedStyles}
-          onValueChange={handleStyleChange}
+          onValueChange={function (value: string[]) {
+            void handleStyleChange(value)
+          }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-[320px] md:max-w-4xl justify-items-center"
         >
           {styles.map((style) => (

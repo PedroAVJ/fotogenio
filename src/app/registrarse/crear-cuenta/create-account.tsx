@@ -43,8 +43,8 @@ import { useSearchParams } from 'next/navigation'
 function GoogleSignUpButton() {
   const { signUp } = useSignUp()
   const searchParams = useSearchParams()
-  if (!signUp) return null
-  const signUpWithGoogle = () => {
+  function signUpWithGoogle() {
+    if (!signUp) return null
     const redirectUrl: Route = '/sso-callback'
     const redirectUrlComplete: Route = `/registrarse/pago?${searchParams.toString()}`
     return signUp.authenticateWithRedirect({
@@ -56,7 +56,9 @@ function GoogleSignUpButton() {
   return (
     <Button 
       variant="outline" 
-      onClick={signUpWithGoogle}
+      onClick={function () {
+        void signUpWithGoogle()
+      }}
       className="w-full max-w-sm flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors rounded-lg"
     >
       <Image

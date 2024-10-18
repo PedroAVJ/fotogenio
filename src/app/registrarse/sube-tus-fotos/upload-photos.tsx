@@ -22,6 +22,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
+import { useQueryState, parseAsString } from 'nuqs'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -57,6 +58,7 @@ const schema = z.object({
 type Schema = z.infer<typeof schema>;
 
 export function UploadPhotosComponent() {
+  const [, setZippedPhotosUrl] = useQueryState('zippedPhotosUrl', parseAsString)
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -94,8 +96,7 @@ export function UploadPhotosComponent() {
       Sentry.captureMessage('No zip file uploaded', 'error');
       toast.error('Las fotos no se pudieron subir')
     } else {
-      const params = new URLSearchParams(searchParams);
-      params.set('zippedPhotosUrl', uploadedZip.appUrl);
+      await setZippedPhotosUrl(uploadedZip.appUrl)
       router.push(`/registrarse/crear-cuenta?${params.toString()}`);
     }
     setIsUploading(false)

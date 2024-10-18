@@ -9,6 +9,7 @@ import { Camera, ArrowDown } from 'lucide-react'
 import Image from 'next/image'
 import { GeneratedPhoto } from '@prisma/client'
 import { saveAs } from 'file-saver'
+import { v4 as uuidv4 } from 'uuid'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
@@ -25,7 +26,8 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
   async function handleDownload(url: string) {
     const response = await fetch(url);
     const blob = await response.blob();
-    saveAs(blob, `fotogenio-${Date.now()}.png`);
+    const fileName = `${uuidv4()}.png`;
+    saveAs(blob, fileName);
   }
 
   const handleTouchStart = (index: number) => {
@@ -69,7 +71,9 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
               <div 
                 key={index} 
                 className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
-                onClick={() => handleDownload(photoUrl ?? '')}
+                onClick={function () {
+                  void handleDownload(photoUrl ?? '')
+                }}
                 onTouchStart={function () {
                   handleTouchStart(index);
                 }}
@@ -77,7 +81,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
               >
                 <Image
                   src={photoUrl ?? ''}
-                  alt={`Generated image ${index + 1}`}
+                  alt={`Generated image ${(index + 1).toString()}`}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover rounded-[10px]"
