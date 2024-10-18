@@ -97,7 +97,7 @@ export function UploadPhotosComponent() {
       toast.error('Las fotos no se pudieron subir')
     } else {
       await setZippedPhotosUrl(uploadedZip.appUrl)
-      router.push(`/registrarse/crear-cuenta?${params.toString()}`);
+      router.push(`/registrarse/crear-cuenta?${searchParams.toString()}`);
     }
     setIsUploading(false)
   }
