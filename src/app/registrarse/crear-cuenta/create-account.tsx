@@ -39,6 +39,7 @@ import Image from 'next/image'
 import GoogleLogo from './google-logo.svg'
 import { Route } from 'next'
 import { useSearchParams } from 'next/navigation'
+import { StaticImageData } from 'next/image'
 
 function GoogleSignUpButton() {
   const { signUp } = useSignUp()
@@ -62,7 +63,7 @@ function GoogleSignUpButton() {
       className="w-full max-w-sm flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors rounded-lg"
     >
       <Image
-        src={GoogleLogo}
+        src={GoogleLogo as StaticImageData}
         alt="Google logo"
         className="size-5"
       />
