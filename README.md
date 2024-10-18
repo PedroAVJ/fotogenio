@@ -1,10 +1,9 @@
 # Project Tasks
 
 ## To Do
-- Image generation:
-  - Prompt engineering
-  - Curate style selections for each gender
-  - Remove the misgendered photos from each gender styles
+- Remove the misgendered photos from each gender styles
+- Figure out how to allow users to log in normally again
+- Curate style selections for each gender
 
 ## User Questions
 - Should we show different example photos for men and women in the upload photos section?
