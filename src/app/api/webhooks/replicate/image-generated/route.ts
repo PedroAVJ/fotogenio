@@ -12,12 +12,12 @@ export async function POST(request: NextRequest) {
     throw new Error('Invalid webhook secret');
   }
   const { searchParams } = new URL(request.url);
-  const generatedPhotoId = searchParams.get('generatedPhotoId') ?? '';
+  const generatedPhotoId = searchParams.get('generatedPhotoId');
   const { output } = await request.json() as Prediction;
   const generatedPhotoUrl = output[0] as string;
   const file = await addWatermark(generatedPhotoUrl);
   const uploadedFiles = await utapi.uploadFiles([file]);
-  const photoUrlWithWatermark = uploadedFiles[0]?.data?.appUrl ?? '';
+  const photoUrlWithWatermark = uploadedFiles[0]?.data?.appUrl;
   const { id, userId, photoUrl } = await db.generatedPhoto.findUniqueOrThrow({
     where: {
       id: generatedPhotoId,

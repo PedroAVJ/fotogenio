@@ -1,25 +1,19 @@
 import { ChooseStyles } from "./choose-styles";
-import { Gender, Style } from "@prisma/client";
 import { db } from "@/server/clients";
+import { searchParamsCache } from "./searchParams";
 
 export default async function Page({
-  searchParams: { gender },
+  searchParams
 }: {
-  searchParams: {
-    gender: Gender;
-  };
+  searchParams: Record<string, string | string[] | undefined>
 }) {
-  let styles: Style[] = [];
-  if (gender === Gender.male) {
-    styles = await db.style.findMany({
-      where: { gender: Gender.male },
-      take: 4,
-    });
-  } else if (gender === Gender.female) {
-    styles = await db.style.findMany({
-      where: { gender: Gender.female },
-      take: 4,
-    });
+  const { gender } = searchParamsCache.parse(searchParams)
+  if (!gender) {
+    throw new Error('Gender was null')
   }
+  const styles = await db.style.findMany({
+    where: { gender },
+    take: 4,
+  });
   return <ChooseStyles styles={styles} />;
 }

@@ -10,9 +10,12 @@ import { Route } from 'next';
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const signature = headers().get('stripe-signature');
+  if (!signature) {
+    throw new Error('Stripe signature not found');
+  }
   const event = stripe.webhooks.constructEvent(
     body,
-    signature ?? '',
+    signature,
     env.STRIPE_WEBHOOK_SECRET
   ) as Stripe.PaymentIntentSucceededEvent;
   const { userId = '', operation } = event.data.object.metadata;
