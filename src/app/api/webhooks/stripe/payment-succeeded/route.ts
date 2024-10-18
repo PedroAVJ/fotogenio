@@ -4,7 +4,6 @@ import { env } from '@/lib/env';
 import { headers } from 'next/headers';
 import { baseUrl } from '@/server/urls';
 import md5 from 'md5';
-import Stripe from 'stripe';
 import { Route } from 'next';
 
 export async function POST(request: NextRequest) {
@@ -17,7 +16,10 @@ export async function POST(request: NextRequest) {
     body,
     signature,
     env.STRIPE_WEBHOOK_SECRET
-  ) as Stripe.PaymentIntentSucceededEvent;
+  );
+  if (event.type !== 'payment_intent.succeeded') {
+    throw new Error('Invalid event type');
+  }
   const { userId = '', operation } = event.data.object.metadata;
   if (operation === 'create-model') {
     const userSettings = await db.userSettings.findUnique({

@@ -9,13 +9,9 @@ import hombre from './hombre.png'
 import mujer from '@/app/mujer.png'
 import { useQueryState, parseAsStringEnum } from 'nuqs'
 import { useSearchParams } from "next/navigation"
+import { Gender } from "@prisma/client"
 
 const workSans = Work_Sans({ subsets: ['latin'] })
-
-enum Gender {
-  male = 'male',
-  female = 'female'
-}
 
 export function ChooseGender() {
   const searchParams = useSearchParams()
@@ -23,8 +19,8 @@ export function ChooseGender() {
   async function handleGenderChange(value: string) {
     if (value === '') {
       await setSelectedGender(null)
-    } else {
-      await setSelectedGender(value as Gender)
+    } else if (value === Gender.male || value === Gender.female) {
+      await setSelectedGender(value)
     }
   }
   return (

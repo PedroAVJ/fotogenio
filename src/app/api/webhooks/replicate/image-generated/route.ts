@@ -13,11 +13,20 @@ export async function POST(request: NextRequest) {
   }
   const { searchParams } = new URL(request.url);
   const generatedPhotoId = searchParams.get('generatedPhotoId');
-  const { output } = await request.json() as Prediction;
-  const generatedPhotoUrl = output[0] as string;
+  if (!generatedPhotoId) {
+    throw new Error('Generated photo ID not found');
+  }
+  const result = await request.json() as Prediction;
+  if (!Array.isArray(result.output) || typeof result.output[0] !== 'string') {
+    throw new Error('Invalid output');
+  }
+  const generatedPhotoUrl = result.output[0];
   const file = await addWatermark(generatedPhotoUrl);
   const uploadedFiles = await utapi.uploadFiles([file]);
   const photoUrlWithWatermark = uploadedFiles[0]?.data?.appUrl;
+  if (!photoUrlWithWatermark) {
+    throw new Error('Photo URL with watermark not found');
+  }
   const { id, userId, photoUrl } = await db.generatedPhoto.findUniqueOrThrow({
     where: {
       id: generatedPhotoId,

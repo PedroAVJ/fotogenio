@@ -2,7 +2,6 @@
 
 ## To Do
 - Finish adding stricter eslint rules
-- Remove type assertions for better type safety
 - Fix bug where image is downloaded twice on mobile
 - Image generation:
   - Prompt engineering
