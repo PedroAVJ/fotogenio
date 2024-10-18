@@ -1,9 +1,9 @@
 # Project Tasks
 
 ## To Do
-- Remove the misgendered photos from each gender styles
 - Figure out how to allow users to log in normally again
 - Add better login and logout flows
+- Remove the misgendered photos from each gender styles
 - Curate style selections for each gender
 
 ## User Questions
