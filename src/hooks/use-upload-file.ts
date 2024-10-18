@@ -43,7 +43,7 @@ export function useUploadFile(
         },
       })
 
-      setUploadedFiles((prev) => (prev ? [...prev, ...res] : res))
+      setUploadedFiles((prev) => ([...prev, ...res]))
     } catch (err) {
       toast.error(getErrorMessage(err))
     } finally {

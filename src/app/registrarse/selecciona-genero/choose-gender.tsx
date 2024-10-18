@@ -20,11 +20,11 @@ enum Gender {
 export function ChooseGender() {
   const searchParams = useSearchParams()
   const [selectedGender, setSelectedGender] = useQueryState('gender', parseAsStringEnum<Gender>(Object.values(Gender)))
-  const handleGenderChange = (value: string) => {
+  async function handleGenderChange(value: string) {
     if (value === '') {
-      setSelectedGender(null)
+      await setSelectedGender(null)
     } else {
-      setSelectedGender(value as Gender)
+      await setSelectedGender(value as Gender)
     }
   }
   return (
@@ -49,7 +49,9 @@ export function ChooseGender() {
       <ToggleGroup
         type="single"
         value={selectedGender || ''}
-        onValueChange={handleGenderChange}
+        onValueChange={function (value: string) {
+          void handleGenderChange(value)
+        }}
         className="flex w-full flex-col items-center justify-evenly space-y-4 md:flex-row"
       >
         <ToggleGroupItem

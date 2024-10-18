@@ -122,7 +122,7 @@ export function FileUploader(props: FileUploaderProps) {
       }
 
       if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        toast.error(`No se puede subir más de ${maxFileCount} archivos`, { dismissible: true })
+        toast.error(`No se puede subir más de ${maxFileCount.toString()} archivos`, { dismissible: true })
         return
       }
 
@@ -148,7 +148,7 @@ export function FileUploader(props: FileUploaderProps) {
         updatedFiles.length <= maxFileCount
       ) {
         const target =
-          updatedFiles.length > 0 ? `${updatedFiles.length} archivos` : `archivo`
+          updatedFiles.length > 0 ? `${updatedFiles.length.toString()} archivos` : `archivo`
 
         toast.promise(onUpload(updatedFiles), {
           loading: `Subiendo ${target}...`,
@@ -237,7 +237,7 @@ export function FileUploader(props: FileUploaderProps) {
                   <p className="text-sm text-muted-foreground/70">
                     Puedes subir hasta
                     {maxFileCount > 1
-                      ? ` ${maxFileCount === Infinity ? "varios" : maxFileCount}
+                      ? ` ${maxFileCount === Infinity ? "varios" : maxFileCount.toString()}
                       imágenes (máximo ${formatBytes(maxSize)} cada una)`
                       : ` una imagen con ${formatBytes(maxSize)}`}.
                   </p>

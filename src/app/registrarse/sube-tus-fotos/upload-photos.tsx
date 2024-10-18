@@ -50,7 +50,7 @@ const schema = z.object({
       (files) => ({
         message: files.length === 0
           ? 'No has agregado ninguna foto. Debes subir al menos 12 fotos.'
-          : `Debes subir al menos 12 fotos. Te ${12 - files.length === 1 ? 'falta 1 foto' : `faltan ${12 - files.length} fotos`}.`
+          : `Debes subir al menos 12 fotos. Te ${12 - files.length === 1 ? 'falta 1 foto' : `faltan ${(12 - files.length).toString()} fotos`}.`
       })
     )
 })
@@ -75,7 +75,7 @@ export function UploadPhotosComponent() {
     if (!progress) {
       return 'Preparando fotos...'
     }
-    return `Subiendo... ${progress}%`
+    return `Subiendo... ${progress.toString()}%`
   }
   async function handleUpload() {
     const zip = new JSZip();
@@ -128,7 +128,7 @@ export function UploadPhotosComponent() {
                   <Image
                     src={placeholderImage.foto}
                     priority
-                    alt={`Ejemplo ${index + 1}`}
+                    alt={`Ejemplo ${(index + 1).toString()}`}
                     className="rounded-md object-cover h-32 w-24"
                   />
                   {placeholderImage.status === 'rejected' ? (
@@ -171,7 +171,9 @@ export function UploadPhotosComponent() {
             size="lg"
             className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!form.formState.isValid || isUploading}
-            onClick={form.handleSubmit(handleUpload)}
+            onClick={function () {
+              void form.handleSubmit(handleUpload)()
+            }}
           >
             {isUploading ? (
               <>
