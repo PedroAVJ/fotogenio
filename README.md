@@ -1,6 +1,7 @@
 # Project Tasks
 
 ## To Do
+- Setup crash modal with sentry
 - Remove the misgendered photos from each gender styles
 - Figure out how to allow users to log in normally again
 - Add better login and logout flows
