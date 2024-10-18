@@ -1,7 +1,7 @@
 # Project Tasks
 
 ## To Do
-- Fix bug where image is downloaded twice on mobile
+- Add a Like and Dislike button to the images
 - Image generation:
   - Prompt engineering
   - Curate style selections for each gender

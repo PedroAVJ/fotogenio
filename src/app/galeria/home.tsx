@@ -71,9 +71,6 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
               <div 
                 key={index} 
                 className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
-                onClick={function () {
-                  void handleDownload(photoUrl ?? '')
-                }}
                 onTouchStart={function () {
                   handleTouchStart(index);
                 }}
@@ -91,7 +88,12 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                   touchedIndex === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                 }`}>
                   <p className="text-white text-lg font-semibold mb-4">¡Descarga tus fotos!</p>
-                  <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center">
+                  <div
+                    onClick={function () {
+                      void handleDownload(photoUrl ?? '')
+                    }}
+                    className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center"
+                  >
                     <ArrowDown className="text-white w-6 h-6" />
                   </div>
                 </div>
