@@ -1,7 +1,6 @@
 # Project Tasks
 
 ## To Do
-- Finish adding stricter eslint rules
 - Fix bug where image is downloaded twice on mobile
 - Image generation:
   - Prompt engineering
