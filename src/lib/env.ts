@@ -9,7 +9,6 @@ export const env = createEnv({
     REPLICATE_API_TOKEN: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
-    NEXT_RUNTIME: z.enum(['nodejs', 'edge']),
   },
   client: {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
