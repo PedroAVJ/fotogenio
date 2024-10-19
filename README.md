@@ -2,7 +2,6 @@
 
 ## To Do
 - Add server only annotations
-- Remove unused dependencies
 - Add stricter linting
 - Curate style selections for each gender
 
