@@ -4,13 +4,19 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
+      allow: [
+        '/',
+        '/registrarse/selecciona-tu-genero',
+        '/registrarse/selecciona-estilos',
+        '/registrarse/crear-cuenta',
+      ],
       disallow: [
         '/api/',
         '/generando-fotos',
-        '/registrarse',
-        '/inicio',
-        '/nuevo-estilo'
+        '/galeria',
+        '/nuevo-estilo',
+        '/registrarse/pago',
+        '/comprar-creditos',
       ],
     },
   }

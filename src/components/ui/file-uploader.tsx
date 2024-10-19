@@ -122,7 +122,7 @@ export function FileUploader(props: FileUploaderProps) {
       }
 
       if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        toast.error(`No se puede subir más de ${maxFileCount} archivos`, { dismissible: true })
+        toast.error(`No se puede subir más de ${maxFileCount.toString()} archivos`, { dismissible: true })
         return
       }
 
@@ -148,7 +148,7 @@ export function FileUploader(props: FileUploaderProps) {
         updatedFiles.length <= maxFileCount
       ) {
         const target =
-          updatedFiles.length > 0 ? `${updatedFiles.length} archivos` : `archivo`
+          updatedFiles.length > 0 ? `${updatedFiles.length.toString()} archivos` : `archivo`
 
         toast.promise(onUpload(updatedFiles), {
           loading: `Subiendo ${target}...`,
@@ -232,14 +232,14 @@ export function FileUploader(props: FileUploaderProps) {
                 </div>
                 <div className="flex flex-col gap-px">
                   <p className="font-medium text-muted-foreground">
-                    Arrastra y suelta archivos aquí, o haz clic para seleccionar archivos
+                    Cuantas más fotos subas, mejor será el resultado.
                   </p>
                   <p className="text-sm text-muted-foreground/70">
-                    Puedes subir
+                    Puedes subir hasta
                     {maxFileCount > 1
-                      ? ` ${maxFileCount === Infinity ? "varios" : maxFileCount}
-                      archivos (hasta ${formatBytes(maxSize)} cada uno)`
-                      : ` un archivo con ${formatBytes(maxSize)}`}
+                      ? ` ${maxFileCount === Infinity ? "varios" : maxFileCount.toString()}
+                      imágenes (máximo ${formatBytes(maxSize)} cada una)`
+                      : ` una imagen con ${formatBytes(maxSize)}`}.
                   </p>
                 </div>
               </div>
@@ -250,11 +250,13 @@ export function FileUploader(props: FileUploaderProps) {
       {files?.length ? (
         <ScrollArea className="h-fit w-full px-3">
           <div className="flex max-h-48 flex-col gap-4">
-            {files?.map((file, index) => (
+            {files.map((file, index) => (
               <FileCard
                 key={index}
                 file={file}
-                onRemove={() => onRemove(index)}
+                onRemove={function () {
+                  onRemove(index);
+                }}
                 progress={progresses?.[file.name] ?? 0}
               />
             ))}

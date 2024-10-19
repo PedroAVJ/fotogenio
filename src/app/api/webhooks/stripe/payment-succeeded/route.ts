@@ -1,40 +1,35 @@
 import { NextResponse, NextRequest } from 'next/server';
-import Stripe from 'stripe';
+import { stripe, db, replicate } from '@/server/clients';
 import { env } from '@/lib/env';
 import { headers } from 'next/headers';
-import { db } from '@/server/db';
-import { replicate } from '@/server/replicate';
-import { getBaseUrl } from '@/lib/utils';
+import { baseUrl } from '@/server/urls';
 import md5 from 'md5';
+import { Route } from 'next';
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const signature = headers().get('stripe-signature');
   if (!signature) {
-    return NextResponse.json({ error: 'Missing stripe-signature' }, { status: 400 });
+    throw new Error('Stripe signature not found');
   }
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-06-20',
-  });
-  const event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET);
+  const event = stripe.webhooks.constructEvent(
+    body,
+    signature,
+    env.STRIPE_WEBHOOK_SECRET
+  );
   if (event.type !== 'payment_intent.succeeded') {
-    return NextResponse.json({ error: 'Invalid event type' }, { status: 400 });
+    throw new Error('Invalid event type');
   }
-  const paymentIntent = event.data.object;
-  const userId = paymentIntent.metadata['userId'];
-  if (!userId) {
-    return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
-  }
-  const operation = paymentIntent.metadata['operation'];
-  if (!operation) {
-    return NextResponse.json({ error: 'Missing operation' }, { status: 400 });
-  }
+  const { userId = '', operation } = event.data.object.metadata;
   if (operation === 'create-model') {
     const userSettings = await db.userSettings.findUnique({
-      where: { userId, modelStatus: 'pending' },
+      where: {
+        userId,
+        modelStatus: 'pending'
+      },
     });
     if (!userSettings) {
-      return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
+      return NextResponse.json({ message: 'Webhook retry catched' });
     }
     await db.userSettings.update({
       where: { userId },
@@ -49,14 +44,15 @@ export async function POST(request: NextRequest) {
         hardware: 'gpu-t4'
       }
     )
-    const baseUrl = getBaseUrl();
+    const url: Route = '/api/webhooks/replicate/fine-tune-completed'
+    const webhook = `${baseUrl}${url}?userId=${userId}`;
     await replicate.trainings.create(
       "ostris",
       "flux-dev-lora-trainer",
       "885394e6a31c6f349dd4f9e6e7ffbabd8d9840ab2559ab78aed6b2451ab2cfef",
       {
         destination: `${model.owner}/${model.name}`,
-        webhook: `${baseUrl}/api/webhooks/replicate/fine-tune-completed?userId=${userId}`,
+        webhook,
         webhook_events_filter: ['completed'],
         input: {
           steps: 1000,
@@ -82,5 +78,5 @@ export async function POST(request: NextRequest) {
       data: { credits: { increment: 25 } },
     });
   }
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ message: 'Webhook received' });
 }

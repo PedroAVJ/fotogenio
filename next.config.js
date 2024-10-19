@@ -26,7 +26,8 @@ const nextConfig = {
 
 import { withSentryConfig } from "@sentry/nextjs";
 
-export default withSentryConfig(
+// Add this conditional export at the end of the file
+export default process.env['TURBOPACK'] ? nextConfig : withSentryConfig(
   nextConfig,
   {
     // For all available options, see:

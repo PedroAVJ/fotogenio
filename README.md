@@ -1,9 +1,13 @@
-# TODO
+# Project Tasks
 
-- Create development database and create seed script
-- Change example photos for user uploads so it makes more sense
-- Don't upload user images, since we only need the zip file
-- Ask for 12 photos minimum, and convert most other image formats to png or jpg
-- Prompt engineering
+## To Do
+- Add stricter linting
 - Curate style selections for each gender
-- Pay for sentry
+
+## User Questions
+- Should we show different example photos for men and women in the upload photos section?
+
+## Production Tasks
+- Setup production Google OAuth
+- Change colors for stripe embedded checkout
+- Figure out why fotogenio doesn't appear on search results

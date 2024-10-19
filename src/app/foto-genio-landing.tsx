@@ -50,22 +50,22 @@ import mujerEleganteEnAbrigo from './mujeres/mujer-elegante-en-abrigo-de-piel.pn
 
 const rotatedPhotos = [
   {
-    rotate: -15, 
-    left: -10, 
+    rotate: '-15', 
+    left: '-10', 
     zIndex: 1,
     photo: glamourEnAmbienteLujoso,
     alternativeText: 'Mujer elegante con joyas disfrutando de un entorno lujoso.',
   },
   {
-    rotate: 0,
-    left: 0,
+    rotate: '0',
+    left: '0',
     zIndex: 2,
     photo: mujerConGafasEnJardin,
     alternativeText: 'Mujer sofisticada con gafas de sol y abrigo de piel, sentada en escaleras de mármol.',
   },
   {
-    rotate: 15,
-    left: 10,
+    rotate: '15',
+    left: '10',
     zIndex: 3,
     photo: mujerEleganteEnAbrigo,
     alternativeText: 'Mujer elegante con abrigo de piel, posando en un ambiente moderno.',
@@ -121,6 +121,7 @@ export function FotoGenioLandingComponent() {
                   key={index}
                   src={personaje.photo}
                   alt={personaje.alternativeText}
+                  priority
                   className="rounded-lg object-cover w-[155px] h-[226px]"
                 />
               ))}
@@ -131,6 +132,7 @@ export function FotoGenioLandingComponent() {
                   key={index}
                   src={personaje.photo}
                   alt={personaje.alternativeText}
+                  priority
                   className="rounded-lg object-cover w-[155px] h-[226px]"
                 />
               ))}
@@ -141,7 +143,7 @@ export function FotoGenioLandingComponent() {
             size="lg"
             asChild
           >
-            <Link href="/registrarse">¡Empieza Ahora!</Link>
+            <Link href="/registrarse/selecciona-genero">¡Empieza Ahora!</Link>
           </Button>
           <p className="text-white text-[20px] font-normal leading-[25px] tracking-[0.02em] mt-4 mb-8 text-center w-full">
             Creamos fotos de ti usando inteligencia artificial.
@@ -242,7 +244,7 @@ export function FotoGenioLandingComponent() {
             size="lg"
             asChild
           >
-            <Link href="/registrarse">Comenzar</Link>
+            <Link href="/registrarse/selecciona-genero">Comenzar</Link>
           </Button>
         </div>
       </ScrollArea>

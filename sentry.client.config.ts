@@ -5,14 +5,19 @@
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
+  beforeSend(event) {
+    // Check if it is an exception, and if so, show the report dialog
+    if (event.exception && event.event_id) {
+      Sentry.showReportDialog({ eventId: event.event_id });
+    }
+    return event;
+  },
+  enabled: process.env.NODE_ENV === "production",
   dsn: "https://44a38013248fc3bb92a011488b6dce92@o4507999317131264.ingest.us.sentry.io/4507999456329728",
 
   // Add optional integrations for additional features
   integrations: [
-    Sentry.replayIntegration({
-      maskAllText: false,
-      blockAllMedia: false,
-    }),
+    Sentry.replayIntegration(),
     Sentry.feedbackIntegration({
       // Additional SDK configuration goes in here, for example:
       showBranding: false,

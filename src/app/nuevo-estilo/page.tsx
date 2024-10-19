@@ -1,39 +1,23 @@
 import { NewStyleComponent } from "./new-style";
-import { db } from "@/server/db";
+import { db } from "@/server/clients";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 
 export default async function NewStyle() {
   const { userId } = auth().protect();
-  const userSettings = await db.userSettings.findUnique({
+  const { gender, credits } = await db.userSettings.findUniqueOrThrow({
     where: { userId },
   });
-  if (!userSettings) {
-    redirect('/registrarse')
-  }
-  const { pendingPhotos, gender, credits } = userSettings;
-  if (pendingPhotos > 0) {
-    redirect("/generando-fotos");
-  }
-  const chosenStyles = await db.chosenStyle.findMany({
+  const styles = await db.style.findMany({
     where: {
-      userId,
-    },
-  });
-  const notChosenStyles = await db.style.findMany({
-    where: {
-      id: {
-        notIn: chosenStyles.map((chosenStyle) => chosenStyle.styleId),
-      },
       gender,
     },
     include: {
-      prompts: true,
+      _count: {
+        select: {
+          prompts: true,
+        },
+      },
     },
   });
-  const styles = notChosenStyles.map((style) => ({
-    ...style,
-    imageCount: style.prompts.length,
-  }));
-  return <NewStyleComponent initialCredits={credits} styles={styles} />;
+  return <NewStyleComponent credits={credits} styles={styles} />;
 }

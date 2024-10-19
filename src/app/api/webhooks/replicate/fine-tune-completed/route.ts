@@ -1,31 +1,50 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { env } from '@/lib/env';
-import { db } from '@/server/db';
-import { replicate } from '@/server/replicate';
+import { db } from '@/server/clients';
+import { Training } from 'replicate';
 import { validateWebhook } from "replicate";
-import { getBaseUrl } from '@/lib/utils';
-import md5 from 'md5';
+import * as Sentry from "@sentry/nextjs";
+import { generateImages } from '@/app/generate-images';
 
 export async function POST(request: NextRequest) {
-  const isValid = validateWebhook(request, env.REPLICATE_WEBHOOK_SECRET);
+  const requestClone = request.clone();
+  const isValid = await validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
   if (!isValid) {
-    return NextResponse.json({ error: 'Invalid webhook' }, { status: 400 });
+    const errorMessage = 'Invalid webhook secret';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId');
   if (!userId) {
-    return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+    const errorMessage = 'Missing userId';
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
+  }
+  const { status } = await request.json() as Training;
+  if (status !== 'succeeded') {
+    const errorMessage = `Fine-tuning failed: Unexpected status '${status}'`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
   const userSettings = await db.userSettings.findUnique({
-    where: { userId, modelStatus: 'training' },
+    where: { userId },
   });
   if (!userSettings) {
-    return NextResponse.json({ error: 'Model is already training' }, { status: 400 });
+    const errorMessage = `User settings for user id ${userId} not found`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
   }
-  await db.userSettings.update({
-    where: { userId },
-    data: { modelStatus: 'ready' },
-  });
+  if (userSettings.modelStatus !== 'training') {
+    const errorMessage = `Expected model status: training, found: ${userSettings.modelStatus} for user id ${userId}`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
+  }
   const prompts = await db.prompt.findMany({
     where: {
       style: {
@@ -36,44 +55,14 @@ export async function POST(request: NextRequest) {
         },
       },
     },
-    include: {
-      style: {
-        include: {
-          chosenStyles: {
-            where: {
-              userId,
-            },
-          },
-        },
-      },
-    },
   });
   await db.userSettings.update({
     where: { userId },
-    data: { pendingPhotos: { increment: prompts.length } },
+    data: { modelStatus: 'ready' },
   });
-  const modelName = `flux-${md5(userId)}`;
-  const baseUrl = getBaseUrl();
-  const model = await replicate.models.get('pedroavj', modelName);
-  const version = model.latest_version;
-  if (!version) {
-    return NextResponse.json({ error: 'Version not found' }, { status: 400 });
-  }
-  await Promise.all(prompts.map(async ({ id, prompt }) => {
-    await replicate.predictions.create(
-      {
-        model: `pedroavj/${modelName}`,
-        version: version.id,
-        webhook: `${baseUrl}/api/webhooks/replicate/image-generated?userId=${userId}&promptId=${id}`,
-        webhook_events_filter: ['completed'],
-        input: {
-          prompt,
-          num_inference_steps: 50,
-          seed: 42,
-          output_quality: 100,
-        }
-      }
-    );
-  }));
-  return NextResponse.json({ received: true });
+  await generateImages({
+    userId,
+    prompts,
+  })
+  return NextResponse.json({ message: 'Webhook received' });
 }

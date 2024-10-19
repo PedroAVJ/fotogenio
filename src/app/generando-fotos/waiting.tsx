@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react'
+import { useEffect } from 'react'
 import { Work_Sans } from 'next/font/google'
 import Lottie from 'lottie-react'
 import animation from './animacion.json'
+import { useRouter } from 'next/navigation'
 
 const workSans = Work_Sans({ subsets: ['latin'] })
 
@@ -13,6 +14,33 @@ interface WaitingComponentProps {
 }
 
 export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        router.refresh()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [router])
+
+  useEffect(() => {
+    const THIRTY_SECONDS = 30000
+    const intervalId = setInterval(() => {
+      router.refresh()
+    }, THIRTY_SECONDS)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [router])
+
   return (
     <main className={`
       ${workSans.className}
@@ -26,7 +54,7 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
         <h1 
           className="scroll-m-20 flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[32px] tracking-[0.02em] text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
         >
-          $
+          ✓
         </h1>
         <h3 className="scroll-m-20 flex grow items-center justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat font-semibold text-[20px] tracking-[0.02em] [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
           ¡Éxito!
