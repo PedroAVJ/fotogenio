@@ -1,3 +1,5 @@
+import "server-only";
+
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 const isProtectedRoute = createRouteMatcher(['/galeria', '/nuevo-estilo', '/generando-fotos', '/registrarse/pago']);
