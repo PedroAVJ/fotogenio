@@ -1,6 +1,7 @@
 # Project Tasks
 
 ## To Do
+- Remove unused dependencies
 - Add stricter linting
 - Curate style selections for each gender
 
