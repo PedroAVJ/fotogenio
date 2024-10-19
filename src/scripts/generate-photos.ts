@@ -2,28 +2,25 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { replicate } from '@/server/clients';
+import { db } from '@/server/clients';
+import { generateImages } from '@/app/generate-images';
+import { Gender } from '@prisma/client';
 
-import md5 from 'md5';
+const userId = 'user_2nAw1i51Is1qDZQ5BTpo6LQJjFD';
+const prompts = await db.prompt.findMany({
+  where: {
+    style: {
+      gender: Gender.female
+    },
+  },
+});
 
-const userId = 'user_2nEGVSXzK0Qs918afjV75q3KgIJ';
-const modelName = `flux-${md5(userId)}`;
-
-const model = await replicate.models.get('pedroavj', modelName);
-const version = model.latest_version;
-if (!version) {
-  console.log('Version not found');
-  process.exit(1);
+// Process prompts in batches of 10
+const batchSize = 10;
+for (let i = 0; i < prompts.length; i += batchSize) {
+  const batch = prompts.slice(i, i + batchSize);
+  await generateImages({ userId, prompts: batch });
+  console.log(`Processed batch ${(i / batchSize + 1).toString()} of ${Math.ceil(prompts.length / batchSize).toString()}`);
 }
-const prediction = await replicate.run(
-  `pedroavj/${modelName}:${version.id}`,
-  {
-    input: {
-      prompt: 'TOK smiling',
-      num_inference_steps: 50,
-      output_quality: 100,
-    }
-  }
-);
 
-console.log(prediction);
+console.log('All batches processed successfully');
