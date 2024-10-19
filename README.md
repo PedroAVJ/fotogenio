@@ -1,7 +1,6 @@
 # Project Tasks
 
 ## To Do
-- Remove the misgendered photos from each gender styles
 - Curate style selections for each gender
 
 ## User Questions
