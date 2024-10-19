@@ -4,7 +4,6 @@
 - Curate style selections for each gender
 
 ## User Questions
-- Add better login and logout flows
 - Should we show different example photos for men and women in the upload photos section?
 
 ## Production Tasks
