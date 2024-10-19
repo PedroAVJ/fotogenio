@@ -72,12 +72,13 @@ enum Feedback {
 }
 
 model GeneratedPhoto {
-  id        String   @id @default(uuid())
-  userId    String
-  photoUrl  String?  @unique
-  promptId  String
-  prompt    Prompt   @relation(fields: [promptId], references: [id])
-  feedback  Feedback @default(neutral)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id              String   @id @default(uuid())
+  userId          String
+  photoUrl        String?  @unique
+  promptId        String
+  prompt          Prompt   @relation(fields: [promptId], references: [id])
+  downloadedCount Int      @default(0)
+  feedback        Feedback @default(neutral)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
 }

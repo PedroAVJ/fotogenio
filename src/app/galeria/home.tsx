@@ -11,7 +11,7 @@ import { Feedback, GeneratedPhoto } from '@prisma/client'
 import { saveAs } from 'file-saver'
 import { v4 as uuidv4 } from 'uuid'
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
-import { saveFeedback } from './api'
+import { saveFeedback, saveDownload } from './api'
 
 const workSans = Work_Sans({ 
   subsets: ['latin'],
@@ -37,21 +37,22 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
       })
     })
   }
-  const [touchedIndex, setTouchedIndex] = useState<number | null>(null)
+  const [touchedId, setTouchedId] = useState<string | null>(null)
 
-  async function handleDownload(url: string) {
+  async function handleDownload(url: string, generatedPhotoId: string) {
+    void saveDownload(generatedPhotoId)
     const response = await fetch(url);
     const blob = await response.blob();
     const fileName = `${uuidv4()}.png`;
     saveAs(blob, fileName);
   }
 
-  const handleTouchStart = (index: number) => {
-    setTouchedIndex(index)
+  const handleTouchStart = (id: string) => {
+    setTouchedId(id)
   }
 
   const handleTouchEnd = () => {
-    setTouchedIndex(null)
+    setTouchedId(null)
   }
 
   return (
@@ -85,16 +86,16 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
           <div className="flex flex-col items-center gap-4">
             {optimisticGeneratedPhotos.map(({ photoUrl, feedback, id }, index) => (
               <div 
-                key={index} 
+                key={id} 
                 className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
                 onTouchStart={function () {
-                  handleTouchStart(index);
+                  handleTouchStart(id);
                 }}
                 onTouchEnd={handleTouchEnd}
               >
                 <Image
                   src={photoUrl ?? ''}
-                  alt={`Generated image ${(index + 1).toString()}`}
+                  alt={`Generated image ${id}`}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover rounded-[10px]"
@@ -108,7 +109,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
                     onClick={function () {
-                      handleFeedbackClick('positive', id, index)
+                      handleFeedbackClick(feedback === 'positive' ? 'neutral' : 'positive', id, index)
                     }}
                   >
                     <ThumbsUp
@@ -121,7 +122,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     variant="secondary"
                     className="bg-white bg-opacity-50 hover:bg-opacity-75"
                     onClick={function () {
-                      handleFeedbackClick('negative', id, index)
+                      handleFeedbackClick(feedback === 'negative' ? 'neutral' : 'negative', id, index)
                     }}
                   >
                     <ThumbsDown
@@ -130,12 +131,12 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                   </Button>
                 </div>
                 <div className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center transition-opacity duration-300 ${
-                  touchedIndex === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                  touchedId === id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                 }`}>
                   <p className="text-white text-lg font-semibold mb-4">¡Descarga tus fotos!</p>
                   <div
                     onClick={function () {
-                      void handleDownload(photoUrl ?? '')
+                      void handleDownload(photoUrl ?? '', id)
                     }}
                     className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center"
                   >

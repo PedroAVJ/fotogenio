@@ -26,3 +26,19 @@ export const saveFeedback = api
     const path: Route = '/galeria'
     revalidatePath(path)
   });
+
+export const saveDownload = api
+  .input(z.string())
+  .mutation(async ({ input: generatedPhotoId, ctx: { session: { userId } } }) => {
+    await db.generatedPhoto.update({
+      where: {
+        id: generatedPhotoId,
+        userId,
+      },
+      data: {
+        downloadedCount: {
+          increment: 1,
+        },
+      },
+    });
+  });
