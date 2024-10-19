@@ -1,6 +1,7 @@
 # Project Tasks
 
 ## To Do
+- Add stricter linting
 - Curate style selections for each gender
 
 ## User Questions
