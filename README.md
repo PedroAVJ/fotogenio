@@ -2,6 +2,7 @@
 
 ## To Do
 - Curate style selections for each gender
+- Some generations trigger NSFW auto blocking
 
 ## User Questions
 - Should we show different example photos for men and women in the upload photos section?
