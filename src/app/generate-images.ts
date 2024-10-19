@@ -22,6 +22,7 @@ async function generateImage(generatedPhoto: GeneratedPhotoWithPrompt, modelName
         num_inference_steps: 50,
         output_quality: 100,
         seed,
+        disable_safety_checker: true,
       }
     }
   );
