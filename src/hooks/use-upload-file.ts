@@ -8,7 +8,7 @@ import { type FileRouter } from "@/app/api/uploadthing/core";
 
 import { type ClientUploadedFileData } from "uploadthing/types";
 
-export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
+export type UploadedFile<T = unknown> = ClientUploadedFileData<T>;
 
 interface UseUploadFileProps
   extends Pick<
