@@ -110,7 +110,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                       size="icon"
                       type="button"
                       variant="secondary"
-                      className="bg-white bg-opacity-50 hover:bg-opacity-75"
+                      className="bg-white/50 hover:bg-white/75"
                       onClick={function () {
                         handleFeedbackClick(
                           feedback === "positive" ? "neutral" : "positive",
@@ -127,7 +127,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                       size="icon"
                       type="button"
                       variant="secondary"
-                      className="bg-white bg-opacity-50 hover:bg-opacity-75"
+                      className="bg-white/50 hover:bg-white/75"
                       onClick={function () {
                         handleFeedbackClick(
                           feedback === "negative" ? "neutral" : "negative",
@@ -142,7 +142,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     </Button>
                   </div>
                   <div
-                    className={`absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
+                    className={`absolute inset-0 flex flex-col items-center justify-center bg-black/50 transition-opacity duration-300 ${
                       touchedId === id
                         ? "opacity-100"
                         : "opacity-0 group-hover:opacity-100"

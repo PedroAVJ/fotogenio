@@ -267,14 +267,14 @@ export function FotoGenioLandingComponent() {
                   alt={item.alt}
                   className="h-[226px] w-[155px] rounded-lg object-cover"
                 />
-                <p className="font-work-sans mt-2 text-[20px] font-normal leading-[25px] tracking-[0.02em] text-white">
+                <p className="mt-2 text-[20px] font-normal leading-[25px] tracking-[0.02em] text-white">
                   {item.label} {item.emoji}
                 </p>
               </div>
             ))}
           </div>
 
-          <p className="font-work-sans mt-8 text-[20px] font-normal leading-[25px] tracking-[0.02em] text-white">
+          <p className="mt-8 text-[20px] font-normal leading-[25px] tracking-[0.02em] text-white">
             ¡Y muchos más!
           </p>
 
