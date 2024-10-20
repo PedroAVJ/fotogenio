@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { PrismaClient } from '@prisma/client';
-import { utapi } from '@/server/clients';
+import { utapi } from '@/lib/clients';
 
 const db = new PrismaClient();
 

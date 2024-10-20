@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { db } from '@/server/clients';
+import { db } from '@/lib/clients';
 import { generateImages } from '@/app/generate-images';
 import { Gender } from '@prisma/client';
 

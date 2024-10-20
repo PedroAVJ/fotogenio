@@ -1,6 +1,6 @@
 import "server-only";
 
-import { replicate, db } from "@/server/clients";
+import { replicate, db } from "@/lib/clients";
 import md5 from "md5";
 import { baseUrl } from "@/lib/urls";
 import { Prompt, Prisma } from "@prisma/client";

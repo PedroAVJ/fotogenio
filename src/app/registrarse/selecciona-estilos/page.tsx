@@ -1,5 +1,5 @@
 import { ChooseStyles } from "./choose-styles";
-import { db } from "@/server/clients";
+import { db } from "@/lib/clients";
 import { searchParamsCache } from "./searchParams";
 
 export default async function Page({

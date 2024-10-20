@@ -1,6 +1,6 @@
 'use server';
 
-import { api, db } from "@/server/clients";
+import { api, db } from "@/lib/clients";
 import { z } from "zod";
 import { redirect } from 'next/navigation';
 import { generateImages } from "@/app/generate-images";
