@@ -5,6 +5,7 @@ import { Training } from 'replicate';
 import { validateWebhook } from "replicate";
 import * as Sentry from "@sentry/nextjs";
 import { generateImages } from '@/app/generate-images';
+import { createModel } from '@/app/api/webhooks/create-model';
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
@@ -23,13 +24,6 @@ export async function POST(request: NextRequest) {
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
-  const { status } = await request.json() as Training;
-  if (status !== 'succeeded') {
-    const errorMessage = `Fine-tuning failed: Unexpected status '${status}'`;
-    Sentry.captureMessage(errorMessage, 'error');
-    console.error(errorMessage);
-    return NextResponse.json({ message: errorMessage });
-  }
   const userSettings = await db.userSettings.findUnique({
     where: { userId },
   });
@@ -41,6 +35,20 @@ export async function POST(request: NextRequest) {
   }
   if (userSettings.modelStatus !== 'training') {
     const errorMessage = `Expected model status: training, found: ${userSettings.modelStatus} for user id ${userId}`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    return NextResponse.json({ message: errorMessage });
+  }
+  const { status } = await request.json() as Training;
+  if (status === 'failed') {
+    const errorMessage = `Fine-tuning failed for user id: ${userId}`;
+    Sentry.captureMessage(errorMessage, 'error');
+    console.error(errorMessage);
+    await createModel(userId, userSettings.zippedPhotosUrl);
+    return NextResponse.json({ message: errorMessage });
+  }
+  if (status !== 'succeeded') {
+    const errorMessage = `Fine-tuning failed: Unexpected status '${status}' for user id: ${userId}`;
     Sentry.captureMessage(errorMessage, 'error');
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
