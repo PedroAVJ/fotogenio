@@ -1,9 +1,5 @@
 import "server-only";
 
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 import { db } from '@/lib/clients';
 import { Gender } from '@prisma/client';
 
