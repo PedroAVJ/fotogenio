@@ -11,8 +11,8 @@ export async function addWatermark(imageUrl: string) {
   const image = sharp(Buffer.from(imageBuffer));
 
   const metadata = await image.metadata();
-  const width = metadata.width || 0;
-  const height = metadata.height || 0;
+  const width = metadata.width ?? 0;
+  const height = metadata.height ?? 0;
 
   const watermarkPath = path.join(
     process.cwd(),
@@ -30,8 +30,8 @@ export async function addWatermark(imageUrl: string) {
   const maxWatermarkHeight = Math.floor(height * 0.25);
 
   if (
-    (watermarkMetadata.width || 0) > maxWatermarkWidth ||
-    (watermarkMetadata.height || 0) > maxWatermarkHeight
+    (watermarkMetadata.width ?? 0) > maxWatermarkWidth ||
+    (watermarkMetadata.height ?? 0) > maxWatermarkHeight
   ) {
     watermark.resize(maxWatermarkWidth, maxWatermarkHeight, { fit: "inside" });
   }

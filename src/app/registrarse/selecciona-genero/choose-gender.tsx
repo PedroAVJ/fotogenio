@@ -40,7 +40,7 @@ export function ChooseGender() {
       </div>
       <ToggleGroup
         type="single"
-        value={selectedGender || ""}
+        value={selectedGender ?? ""}
         onValueChange={function (value: string) {
           void handleGenderChange(value);
         }}
