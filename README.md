@@ -1,6 +1,7 @@
 # Project Tasks
 
 ## To Do
+- Figure out why the setZippedPhotosUrl query state is not being set before redirecting to create account
 - Add stricter linting
 - Curate style selections for each gender
 

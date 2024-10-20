@@ -1,6 +1,6 @@
 'use server';
 
-import { api, db } from "@/server/clients";
+import { api, db } from "@/lib/clients";
 import { z } from "zod";
 import { Feedback } from "@prisma/client";
 import { revalidatePath } from "next/cache";

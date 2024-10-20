@@ -1,10 +1,6 @@
 import "server-only";
 
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-import { replicate } from '@/server/clients';
+import { replicate } from '@/lib/clients';
 
 import md5 from 'md5';
 

@@ -1,5 +1,5 @@
 import { HomeComponent } from "./home";
-import { db } from "@/server/clients";
+import { db } from "@/lib/clients";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function Home() {
