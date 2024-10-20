@@ -9,10 +9,7 @@ export default async function Home() {
   });
   const generatedPhotos = await db.generatedPhoto.findMany({
     where: { userId, photoUrl: { not: null } },
-    orderBy: {
-      createdAt: "desc",
-      promptId: "asc",
-    },
+    orderBy: [{ createdAt: "desc" }, { promptId: "asc" }],
   });
   return <HomeComponent credits={credits} generatedPhotos={generatedPhotos} />;
 }
