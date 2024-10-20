@@ -3,13 +3,13 @@ import { db } from "@/lib/clients";
 import { searchParamsCache } from "./searchParams";
 
 export default async function Page({
-  searchParams
+  searchParams,
 }: {
-  searchParams: Record<string, string | string[] | undefined>
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const { gender } = searchParamsCache.parse(searchParams)
+  const { gender } = searchParamsCache.parse(searchParams);
   if (!gender) {
-    throw new Error('Gender was null')
+    throw new Error("Gender was null");
   }
   const styles = await db.style.findMany({
     where: { gender },

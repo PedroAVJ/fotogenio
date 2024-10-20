@@ -1,14 +1,15 @@
 import "server-only";
 
-import { replicate } from '@/lib/clients';
+import { replicate } from "@/lib/clients";
 
-import md5 from 'md5';
+import md5 from "md5";
 
-const userId = 'user_2nEGVSXzK0Qs918afjV75q3KgIJ';
+const userId = "user_2nEGVSXzK0Qs918afjV75q3KgIJ";
 const modelName = `flux-${md5(userId)}`;
 
-const baseUrl = 'https://fotogenio-git-staging-pedroavjs-projects.vercel.app';
-const zippedPhotosUrl = 'https://utfs.io/f/wB1nfjdKLAC8e6nKojagxoyUu925OCphs7BkHinW8Mb0INmK';
+const baseUrl = "https://fotogenio-git-staging-pedroavjs-projects.vercel.app";
+const zippedPhotosUrl =
+  "https://utfs.io/f/wB1nfjdKLAC8e6nKojagxoyUu925OCphs7BkHinW8Mb0INmK";
 
 await replicate.trainings.create(
   "ostris",
@@ -17,7 +18,7 @@ await replicate.trainings.create(
   {
     destination: `pedroavj/${modelName}`,
     webhook: `${baseUrl}/api/webhooks/replicate/fine-tune-completed?userId=${userId}`,
-    webhook_events_filter: ['completed'],
+    webhook_events_filter: ["completed"],
     input: {
       steps: 1000,
       lora_rank: 16,
@@ -32,9 +33,9 @@ await replicate.trainings.create(
       wandb_save_interval: 100,
       caption_dropout_rate: 0.05,
       cache_latents_to_disk: false,
-      wandb_sample_interval: 100
-    }
-  }
-)
+      wandb_sample_interval: 100,
+    },
+  },
+);
 
-console.log('Training created');
+console.log("Training created");

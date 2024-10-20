@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { Work_Sans } from 'next/font/google'
-import { Button } from "@/components/ui/button"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import Image from 'next/image'
-import { Camera, Loader2, Plus } from 'lucide-react'
-import { createImages } from './api'
-import { useMutation } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { Prisma } from '@prisma/client'
-import Link from 'next/link'
+import React, { useState, useEffect } from "react";
+import { Work_Sans } from "next/font/google";
+import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Image from "next/image";
+import { Camera, Loader2, Plus } from "lucide-react";
+import { createImages } from "./api";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Prisma } from "@prisma/client";
+import Link from "next/link";
 
-const workSans = Work_Sans({ subsets: ['latin'] })
+const workSans = Work_Sans({ subsets: ["latin"] });
 
 type StyleWithCount = Prisma.StyleGetPayload<{
   include: {
@@ -31,36 +31,38 @@ interface NewStyleProps {
 }
 
 export function NewStyleComponent({ credits, styles }: NewStyleProps) {
-  const [selectedStyles, setSelectedStyles] = useState<string[]>([])
-  const [remainingCredits, setRemainingCredits] = useState(credits)
+  const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
+  const [remainingCredits, setRemainingCredits] = useState(credits);
 
   const handleStyleChange = (value: string[]) => {
-    setSelectedStyles(value)
-  }
+    setSelectedStyles(value);
+  };
 
   useEffect(() => {
     const usedCredits = selectedStyles.reduce((total, styleId) => {
-      const style = styles.find(s => s.id === styleId)
-      return total + (style ? style._count.prompts : 0)
-    }, 0)
-    setRemainingCredits(Math.max(0, credits - usedCredits))
-  }, [selectedStyles, styles, credits])
+      const style = styles.find((s) => s.id === styleId);
+      return total + (style ? style._count.prompts : 0);
+    }, 0);
+    setRemainingCredits(Math.max(0, credits - usedCredits));
+  }, [selectedStyles, styles, credits]);
 
   const mutation = useMutation({
     mutationFn: createImages,
     onSuccess: ({ message }) => {
-      toast.error(message)
+      toast.error(message);
     },
-  })
+  });
   return (
-    <main className={`
+    <main
+      className={`
       ${workSans.className}
       h-dvh w-dvw
       flex flex-col
       text-[#F5F5F5]
       bg-gradient-to-b from-[#534E4E] to-[#171717]
       relative
-    `}>
+    `}
+    >
       <ScrollArea className="h-full w-full">
         <div className="px-2 pt-4 pb-24">
           <div className="flex w-full flex-col space-y-8 items-center mb-8">
@@ -69,8 +71,10 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
             </h3>
             <h3 className="scroll-m-20 text-[20px] leading-[102%] tracking-[0px] font-semibold justify-center items-center rounded-lg border-x-4 border-l-white border-r-[#4776E6] bg-no-repeat px-6 py-4 [background-image:linear-gradient(90deg,white,#4776E6),linear-gradient(90deg,white,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%] inline-flex space-x-4">
               <Camera />
-              <span className="bg-gradient-to-b from-[#4776E6] to-white bg-clip-text text-transparent text-[24px] leading-[102%] tracking-[0px] font-semibold">x {remainingCredits}</span>
-              <Link 
+              <span className="bg-gradient-to-b from-[#4776E6] to-white bg-clip-text text-transparent text-[24px] leading-[102%] tracking-[0px] font-semibold">
+                x {remainingCredits}
+              </span>
+              <Link
                 href="/comprar-creditos"
                 className="rounded-full border-[2px] border-white p-0.5 flex items-center justify-center w-5 h-5 cursor-pointer"
               >
@@ -91,7 +95,10 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
                   value={style.id}
                   aria-label={`Toggle ${style.description}`}
                   className="relative w-[149px] h-[215px] p-0 rounded-md overflow-hidden group data-[state=on]:ring-2 data-[state=on]:ring-[#8CF486]"
-                  disabled={!selectedStyles.includes(style.id) && remainingCredits < style._count.prompts}
+                  disabled={
+                    !selectedStyles.includes(style.id) &&
+                    remainingCredits < style._count.prompts
+                  }
                 >
                   <Image
                     src={style.coverPhotoUrl}
@@ -102,7 +109,9 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
                     className="object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-75"
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-white text-center font-semibold px-2">{style.description}</p>
+                    <p className="text-white text-center font-semibold px-2">
+                      {style.description}
+                    </p>
                   </div>
                   <div className="absolute bottom-2 right-2 text-white text-xs font-semibold">
                     x {style._count.prompts}
@@ -122,9 +131,13 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
             mutation.mutate({ styleIds: selectedStyles });
           }}
         >
-          {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Generar imágenes'}
+          {mutation.isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            "Generar imágenes"
+          )}
         </Button>
       </div>
     </main>
-  )
+  );
 }

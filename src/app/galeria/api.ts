@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { api, db } from "@/lib/clients";
 import { z } from "zod";
@@ -11,9 +11,13 @@ const feedback = z.object({
   generatedPhotoId: z.string(),
 });
 
-export const saveFeedback = api
-  .input(feedback)
-  .mutation(async ({ input: { feedback, generatedPhotoId }, ctx: { session: { userId } } }) => {
+export const saveFeedback = api.input(feedback).mutation(
+  async ({
+    input: { feedback, generatedPhotoId },
+    ctx: {
+      session: { userId },
+    },
+  }) => {
     await db.generatedPhoto.update({
       where: {
         id: generatedPhotoId,
@@ -21,15 +25,20 @@ export const saveFeedback = api
       },
       data: {
         feedback,
-      }
-    })
-    const path: Route = '/galeria'
-    revalidatePath(path)
-  });
+      },
+    });
+    const path: Route = "/galeria";
+    revalidatePath(path);
+  },
+);
 
-export const saveDownload = api
-  .input(z.string())
-  .mutation(async ({ input: generatedPhotoId, ctx: { session: { userId } } }) => {
+export const saveDownload = api.input(z.string()).mutation(
+  async ({
+    input: generatedPhotoId,
+    ctx: {
+      session: { userId },
+    },
+  }) => {
     await db.generatedPhoto.update({
       where: {
         id: generatedPhotoId,
@@ -41,4 +50,5 @@ export const saveDownload = api
         },
       },
     });
-  });
+  },
+);

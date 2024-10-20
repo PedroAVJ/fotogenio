@@ -1,7 +1,7 @@
 import "server-only";
 
-import { PrismaClient } from '@prisma/client';
-import { utapi } from '@/lib/clients';
+import { PrismaClient } from "@prisma/client";
+import { utapi } from "@/lib/clients";
 
 const db = new PrismaClient();
 

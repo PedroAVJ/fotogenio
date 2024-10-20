@@ -11,7 +11,7 @@ export default async function Page() {
       userId,
     },
   });
-  if (modelStatus === 'pending' || modelStatus === 'training') {
+  if (modelStatus === "pending" || modelStatus === "training") {
     return <WaitingComponent aproxTime={30} />;
   }
   const pendingPhotos = await db.generatedPhoto.count({
@@ -23,6 +23,6 @@ export default async function Page() {
   if (pendingPhotos > 0) {
     return <WaitingComponent aproxTime={5} />;
   }
-  const url: Route = '/galeria';
+  const url: Route = "/galeria";
   redirect(url);
 }

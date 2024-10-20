@@ -1,26 +1,29 @@
-import { NextResponse, NextRequest } from 'next/server';
-import { env } from '@/lib/env';
-import { db } from '@/lib/clients';
-import { Training } from 'replicate';
+import { NextResponse, NextRequest } from "next/server";
+import { env } from "@/lib/env";
+import { db } from "@/lib/clients";
+import { Training } from "replicate";
 import { validateWebhook } from "replicate";
 import * as Sentry from "@sentry/nextjs";
-import { generateImages } from '@/app/generate-images';
-import { createModel } from '@/app/api/webhooks/create-model';
+import { generateImages } from "@/app/generate-images";
+import { createModel } from "@/app/api/webhooks/create-model";
 
 export async function POST(request: NextRequest) {
   const requestClone = request.clone();
-  const isValid = await validateWebhook(requestClone, env.REPLICATE_WEBHOOK_SECRET);
+  const isValid = await validateWebhook(
+    requestClone,
+    env.REPLICATE_WEBHOOK_SECRET,
+  );
   if (!isValid) {
-    const errorMessage = 'Invalid webhook secret';
-    Sentry.captureMessage(errorMessage, 'error');
+    const errorMessage = "Invalid webhook secret";
+    Sentry.captureMessage(errorMessage, "error");
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
+  const userId = searchParams.get("userId");
   if (!userId) {
-    const errorMessage = 'Missing userId';
-    Sentry.captureMessage(errorMessage, 'error');
+    const errorMessage = "Missing userId";
+    Sentry.captureMessage(errorMessage, "error");
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
@@ -29,27 +32,27 @@ export async function POST(request: NextRequest) {
   });
   if (!userSettings) {
     const errorMessage = `User settings for user id ${userId} not found`;
-    Sentry.captureMessage(errorMessage, 'error');
+    Sentry.captureMessage(errorMessage, "error");
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
-  if (userSettings.modelStatus !== 'training') {
+  if (userSettings.modelStatus !== "training") {
     const errorMessage = `Expected model status: training, found: ${userSettings.modelStatus} for user id ${userId}`;
-    Sentry.captureMessage(errorMessage, 'error');
+    Sentry.captureMessage(errorMessage, "error");
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
-  const { status } = await request.json() as Training;
-  if (status === 'failed') {
+  const { status } = (await request.json()) as Training;
+  if (status === "failed") {
     const errorMessage = `Fine-tuning failed for user id: ${userId}`;
-    Sentry.captureMessage(errorMessage, 'error');
+    Sentry.captureMessage(errorMessage, "error");
     console.error(errorMessage);
     await createModel(userId, userSettings.zippedPhotosUrl);
     return NextResponse.json({ message: errorMessage });
   }
-  if (status !== 'succeeded') {
+  if (status !== "succeeded") {
     const errorMessage = `Fine-tuning failed: Unexpected status '${status}' for user id: ${userId}`;
-    Sentry.captureMessage(errorMessage, 'error');
+    Sentry.captureMessage(errorMessage, "error");
     console.error(errorMessage);
     return NextResponse.json({ message: errorMessage });
   }
@@ -66,11 +69,11 @@ export async function POST(request: NextRequest) {
   });
   await db.userSettings.update({
     where: { userId },
-    data: { modelStatus: 'ready' },
+    data: { modelStatus: "ready" },
   });
   await generateImages({
     userId,
     prompts,
-  })
-  return NextResponse.json({ message: 'Webhook received' });
+  });
+  return NextResponse.json({ message: "Webhook received" });
 }

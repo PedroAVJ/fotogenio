@@ -1,12 +1,12 @@
 import "server-only";
 
-import { db } from '@/lib/clients';
-import { Gender } from '@prisma/client';
+import { db } from "@/lib/clients";
+import { Gender } from "@prisma/client";
 
 const count = await db.prompt.count({
   where: {
     style: {
-      gender: Gender.female
+      gender: Gender.female,
     },
   },
 });

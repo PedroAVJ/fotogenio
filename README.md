@@ -1,6 +1,7 @@
 # Project Tasks
 
 ## To Do
+
 - Data modeling
   - Use cn utility where applicable
   - Apply the font globally instead of importing it in each component
@@ -17,4 +18,5 @@
   - Register site in Google Search Console
 
 ## User Questions
+
 - Should we show different example photos for men and women in the upload photos section?

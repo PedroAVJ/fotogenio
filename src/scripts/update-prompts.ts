@@ -1,9 +1,9 @@
 import "server-only";
 
-import OpenAI from 'openai';
-import { zodResponseFormat } from 'openai/helpers/zod';
-import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
+import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
+import { PrismaClient } from "@prisma/client";
 
 const db = new PrismaClient();
 
@@ -182,17 +182,17 @@ const main = async () => {
     i++;
     console.log(i);
     const completion = await openai.beta.chat.completions.parse({
-      model: 'gpt-4o-2024-08-06',
+      model: "gpt-4o-2024-08-06",
       messages: [
         {
-          role: 'system',
+          role: "system",
           content: systemPrompt,
         },
         {
-          role: 'user',
+          role: "user",
           content: [
             {
-              type: 'image_url',
+              type: "image_url",
               image_url: {
                 url: prompt.inpaintPhotoUrl,
               },
@@ -200,10 +200,10 @@ const main = async () => {
           ],
         },
       ],
-      response_format: zodResponseFormat(Prompt, 'prompt'),
+      response_format: zodResponseFormat(Prompt, "prompt"),
     });
 
-    const promptText = completion.choices[0]?.message.parsed?.description ?? '';
+    const promptText = completion.choices[0]?.message.parsed?.description ?? "";
     await db.prompt.update({
       where: {
         id: prompt.id,

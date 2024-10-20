@@ -1,19 +1,19 @@
-import '@/lib/global.css';
+import "@/lib/global.css";
 
-import { esMX } from '@clerk/localizations';
-import { ClerkProvider } from '@clerk/nextjs';
-import type { ReactNode } from 'react';
-import { Toaster } from "@/components/ui/sonner"
+import { esMX } from "@clerk/localizations";
+import { ClerkProvider } from "@clerk/nextjs";
+import type { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "@/app/api/uploadthing/core";
 
-import { QueryClientProvider } from './query-client-provider';
-import type { Metadata } from 'next'
+import { QueryClientProvider } from "./query-client-provider";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Fotogenio',
-}
+  title: "Fotogenio",
+};
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -21,9 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <ClerkProvider localization={esMX}>
         <body className="h-dvh w-dvw">
           <QueryClientProvider>
-            <NextSSRPlugin
-              routerConfig={extractRouterConfig(fileRouter)}
-            />
+            <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
             {children}
           </QueryClientProvider>
           <Toaster />

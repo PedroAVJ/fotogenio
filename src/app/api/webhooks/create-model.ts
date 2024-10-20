@@ -1,19 +1,15 @@
-import md5 from 'md5';
-import { replicate } from '@/lib/clients';
-import { Route } from 'next';
-import { baseUrl } from '@/lib/urls';
+import md5 from "md5";
+import { replicate } from "@/lib/clients";
+import { Route } from "next";
+import { baseUrl } from "@/lib/urls";
 
 export async function createModel(userId: string, zippedPhotosUrl: string) {
   const modelName = `flux-${md5(userId)}`;
-  const model = await replicate.models.create(
-    'pedroavj',
-    modelName,
-    {
-      visibility: 'private',
-      hardware: 'gpu-t4'
-    }
-  )
-  const url: Route = '/api/webhooks/replicate/fine-tune-completed'
+  const model = await replicate.models.create("pedroavj", modelName, {
+    visibility: "private",
+    hardware: "gpu-t4",
+  });
+  const url: Route = "/api/webhooks/replicate/fine-tune-completed";
   const webhook = `${baseUrl}${url}?userId=${userId}`;
   await replicate.trainings.create(
     "ostris",
@@ -22,7 +18,7 @@ export async function createModel(userId: string, zippedPhotosUrl: string) {
     {
       destination: `${model.owner}/${model.name}`,
       webhook,
-      webhook_events_filter: ['completed'],
+      webhook_events_filter: ["completed"],
       input: {
         steps: 1000,
         lora_rank: 16,
@@ -37,8 +33,8 @@ export async function createModel(userId: string, zippedPhotosUrl: string) {
         wandb_save_interval: 100,
         caption_dropout_rate: 0.05,
         cache_latents_to_disk: false,
-        wandb_sample_interval: 100
-      }
-    }
+        wandb_sample_interval: 100,
+      },
+    },
   );
 }

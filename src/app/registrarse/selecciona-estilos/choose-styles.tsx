@@ -1,39 +1,38 @@
-'use client'
+"use client";
 
-import { Work_Sans } from 'next/font/google'
-import { Button } from "@/components/ui/button"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
-import { Style } from '@prisma/client'
-import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs'
-import Link from 'next/link'
+import { Work_Sans } from "next/font/google";
+import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { Style } from "@prisma/client";
+import { useQueryState, parseAsArrayOf, parseAsString } from "nuqs";
+import Link from "next/link";
 
-const workSans = Work_Sans({ subsets: ['latin'] })
+const workSans = Work_Sans({ subsets: ["latin"] });
 
-export function ChooseStyles({
-  styles,
-}: {
-  styles: Style[]
-}) {
-  const [selectedStyles, setSelectedStyles] = useQueryState('styles', parseAsArrayOf(parseAsString).withDefault([]))
+export function ChooseStyles({ styles }: { styles: Style[] }) {
+  const [selectedStyles, setSelectedStyles] = useQueryState(
+    "styles",
+    parseAsArrayOf(parseAsString).withDefault([]),
+  );
   async function handleStyleChange(value: string[]) {
-    await setSelectedStyles(value)
+    await setSelectedStyles(value);
   }
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   return (
-    <main className={`
+    <main
+      className={`
       ${workSans.className}
       min-h-dvh w-full
       flex flex-col items-center justify-between
       px-2 pb-8 pt-4
       text-[#F5F5F5]
       bg-gradient-to-b from-[#534E4E] to-[#171717]
-    `}>
+    `}
+    >
       <div className="flex w-full space-x-2">
-        <h1 
-          className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]"
-        >
+        <h1 className="scroll-m-20 text-3xl tracking-tight lg:text-5xl flex size-16 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat font-semibold text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-size:100%_4px] [background-position:0_0,0_100%]">
           2
         </h1>
         <h3 className="scroll-m-20 text-xl tracking-tight flex grow justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 font-semibold [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-size:100%_4px] [background-position:0_0,0_100%]">
@@ -45,7 +44,7 @@ export function ChooseStyles({
           type="multiple"
           value={selectedStyles}
           onValueChange={function (value: string[]) {
-            void handleStyleChange(value)
+            void handleStyleChange(value);
           }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-[320px] md:max-w-4xl justify-items-center"
         >
@@ -73,8 +72,10 @@ export function ChooseStyles({
         className="flex w-36 font-semibold rounded-md text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:opacity-50 disabled:cursor-not-allowed"
         disabled={!selectedStyles}
       >
-        <Link href={`/registrarse/sube-tus-fotos?${searchParams.toString()}`}>Siguiente</Link>
+        <Link href={`/registrarse/sube-tus-fotos?${searchParams.toString()}`}>
+          Siguiente
+        </Link>
       </Button>
     </main>
-  )
+  );
 }
