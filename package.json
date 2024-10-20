@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbo",
-    "vercel:pull": "vercel env pull .env --environment=development",
+    "vercel:pull": "vercel env pull --environment=development",
     "db:push": "prisma db push",
+    "scripts": "dotenv -e .env.local -- tsx --conditions=react-server ./src/scripts/**.ts",
     "postinstall": "prisma generate",
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
@@ -36,7 +37,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^0.2.1",
-    "dotenv": "^16.4.5",
     "file-saver": "^2.0.5",
     "input-otp": "^1.2.4",
     "jiti": "^1.21.6",
