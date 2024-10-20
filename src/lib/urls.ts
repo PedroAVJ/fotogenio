@@ -14,7 +14,7 @@ function getBaseUrl() {
     }
     return `https://${env.VERCEL_BRANCH_URL}`;
   } else {
-    return 'http://localhost:3000';
+    throw new Error('Base URL is used for webhook processing. That means it cannot be used in development.');
   }
 }
 
