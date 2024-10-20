@@ -44,7 +44,7 @@ export function ChoosePaymentComponent({
               className="rounded-md object-cover"
             />
           </div>
-          <ArrowDown className="mb-2 h-8 w-8 text-purple-500" />
+          <ArrowDown className="mb-2 size-8 text-purple-500" />
           <p className="mb-4 text-xl font-semibold">
             <span className="text-purple-500">$99 pesos</span> por{" "}
             <span className="text-purple-500">25 fotos</span>

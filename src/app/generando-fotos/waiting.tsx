@@ -54,11 +54,11 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
         </h3>
       </div>
 
-      <div className="mx-auto flex w-full max-w-md flex-grow flex-col items-center">
+      <div className="mx-auto flex w-full max-w-md grow flex-col items-center">
         <h2 className="mb-4 text-center text-[20px] font-semibold tracking-[0.02em]">
           ¡Tus fotos se estan generando!
         </h2>
-        <div className="flex w-full max-w-md flex-grow items-center justify-center">
+        <div className="flex w-full max-w-md grow items-center justify-center">
           <Lottie animationData={animation} loop={true} />
         </div>
         <p className="mt-4 text-[12px] font-semibold leading-[20px] tracking-[0.02em]">

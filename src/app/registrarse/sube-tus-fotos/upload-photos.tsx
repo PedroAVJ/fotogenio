@@ -132,11 +132,11 @@ export function UploadPhotosComponent() {
                     className="h-32 w-24 rounded-md object-cover"
                   />
                   {placeholderImage.status === "rejected" ? (
-                    <div className="absolute -right-4 -top-4 flex h-8 w-8 items-center justify-center rounded-full border border-red-500">
+                    <div className="absolute -right-4 -top-4 flex size-8 items-center justify-center rounded-full border border-red-500">
                       <X className="text-red-500" size={20} />
                     </div>
                   ) : (
-                    <div className="absolute -right-4 -top-4 flex h-8 w-8 items-center justify-center rounded-full border border-green-500">
+                    <div className="absolute -right-4 -top-4 flex size-8 items-center justify-center rounded-full border border-green-500">
                       <Check className="text-green-500" size={20} />
                     </div>
                   )}
@@ -177,7 +177,7 @@ export function UploadPhotosComponent() {
           >
             {isUploading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 size-4 animate-spin" />
                 {loadingText()}
               </>
             ) : (

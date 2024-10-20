@@ -19,13 +19,13 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         custom:
-          "text-primary-foreground bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90",
+          "bg-gradient-to-r from-secondary to-primary text-primary-foreground hover:from-secondary/90 hover:to-primary/90",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        icon: "size-10",
       },
     },
     defaultVariants: {

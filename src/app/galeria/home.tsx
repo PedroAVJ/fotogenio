@@ -82,7 +82,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
           >
             <Link href="/nuevo-estilo">
               Generar Nuevas Fotos
-              <Camera className="ml-2 h-5 w-5" />
+              <Camera className="ml-2 size-5" />
             </Link>
           </Button>
           <div className="flex flex-col items-center gap-4">
@@ -155,9 +155,9 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                       onClick={function () {
                         void handleDownload(photoUrl ?? "", id);
                       }}
-                      className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-white"
+                      className="flex size-12 items-center justify-center rounded-full border-2 border-white"
                     >
-                      <ArrowDown className="h-6 w-6 text-white" />
+                      <ArrowDown className="size-6 text-white" />
                     </div>
                   </div>
                 </div>

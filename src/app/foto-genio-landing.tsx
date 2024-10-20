@@ -130,7 +130,7 @@ export function FotoGenioLandingComponent() {
     <main
       className={`h-screen w-full bg-gradient-to-b from-[#323133] to-[#4776E6] ${workSans.variable} font-sans`}
     >
-      <ScrollArea className="h-full w-full">
+      <ScrollArea className="size-full">
         <div className="flex flex-col items-center p-6">
           <div className="w-full">
             <h1 className="mb-8 text-[32px] font-bold leading-[38px] tracking-[0.02em]">
@@ -193,7 +193,7 @@ export function FotoGenioLandingComponent() {
               alt="Selfie de Santiago"
               className="h-[400px] w-[225px] rounded-lg object-cover"
             />
-            <ArrowDown className="h-8 w-8 text-[#8E54E9]" />
+            <ArrowDown className="size-8 text-[#8E54E9]" />
             <Image
               src={santiagoSuperman}
               alt="Santiago posando como superman"
@@ -204,7 +204,7 @@ export function FotoGenioLandingComponent() {
               alt="Selfie de Diana"
               className="h-[400px] w-[225px] rounded-lg object-cover"
             />
-            <ArrowDown className="h-8 w-8 text-[#8E54E9]" />
+            <ArrowDown className="size-8 text-[#8E54E9]" />
             <Image
               src={dianaVestidoBlanco}
               alt="Diana con vestido blanco"
@@ -220,7 +220,7 @@ export function FotoGenioLandingComponent() {
                 <Image
                   src={reseñaOscarGutierrez}
                   alt="Imagen de Oscar Gutiérrez para la reseña."
-                  className="mr-4 h-[45px] w-[45px] rounded-full object-cover object-top"
+                  className="mr-4 size-[45px] rounded-full object-cover object-top"
                 />
                 <p className="text-[14px] font-bold leading-[29px] tracking-[-0.2px] text-white">
                   Oscar Gutierrez
@@ -257,7 +257,7 @@ export function FotoGenioLandingComponent() {
               ))}
             </div>
           </div>
-          <ArrowDown className="mt-8 h-8 w-8 text-white" />
+          <ArrowDown className="mt-8 size-8 text-white" />
 
           <div className="mt-12 grid w-full max-w-2xl grid-cols-2 gap-4">
             {estilos.map((item, index) => (

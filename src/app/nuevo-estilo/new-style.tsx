@@ -56,20 +56,20 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
     <main
       className={` ${workSans.className} relative flex h-dvh w-dvw flex-col bg-gradient-to-b from-[#534E4E] to-[#171717] text-[#F5F5F5]`}
     >
-      <ScrollArea className="h-full w-full">
+      <ScrollArea className="size-full">
         <div className="px-2 pb-24 pt-4">
           <div className="mb-8 flex w-full flex-col items-center space-y-8">
-            <h3 className="flex w-11/12 scroll-m-20 justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 text-[20px] font-semibold leading-[102%] tracking-[0px] [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-position:0_0,0_100%] [background-size:100%_4px]">
+            <h3 className="flex w-11/12 scroll-m-20 justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 text-[20px] font-semibold leading-[102%] tracking-normal [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-position:0_0,0_100%] [background-size:100%_4px]">
               Escoge un Nuevo Estilo
             </h3>
-            <h3 className="inline-flex scroll-m-20 items-center justify-center space-x-4 rounded-lg border-x-4 border-l-white border-r-[#4776E6] bg-no-repeat px-6 py-4 text-[20px] font-semibold leading-[102%] tracking-[0px] [background-image:linear-gradient(90deg,white,#4776E6),linear-gradient(90deg,white,#4776E6)] [background-position:0_0,0_100%] [background-size:100%_4px]">
+            <h3 className="inline-flex scroll-m-20 items-center justify-center space-x-4 rounded-lg border-x-4 border-l-white border-r-[#4776E6] bg-no-repeat px-6 py-4 text-[20px] font-semibold leading-[102%] tracking-normal [background-image:linear-gradient(90deg,white,#4776E6),linear-gradient(90deg,white,#4776E6)] [background-position:0_0,0_100%] [background-size:100%_4px]">
               <Camera />
-              <span className="bg-gradient-to-b from-[#4776E6] to-white bg-clip-text text-[24px] font-semibold leading-[102%] tracking-[0px] text-transparent">
+              <span className="bg-gradient-to-b from-[#4776E6] to-white bg-clip-text text-[24px] font-semibold leading-[102%] tracking-normal text-transparent">
                 x {remainingCredits}
               </span>
               <Link
                 href="/comprar-creditos"
-                className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-[2px] border-white p-0.5"
+                className="flex size-5 cursor-pointer items-center justify-center rounded-full border-2 border-white p-0.5"
               >
                 <Plus size={12} strokeWidth={3} />
               </Link>
@@ -115,17 +115,17 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
           </div>
         </div>
       </ScrollArea>
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center p-4">
+      <div className="absolute inset-x-0 bottom-0 flex justify-center p-4">
         <Button
           size="lg"
-          className="w-48 rounded-[12px] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] text-[14px] font-semibold leading-[102%] tracking-[0px] text-[#F5F5F5] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-48 rounded-[12px] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] text-[14px] font-semibold leading-[102%] tracking-normal text-[#F5F5F5] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={selectedStyles.length === 0 || mutation.isPending}
           onClick={function () {
             mutation.mutate({ styleIds: selectedStyles });
           }}
         >
           {mutation.isPending ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="size-4 animate-spin" />
           ) : (
             "Generar imágenes"
           )}

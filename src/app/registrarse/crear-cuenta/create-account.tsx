@@ -20,7 +20,7 @@ export function CreateAccountComponent() {
           </h3>
         </div>
       </div>
-      <div className="flex w-56 max-w-md flex-grow flex-col items-center justify-center space-y-6">
+      <div className="flex w-56 max-w-md grow flex-col items-center justify-center space-y-6">
         <GoogleSignUpButton />
       </div>
     </main>
