@@ -111,7 +111,7 @@ export function FileUploader(props: FileUploaderProps) {
 
   const [files, setFiles] = useControllableState({
     prop: valueProp ?? [],
-    onChange: onValueChange ?? (() => {}),
+    onChange: onValueChange ?? (() => void 0),
   });
 
   const onDrop = React.useCallback(
