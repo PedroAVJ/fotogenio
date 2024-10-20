@@ -62,16 +62,11 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
 
   return (
     <main
-      className={`
-      ${workSans.className}
-      h-screen w-full
-      text-[#F5F5F5]
-      bg-gradient-to-b from-[#534E4E] to-[#171717]
-    `}
+      className={` ${workSans.className} h-screen w-full bg-gradient-to-b from-[#534E4E] to-[#171717] text-[#F5F5F5]`}
     >
       <ScrollArea className="h-full">
         <div className="flex flex-col items-center px-2 pb-8 pt-4">
-          <h3 className="scroll-m-20 text-[20px] leading-normal tracking-[0.02em] text-center flex items-center justify-center p-4 font-semibold">
+          <h3 className="flex scroll-m-20 items-center justify-center p-4 text-center text-[20px] font-semibold leading-normal tracking-[0.02em]">
             <span className="inline-block">
               ¡Puedes generar{" "}
               <span className="inline-block bg-gradient-to-b from-[#8E54E9] to-white bg-clip-text text-transparent">
@@ -83,11 +78,11 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
           <Button
             asChild
             size="lg"
-            className="flex items-center justify-center gap-2 px-4 py-2 mb-8 rounded-xl text-[#F5F5F5] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 text-[14px] leading-[12px] tracking-[0.02em] font-semibold"
+            className="mb-8 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#4776E6] to-[#8E54E9] px-4 py-2 text-[14px] font-semibold leading-[12px] tracking-[0.02em] text-[#F5F5F5] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90"
           >
             <Link href="/nuevo-estilo">
               Generar Nuevas Fotos
-              <Camera className="w-5 h-5 ml-2" />
+              <Camera className="ml-2 h-5 w-5" />
             </Link>
           </Button>
           <div className="flex flex-col items-center gap-4">
@@ -95,7 +90,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
               ({ photoUrl, feedback, id }, index) => (
                 <div
                   key={id}
-                  className="relative w-[303px] h-[420px] rounded-[10px] overflow-hidden group cursor-pointer"
+                  className="group relative h-[420px] w-[303px] cursor-pointer overflow-hidden rounded-[10px]"
                   onTouchStart={function () {
                     handleTouchStart(id);
                   }}
@@ -106,11 +101,11 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     alt={`Generated image ${id}`}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover rounded-[10px]"
+                    className="rounded-[10px] object-cover"
                     priority={index < 2}
                   />
                   {/* Add the thumbs up and down icons */}
-                  <div className="absolute bottom-2 right-2 flex space-x-2 z-10">
+                  <div className="absolute bottom-2 right-2 z-10 flex space-x-2">
                     <Button
                       size="icon"
                       type="button"
@@ -147,22 +142,22 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     </Button>
                   </div>
                   <div
-                    className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center transition-opacity duration-300 ${
+                    className={`absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
                       touchedId === id
                         ? "opacity-100"
                         : "opacity-0 group-hover:opacity-100"
                     }`}
                   >
-                    <p className="text-white text-lg font-semibold mb-4">
+                    <p className="mb-4 text-lg font-semibold text-white">
                       ¡Descarga tus fotos!
                     </p>
                     <div
                       onClick={function () {
                         void handleDownload(photoUrl ?? "", id);
                       }}
-                      className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center"
+                      className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-white"
                     >
-                      <ArrowDown className="text-white w-6 h-6" />
+                      <ArrowDown className="h-6 w-6 text-white" />
                     </div>
                   </div>
                 </div>

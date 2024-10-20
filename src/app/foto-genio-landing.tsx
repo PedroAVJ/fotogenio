@@ -133,19 +133,19 @@ export function FotoGenioLandingComponent() {
       <ScrollArea className="h-full w-full">
         <div className="flex flex-col items-center p-6">
           <div className="w-full">
-            <h1 className="text-[32px] font-bold leading-[38px] tracking-[0.02em] mb-8">
+            <h1 className="mb-8 text-[32px] font-bold leading-[38px] tracking-[0.02em]">
               <span className="mr-2">📸</span>
               <span className="text-white">Foto</span>
               <span className="text-[#007AFF]">Genio</span>
               <span className="ml-2">🧞‍♀️</span>
             </h1>
           </div>
-          <div className="text-center max-w-md mx-auto mb-12">
+          <div className="mx-auto mb-12 max-w-md text-center">
             <p className="text-[32px] font-semibold leading-[30px] tracking-[0.02em] text-white">
               Conviértete en tus
             </p>
             <p className="text-[32px] font-semibold leading-[30px] tracking-[0.02em]">
-              <span className="inline-block bg-gradient-to-r from-[#8E54E9] to-[#F5F5F5] text-transparent bg-clip-text">
+              <span className="inline-block bg-gradient-to-r from-[#8E54E9] to-[#F5F5F5] bg-clip-text text-transparent">
                 personajes
               </span>
             </p>
@@ -153,7 +153,7 @@ export function FotoGenioLandingComponent() {
               favoritos!
             </p>
           </div>
-          <div className="w-full max-w-[495px] space-y-4 mb-8">
+          <div className="mb-8 w-full max-w-[495px] space-y-4">
             <div className="grid grid-cols-3 gap-4">
               {personajesFavoritos.slice(0, 3).map((personaje, index) => (
                 <Image
@@ -161,7 +161,7 @@ export function FotoGenioLandingComponent() {
                   src={personaje.photo}
                   alt={personaje.alternativeText}
                   priority
-                  className="rounded-lg object-cover w-[155px] h-[226px]"
+                  className="h-[226px] w-[155px] rounded-lg object-cover"
                 />
               ))}
             </div>
@@ -172,69 +172,69 @@ export function FotoGenioLandingComponent() {
                   src={personaje.photo}
                   alt={personaje.alternativeText}
                   priority
-                  className="rounded-lg object-cover w-[155px] h-[226px]"
+                  className="h-[226px] w-[155px] rounded-lg object-cover"
                 />
               ))}
             </div>
           </div>
           <Button
-            className="bg-gradient-to-r from-[#4776E6] to-[#8E54E9] text-white font-semibold text-[20px] leading-[12px] tracking-[0.02em] rounded-[12px] hover:opacity-90 transition-opacity duration-300 py-6 px-12"
+            className="rounded-[12px] bg-gradient-to-r from-[#4776E6] to-[#8E54E9] px-12 py-6 text-[20px] font-semibold leading-[12px] tracking-[0.02em] text-white transition-opacity duration-300 hover:opacity-90"
             size="lg"
             asChild
           >
             <Link href="/registrarse/selecciona-genero">¡Empieza Ahora!</Link>
           </Button>
-          <p className="text-white text-[20px] font-normal leading-[25px] tracking-[0.02em] mt-4 mb-8 text-center w-full">
+          <p className="mb-8 mt-4 w-full text-center text-[20px] font-normal leading-[25px] tracking-[0.02em] text-white">
             Creamos fotos de ti usando inteligencia artificial.
           </p>
-          <div className="flex flex-col items-center space-y-4 w-full max-w-md">
+          <div className="flex w-full max-w-md flex-col items-center space-y-4">
             <Image
               src={santiago}
               alt="Selfie de Santiago"
-              className="rounded-lg w-[225px] h-[400px] object-cover"
+              className="h-[400px] w-[225px] rounded-lg object-cover"
             />
-            <ArrowDown className="text-[#8E54E9] w-8 h-8" />
+            <ArrowDown className="h-8 w-8 text-[#8E54E9]" />
             <Image
               src={santiagoSuperman}
               alt="Santiago posando como superman"
-              className="rounded-lg w-[225px] h-[400px] object-cover"
+              className="h-[400px] w-[225px] rounded-lg object-cover"
             />
             <Image
               src={diana}
               alt="Selfie de Diana"
-              className="rounded-lg w-[225px] h-[400px] object-cover"
+              className="h-[400px] w-[225px] rounded-lg object-cover"
             />
-            <ArrowDown className="text-[#8E54E9] w-8 h-8" />
+            <ArrowDown className="h-8 w-8 text-[#8E54E9]" />
             <Image
               src={dianaVestidoBlanco}
               alt="Diana con vestido blanco"
-              className="rounded-lg w-[225px] h-[400px] object-cover"
+              className="h-[400px] w-[225px] rounded-lg object-cover"
             />
           </div>
-          <div className="w-full max-w-md mt-12">
+          <div className="mt-12 w-full max-w-md">
             <div className="rounded-lg p-6">
-              <p className="text-white text-2xl font-semibold mb-4 text-center">
+              <p className="mb-4 text-center text-2xl font-semibold text-white">
                 &ldquo;Ahora tengo las mejores fotos para redes sociales&rdquo;
               </p>
               <div className="flex items-center justify-center">
                 <Image
                   src={reseñaOscarGutierrez}
                   alt="Imagen de Oscar Gutiérrez para la reseña."
-                  className="rounded-full mr-4 w-[45px] h-[45px] object-cover object-top"
+                  className="mr-4 h-[45px] w-[45px] rounded-full object-cover object-top"
                 />
-                <p className="text-white font-bold text-[14px] leading-[29px] tracking-[-0.2px]">
+                <p className="text-[14px] font-bold leading-[29px] tracking-[-0.2px] text-white">
                   Oscar Gutierrez
                 </p>
               </div>
             </div>
           </div>
-          <div className="w-full max-w-md mt-12 rounded-lg p-6">
-            <h2 className="text-[32px] font-semibold leading-[30px] tracking-[0.02em] text-center bg-gradient-to-r from-[#8E55E9] to-white text-transparent bg-clip-text">
+          <div className="mt-12 w-full max-w-md rounded-lg p-6">
+            <h2 className="bg-gradient-to-r from-[#8E55E9] to-white bg-clip-text text-center text-[32px] font-semibold leading-[30px] tracking-[0.02em] text-transparent">
               Sube tus fotos y se los siguientes estilos
             </h2>
           </div>
-          <div className="flex justify-center items-end w-full max-w-md h-40 mt-12">
-            <div className="relative w-[120px] h-[114px]">
+          <div className="mt-12 flex h-40 w-full max-w-md items-end justify-center">
+            <div className="relative h-[114px] w-[120px]">
               {rotatedPhotos.map((style, index) => (
                 <div
                   key={index}
@@ -251,35 +251,35 @@ export function FotoGenioLandingComponent() {
                   <Image
                     src={style.photo}
                     alt={style.alternativeText}
-                    className="rounded-lg object-cover w-[100px] h-[114px]"
+                    className="h-[114px] w-[100px] rounded-lg object-cover"
                   />
                 </div>
               ))}
             </div>
           </div>
-          <ArrowDown className="text-white w-8 h-8 mt-8" />
+          <ArrowDown className="mt-8 h-8 w-8 text-white" />
 
-          <div className="w-full max-w-2xl mt-12 grid grid-cols-2 gap-4">
+          <div className="mt-12 grid w-full max-w-2xl grid-cols-2 gap-4">
             {estilos.map((item, index) => (
               <div key={index} className="flex flex-col items-center">
                 <Image
                   src={item.src}
                   alt={item.alt}
-                  className="rounded-lg object-cover w-[155px] h-[226px]"
+                  className="h-[226px] w-[155px] rounded-lg object-cover"
                 />
-                <p className="text-white text-[20px] font-normal leading-[25px] tracking-[0.02em] mt-2 font-work-sans">
+                <p className="font-work-sans mt-2 text-[20px] font-normal leading-[25px] tracking-[0.02em] text-white">
                   {item.label} {item.emoji}
                 </p>
               </div>
             ))}
           </div>
 
-          <p className="text-white text-[20px] font-normal leading-[25px] tracking-[0.02em] mt-8 font-work-sans">
+          <p className="font-work-sans mt-8 text-[20px] font-normal leading-[25px] tracking-[0.02em] text-white">
             ¡Y muchos más!
           </p>
 
           <Button
-            className="bg-gradient-to-r from-[#C9BDDC] to-[#8E55E9] text-white font-bold text-[20px] leading-[12px] tracking-[0.02em] rounded-[12px] hover:opacity-90 transition-opacity duration-300 mt-8 py-6 px-12 mb-[60px]"
+            className="mb-[60px] mt-8 rounded-[12px] bg-gradient-to-r from-[#C9BDDC] to-[#8E55E9] px-12 py-6 text-[20px] font-bold leading-[12px] tracking-[0.02em] text-white transition-opacity duration-300 hover:opacity-90"
             size="lg"
             asChild
           >
