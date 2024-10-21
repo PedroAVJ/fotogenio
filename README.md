@@ -2,6 +2,7 @@
 
 ## To Do
 
+- Change to syncronous prediction creation
 - Data modeling
   - Use cn utility where applicable
   - Apply the font globally instead of importing it in each component
