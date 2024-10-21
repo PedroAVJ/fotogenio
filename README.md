@@ -2,8 +2,11 @@
 
 ## To Do
 
-- Change to syncronous prediction creation
 - Data modeling
+  - Use clerk elements instead of custom components
+  - Use session claims instead of saving data in database
+  - Change to syncronous account creation
+  - Change to syncronous prediction creation
   - Use cn utility where applicable
   - Apply the font globally instead of importing it in each component
   - Use variants instead of copying the code everywhere
