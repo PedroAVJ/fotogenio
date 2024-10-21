@@ -7,8 +7,6 @@
   - Apply the font globally instead of importing it in each component
   - Use variants instead of copying the code everywhere
   - Figure out why the setZippedPhotosUrl query state is not being set before redirecting to create account
-- Eslint
-- Prettier
 - Curate style selections for each gender
 - Stripe
   - Change colors for stripe embedded checkout

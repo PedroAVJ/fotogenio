@@ -56,9 +56,13 @@ export async function generateImages({
   if (!version) {
     throw new Error("No version found for model");
   }
-  await Promise.all(
-    generatedPhotos.map((prompt) =>
-      generateImage(prompt, modelName, version, seed),
-    ),
-  );
+
+  // Process in batches of 10
+  const batchSize = 10;
+  for (let i = 0; i < generatedPhotos.length; i += batchSize) {
+    const batch = generatedPhotos.slice(i, i + batchSize);
+    await Promise.all(
+      batch.map((prompt) => generateImage(prompt, modelName, version, seed)),
+    );
+  }
 }
