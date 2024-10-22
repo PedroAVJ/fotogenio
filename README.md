@@ -4,6 +4,8 @@
 
 - Data modeling
   - Upgrade to Next.js 15
+  - Upgrade to eslint 9
+  - Use special react linter for react compiler
   - Use react query everywhere applicable with sentry error handling
   - Use clerk elements instead of custom components
   - Use session claims instead of saving data in database
