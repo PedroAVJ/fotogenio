@@ -3,6 +3,7 @@
 ## To Do
 
 - Data modeling
+  - Upgrade to Next.js 15
   - Use clerk elements instead of custom components
   - Use session claims instead of saving data in database
   - Change to syncronous account creation
