@@ -9,9 +9,10 @@ import { Camera, ArrowDown } from "lucide-react";
 import Image from "next/image";
 import { Feedback, GeneratedPhoto } from "@prisma/client";
 import { saveAs } from "file-saver";
-import { v4 as uuidv4 } from "uuid";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { saveFeedback, saveDownload } from "./api";
+import { toast } from "sonner";
+import * as Sentry from "@sentry/nextjs";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -44,12 +45,22 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
   }
   const [touchedId, setTouchedId] = useState<string | null>(null);
 
-  async function handleDownload(url: string, generatedPhotoId: string) {
+  function handleDownload(url: string, generatedPhotoId: string) {
     void saveDownload(generatedPhotoId);
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const fileName = `${uuidv4()}.png`;
-    saveAs(blob, fileName);
+    try {
+      saveAs(url);
+    } catch (error) {
+      Sentry.captureException(error, {
+        extra: {
+          generatedPhotoId,
+          url,
+        },
+      });
+      toast.error(
+        "Ocurrió un error al descargar la foto. Por favor, intenta de nuevo.",
+      );
+      return;
+    }
   }
 
   const handleTouchStart = (id: string) => {
@@ -153,7 +164,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
                     </p>
                     <div
                       onClick={function () {
-                        void handleDownload(photoUrl ?? "", id);
+                        handleDownload(photoUrl ?? "", id);
                       }}
                       className="flex size-12 items-center justify-center rounded-full border-2 border-white"
                     >
