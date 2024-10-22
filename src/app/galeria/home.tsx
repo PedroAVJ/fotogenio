@@ -13,6 +13,7 @@ import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { saveFeedback, saveDownload } from "./api";
 import { toast } from "sonner";
 import * as Sentry from "@sentry/nextjs";
+import { useMutation } from "@tanstack/react-query";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -45,8 +46,18 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
   }
   const [touchedId, setTouchedId] = useState<string | null>(null);
 
+  const downloadMutation = useMutation({
+    mutationFn: saveDownload,
+    onError: (error, generatedPhotoId) => {
+      Sentry.captureException(error, {
+        extra: {
+          generatedPhotoId,
+        },
+      });
+    },
+  });
   function handleDownload(url: string, generatedPhotoId: string) {
-    void saveDownload(generatedPhotoId);
+    downloadMutation.mutate(generatedPhotoId);
     try {
       saveAs(url);
     } catch (error) {
