@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     const errorMessage = `Fine-tuning failed for user id: ${userId}`;
     Sentry.captureMessage(errorMessage, "error");
     console.error(errorMessage);
-    await createModel(userId, userSettings.zippedPhotosUrl);
+    await createModel(userId, userSettings.zippedPhotosUrl, true);
     return NextResponse.json({ message: errorMessage });
   }
   if (status !== "succeeded") {

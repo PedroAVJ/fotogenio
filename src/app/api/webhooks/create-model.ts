@@ -3,12 +3,21 @@ import { replicate } from "@/lib/clients";
 import { Route } from "next";
 import { baseUrl } from "@/lib/urls";
 
-export async function createModel(userId: string, zippedPhotosUrl: string) {
+export async function createModel(
+  userId: string,
+  zippedPhotosUrl: string,
+  modelAlreadyExists = false,
+) {
   const modelName = `flux-${md5(userId)}`;
-  const model = await replicate.models.create("pedroavj", modelName, {
-    visibility: "private",
-    hardware: "gpu-t4",
-  });
+  let model;
+  if (modelAlreadyExists) {
+    model = await replicate.models.get("pedroavj", modelName);
+  } else {
+    model = await replicate.models.create("pedroavj", modelName, {
+      visibility: "private",
+      hardware: "gpu-t4",
+    });
+  }
   const url: Route = "/api/webhooks/replicate/fine-tune-completed";
   const webhook = `${baseUrl}${url}?userId=${userId}`;
   await replicate.trainings.create(
