@@ -15,6 +15,7 @@
   - Use variants instead of copying the code everywhere
   - Figure out why the setZippedPhotosUrl query state is not being set before redirecting to create account
 - Curate style selections for each gender
+- Add all sentry integrations
 - Stripe
   - Change colors for stripe embedded checkout
   - Remove unused payment methods
