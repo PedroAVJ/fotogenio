@@ -17,6 +17,9 @@ Sentry.init({
 
   // Add optional integrations for additional features
   integrations: [
+    Sentry.captureConsoleIntegration({
+      levels: ["error"],
+    }),
     Sentry.replayIntegration({
       maskAllText: false,
       blockAllMedia: false,
