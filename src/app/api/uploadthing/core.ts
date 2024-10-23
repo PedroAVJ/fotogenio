@@ -2,6 +2,7 @@ import {
   createUploadthing,
   type FileRouter as UploadThingFileRouter,
 } from "uploadthing/next";
+import { captionImage } from "./caption-image";
 
 const f = createUploadthing();
 
@@ -11,10 +12,18 @@ export const fileRouter = {
   }).onUploadComplete(() => {
     return {};
   }),
-  subirFotos: f({
-    image: { maxFileSize: "8MB", maxFileCount: 20, minFileCount: 12 },
-  }).onUploadComplete(() => {
-    return {};
+  subirFotos: f(
+    {
+      image: { maxFileSize: "8MB", maxFileCount: 20, minFileCount: 12 },
+    },
+    {
+      awaitServerData: true,
+    },
+  ).onUploadComplete(async ({ file: { appUrl } }) => {
+    const caption = await captionImage(appUrl);
+    return {
+      caption,
+    };
   }),
 } satisfies UploadThingFileRouter;
 

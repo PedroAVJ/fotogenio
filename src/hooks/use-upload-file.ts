@@ -8,14 +8,18 @@ import { type FileRouter } from "@/app/api/uploadthing/core";
 
 import { type ClientUploadedFileData } from "uploadthing/types";
 
-export type UploadedFile<T = unknown> = ClientUploadedFileData<T>;
+export type UploadedFile<T> = ClientUploadedFileData<T>;
+
+interface Caption {
+  caption: string;
+}
 
 interface UseUploadFileProps
   extends Pick<
     UploadFilesOptions<FileRouter, keyof FileRouter>,
     "headers" | "onUploadBegin" | "onUploadProgress" | "skipPolling"
   > {
-  defaultUploadedFiles?: UploadedFile[];
+  defaultUploadedFiles?: UploadedFile<Caption>[];
 }
 
 export function useUploadFile(
@@ -23,7 +27,7 @@ export function useUploadFile(
   { defaultUploadedFiles = [], ...props }: UseUploadFileProps = {},
 ) {
   const [uploadedFiles, setUploadedFiles] =
-    React.useState<UploadedFile[]>(defaultUploadedFiles);
+    React.useState<UploadedFile<Caption>[]>(defaultUploadedFiles);
   const [progresses, setProgresses] = React.useState<Record<string, number>>(
     {},
   );
@@ -45,7 +49,10 @@ export function useUploadFile(
         },
       });
 
-      setUploadedFiles((prev) => [...prev, ...res]);
+      setUploadedFiles((prev) => [
+        ...prev,
+        ...(res as UploadedFile<Caption>[]),
+      ]);
     } catch (err) {
       toast.error(getErrorMessage(err));
     } finally {

@@ -41,28 +41,21 @@ import * as Sentry from "@sentry/nextjs";
 
 const trpc = initTRPC.create();
 
-const middleware = trpc.middleware;
-
-const sentryMiddleware = middleware(
-  Sentry.trpcMiddleware({
-    attachRpcInput: true,
-  }),
-);
-
-const authMiddleware = middleware(async (opts) => {
-  const session = auth().protect();
-  return opts.next({
-    ctx: {
-      session,
-    },
-  });
-});
-
-export const unprotectedApi = trpc.procedure
+export const api = trpc.procedure
   .experimental_caller(experimental_nextAppDirCaller({}))
-  .use(sentryMiddleware);
-
-export const api = unprotectedApi.use(authMiddleware);
+  .use(
+    Sentry.trpcMiddleware({
+      attachRpcInput: true,
+    }),
+  )
+  .use(async (opts) => {
+    const session = auth().protect();
+    return opts.next({
+      ctx: {
+        session,
+      },
+    });
+  });
 
 /* Uploadthing client */
 import { UTApi } from "uploadthing/server";
