@@ -11,6 +11,11 @@ export const fileRouter = {
   }).onUploadComplete(() => {
     return {};
   }),
+  subirFotos: f({
+    image: { maxFileSize: "8MB", maxFileCount: 20, minFileCount: 12 },
+  }).onUploadComplete(() => {
+    return {};
+  }),
 } satisfies UploadThingFileRouter;
 
 export type FileRouter = typeof fileRouter;

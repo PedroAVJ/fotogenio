@@ -1,6 +1,6 @@
 "use server";
 
-import { api } from "@/lib/clients";
+import { unprotectedApi } from "@/lib/clients";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
@@ -23,14 +23,12 @@ Whenever refering to the person, use the word "TOK". This is extremely important
 Do not break this rule.
 `;
 
-export const captionImages = api
+export const captionImages = unprotectedApi
   .input(z.object({ photoUrls: z.array(z.string()) }))
   .mutation(async ({ input: { photoUrls } }) => {
-    const captions: string[] = [];
-
-    for (const photoUrl of photoUrls) {
+    const captionPromises = photoUrls.map(async (photoUrl) => {
       const completion = await openai.beta.chat.completions.parse({
-        model: "gpt-4-vision-preview",
+        model: "gpt-4o-2024-08-06",
         messages: [
           {
             role: "system",
@@ -51,12 +49,9 @@ export const captionImages = api
         response_format: zodResponseFormat(Prompt, "prompt"),
       });
 
-      const caption = completion.choices[0]?.message.parsed?.description ?? "";
-      captions.push(caption);
+      return completion.choices[0]?.message.parsed?.description ?? "";
+    });
 
-      // Add a delay to avoid rate limiting
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-
+    const captions = await Promise.all(captionPromises);
     return captions;
   });

@@ -6,8 +6,6 @@ import { X, Check, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { FileUploader } from "@/components/ui/file-uploader";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { uploadFiles } from "@/lib/uploadthing";
-import { useState } from "react";
 import JSZip from "jszip";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,6 +20,10 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { captionImages } from "./caption-images";
+import { useUploadFile } from "@/hooks/use-upload-file";
+import { Route } from "next";
+import { useMutation } from "@tanstack/react-query";
 
 const workSans = Work_Sans({ subsets: ["latin"] });
 
@@ -66,43 +68,59 @@ export function UploadPhotosComponent() {
     },
     mode: "onChange",
   });
-  const photos = form.watch("photos");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isUploading, setIsUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const subirFotos = useUploadFile("subirFotos", { defaultUploadedFiles: [] });
+  const subirZip = useUploadFile("subirZip", { defaultUploadedFiles: [] });
+  function handleSubmit() {
+    mutation.mutate();
+  }
+  const mutation = useMutation({
+    mutationFn: handleUpload,
+  });
   function loadingText() {
+    const progress = subirFotos.progresses["uploaded_photos.zip"];
     if (!progress) {
-      return "Preparando fotos...";
+      return "Subtitulando...";
     }
     return `Subiendo... ${progress.toString()}%`;
   }
   async function handleUpload() {
+    const captions = await captionImages({
+      photoUrls: subirFotos.uploadedFiles.map((file) => file.appUrl),
+    });
+    const txtFiles = captions.map((caption, index) => {
+      const file = new File(
+        [caption],
+        `${subirFotos.uploadedFiles[index]?.name ?? "foto"}.txt`,
+        {
+          type: "text/plain",
+        },
+      );
+      return file;
+    });
     const zip = new JSZip();
-    for (const file of photos) {
+    for (const file of form.getValues("photos")) {
+      zip.file(file.name, file);
+    }
+    for (const file of txtFiles) {
       zip.file(file.name, file);
     }
     const content = await zip.generateAsync({ type: "arraybuffer" });
     const zippedPhotos = new File([content], "uploaded_photos.zip", {
       type: "application/zip",
     });
-    setIsUploading(true);
-    const uploadedFiles = await uploadFiles("subirZip", {
-      files: [zippedPhotos],
-      onUploadProgress: function ({ progress }) {
-        setProgress(progress);
-      },
-    });
-    const uploadedZip = uploadedFiles[0];
+    await subirZip.onUpload([zippedPhotos]);
+    const uploadedZip = subirZip.uploadedFiles[0];
     if (!uploadedZip) {
       Sentry.captureMessage("No zip file uploaded", "error");
       toast.error("Las fotos no se pudieron subir");
     } else {
       const params = new URLSearchParams(searchParams.toString());
       params.set("zippedPhotosUrl", uploadedZip.appUrl);
-      router.push(`/registrarse/crear-cuenta?${params.toString()}`);
+      const url: Route = "/registrarse/crear-cuenta";
+      router.push(`${url}?${params.toString()}`);
     }
-    setIsUploading(false);
   }
   return (
     <ScrollArea>
@@ -153,11 +171,16 @@ export function UploadPhotosComponent() {
                       onValueChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      disabled={disabled ?? false}
+                      disabled={
+                        disabled ??
+                        (subirFotos.isUploading || mutation.isPending)
+                      }
                       accept={{
                         "image/jpeg": [".jpg", ".jpeg"],
                         "image/png": [".png"],
                       }}
+                      progresses={subirFotos.progresses}
+                      onUpload={subirFotos.onUpload}
                       maxFileCount={20}
                       maxSize={8 * 1024 * 1024}
                     />
@@ -170,12 +193,16 @@ export function UploadPhotosComponent() {
           <Button
             size="lg"
             className="flex w-36 rounded-md bg-gradient-to-r from-[#4776E6] to-[#8E54E9] font-semibold text-[#F5F5F5] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={!form.formState.isValid || isUploading}
-            onClick={function () {
-              void form.handleSubmit(handleUpload)();
+            disabled={
+              !form.formState.isValid ||
+              subirFotos.isUploading ||
+              mutation.isPending
+            }
+            onClick={() => {
+              void form.handleSubmit(handleSubmit)();
             }}
           >
-            {isUploading ? (
+            {mutation.isPending ? (
               <>
                 <Loader2 className="mr-2 size-4 animate-spin" />
                 {loadingText()}
