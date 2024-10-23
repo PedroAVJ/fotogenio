@@ -15,6 +15,14 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+import { type ClientUploadedFileData } from "uploadthing/types";
+
+type UploadedFile<T> = ClientUploadedFileData<T>;
+
+interface Caption {
+  caption: string;
+}
+
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Value of the uploader.
@@ -34,11 +42,11 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
   /**
    * Function to be called when files are uploaded.
-   * @type (files: File[]) => Promise<void>
+   * @type (files: File[]) => Promise<UploadedFile<Caption>[]>
    * @default undefined
    * @example onUpload={(files) => uploadFiles(files)}
    */
-  onUpload?: (files: File[]) => Promise<void>;
+  onUpload?: (files: File[]) => Promise<UploadedFile<Caption>[]>;
 
   /**
    * Progress of the uploaded files.
@@ -160,7 +168,7 @@ export function FileUploader(props: FileUploaderProps) {
             : `archivo`;
 
         toast.promise(onUpload(updatedFiles), {
-          loading: `Subiendo ${target}...`,
+          loading: toastText(progresses),
           success: () => {
             return updatedFiles.length > 0 ? `${target} subidos` : `subido`;
           },
@@ -170,7 +178,7 @@ export function FileUploader(props: FileUploaderProps) {
       }
     },
 
-    [files, maxFileCount, multiple, onUpload, setFiles],
+    [files, maxFileCount, multiple, onUpload, setFiles, progresses],
   );
 
   function onRemove(index: number) {
@@ -274,6 +282,15 @@ export function FileUploader(props: FileUploaderProps) {
       ) : null}
     </div>
   );
+}
+
+function toastText(progresses: Record<string, number> | undefined) {
+  if (!progresses) return "Subiendo...";
+  if (Object.keys(progresses).length === 0) return "Subiendo...";
+  const allProgressesComplete = Object.values(progresses).every(
+    (progress) => progress === 100,
+  );
+  return allProgressesComplete ? "Subtitulando..." : "Subiendo...";
 }
 
 interface FileCardProps {

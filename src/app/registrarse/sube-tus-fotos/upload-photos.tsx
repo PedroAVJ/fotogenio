@@ -20,10 +20,11 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { captionImages } from "./caption-images";
 import { useUploadFile } from "@/hooks/use-upload-file";
 import { Route } from "next";
 import { useMutation } from "@tanstack/react-query";
+import { uploadFiles } from "@/lib/uploadthing";
+import { useState } from "react";
 
 const workSans = Work_Sans({ subsets: ["latin"] });
 
@@ -71,7 +72,7 @@ export function UploadPhotosComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const subirFotos = useUploadFile("subirFotos", { defaultUploadedFiles: [] });
-  const subirZip = useUploadFile("subirZip", { defaultUploadedFiles: [] });
+  const [progress, setProgress] = useState<number | null>(null);
   function handleSubmit() {
     mutation.mutate();
   }
@@ -79,25 +80,30 @@ export function UploadPhotosComponent() {
     mutationFn: handleUpload,
   });
   function loadingText() {
-    const progress = subirFotos.progresses["uploaded_photos.zip"];
     if (!progress) {
-      return "Subtitulando...";
+      return "Comprimiendo...";
     }
     return `Subiendo... ${progress.toString()}%`;
   }
   async function handleUpload() {
-    const captions = await captionImages({
-      photoUrls: subirFotos.uploadedFiles.map((file) => file.appUrl),
-    });
-    const txtFiles = captions.map((caption, index) => {
-      const file = new File(
-        [caption],
-        `${subirFotos.uploadedFiles[index]?.name ?? "foto"}.txt`,
-        {
-          type: "text/plain",
-        },
-      );
-      return file;
+    const photos = form.getValues("photos");
+    const txtFiles = subirFotos.uploadedFiles.map((file, index) => {
+      const photoName = photos[index]?.name;
+      if (photoName !== file.name) {
+        Sentry.captureMessage("Photo name mismatch", {
+          extra: {
+            photoName,
+            fileName: file.name,
+            formPhotosLength: photos.length,
+            uploadedFilesLength: subirFotos.uploadedFiles.length,
+          },
+        });
+        toast.error("Hubo un error al subir tus fotos");
+      }
+      const txtFile = new File([file.serverData.caption], `${file.name}.txt`, {
+        type: "text/plain",
+      });
+      return txtFile;
     });
     const zip = new JSZip();
     for (const file of form.getValues("photos")) {
@@ -110,8 +116,13 @@ export function UploadPhotosComponent() {
     const zippedPhotos = new File([content], "uploaded_photos.zip", {
       type: "application/zip",
     });
-    await subirZip.onUpload([zippedPhotos]);
-    const uploadedZip = subirZip.uploadedFiles[0];
+    const uploadedFiles = await uploadFiles("subirZip", {
+      files: [zippedPhotos],
+      onUploadProgress: ({ progress }) => {
+        setProgress(progress);
+      },
+    });
+    const uploadedZip = uploadedFiles[0];
     if (!uploadedZip) {
       Sentry.captureMessage("No zip file uploaded", "error");
       toast.error("Las fotos no se pudieron subir");

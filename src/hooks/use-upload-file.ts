@@ -53,12 +53,14 @@ export function useUploadFile(
         ...prev,
         ...(res as UploadedFile<Caption>[]),
       ]);
+      return uploadedFiles;
     } catch (err) {
       toast.error(getErrorMessage(err));
     } finally {
       setProgresses({});
       setIsUploading(false);
     }
+    return [];
   }
 
   return {
