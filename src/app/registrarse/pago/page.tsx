@@ -1,12 +1,12 @@
 import { stripe, db } from "@/lib/clients";
 import { env } from "@/lib/env";
 import { baseUrl } from "@/lib/urls";
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { ChoosePaymentComponent } from "@/app/choose-payment";
 import * as Sentry from "@sentry/nextjs";
-import { clerkClient } from "@clerk/nextjs/server";
 import { searchParamsCache } from "./searchParams";
 import { Route } from "next";
+import { redirect } from "next/navigation";
 
 export default async function Page({
   searchParams,
@@ -21,7 +21,12 @@ export default async function Page({
   if (!zippedPhotosUrl) {
     throw new Error("Zipped photos URL not found");
   }
-  const { userId } = auth().protect();
+  const user = await currentUser();
+  if (!user) {
+    const url: Route = "/";
+    redirect(url);
+  }
+  const userId = user.id;
   const userSettings = await db.userSettings.findUnique({
     where: { userId },
   });
@@ -42,7 +47,6 @@ export default async function Page({
       })),
     });
   }
-  const user = await clerkClient().users.getUser(userId);
   const route: Route = "/generando-fotos";
   const { client_secret } = await stripe.checkout.sessions.create({
     ui_mode: "embedded",

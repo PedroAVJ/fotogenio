@@ -1,15 +1,18 @@
 import { stripe } from "@/lib/clients";
 import { env } from "@/lib/env";
 import { baseUrl } from "@/lib/urls";
-import { auth } from "@clerk/nextjs/server";
 import { ChoosePaymentComponent } from "@/app/choose-payment";
 import * as Sentry from "@sentry/nextjs";
-import { clerkClient } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { Route } from "next";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
-  const { userId } = auth().protect();
-  const user = await clerkClient().users.getUser(userId);
+  const user = await currentUser();
+  if (!user) {
+    const url: Route = "/";
+    redirect(url);
+  }
   const returnUrl: Route = "/nuevo-estilo?session_id={CHECKOUT_SESSION_ID}";
   const { client_secret } = await stripe.checkout.sessions.create({
     ui_mode: "embedded",
@@ -24,7 +27,7 @@ export default async function Page() {
     return_url: `${baseUrl}${returnUrl}`,
     payment_intent_data: {
       metadata: {
-        userId,
+        userId: user.id,
         operation: "buy-credits",
       },
     },
