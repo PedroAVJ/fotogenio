@@ -9,6 +9,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "@/app/api/uploadthing/core";
 
 import { QueryClientProvider } from "./query-client-provider";
+import { CSPostHogProvider } from "./posthog-provider";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -19,13 +20,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es-MX">
       <ClerkProvider localization={esMX}>
-        <body className="h-dvh w-dvw">
-          <QueryClientProvider>
-            <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
-            {children}
-          </QueryClientProvider>
-          <Toaster />
-        </body>
+        <CSPostHogProvider>
+          <body className="h-dvh w-dvw">
+            <QueryClientProvider>
+              <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
+              {children}
+            </QueryClientProvider>
+            <Toaster />
+          </body>
+        </CSPostHogProvider>
       </ClerkProvider>
     </html>
   );

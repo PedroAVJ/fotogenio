@@ -12,10 +12,12 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string(),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env["NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"],
+    NEXT_PUBLIC_POSTHOG_KEY: process.env["NEXT_PUBLIC_POSTHOG_KEY"],
   },
   emptyStringAsUndefined: true,
   isServer: typeof window === "undefined",

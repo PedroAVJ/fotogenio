@@ -3,6 +3,7 @@
 ## To Do
 
 - Data modeling
+  - Do not use clerk client, instead use the currentUser helper
   - Upgrade to Next.js 15
   - Upgrade to eslint 9
   - Use special react linter for react compiler
