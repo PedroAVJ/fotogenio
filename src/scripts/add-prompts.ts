@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 import fs from "fs";
 import path from "path";
 import { utapi } from "@/lib/clients";
+import { fileURLToPath } from "url";
 
 const db = new PrismaClient();
 
@@ -178,7 +179,7 @@ Tips for Success
 - ALWAYS MAKE THE PERSON SEDUCTIVE AND ATTRACTIVE.
 `;
 
-const loadImages = (directory: string) => {
+function loadImages(directory: string) {
   const imageExtensions = [".jpg", ".jpeg", ".png", ".webp"];
   const files = fs.readdirSync(directory);
 
@@ -193,9 +194,11 @@ const loadImages = (directory: string) => {
         type: `image/${path.extname(file).slice(1)}`,
       });
     });
-};
+}
 
-const files = loadImages("./HeadshotsMen");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const directoryPath = path.resolve(__dirname, "HeadshotsMen");
+const files = loadImages(directoryPath);
 let i = 0;
 for (const file of files) {
   i++;
