@@ -196,7 +196,10 @@ const loadImages = (directory: string) => {
 };
 
 const files = loadImages("./HeadshotsMen");
+let i = 0;
 for (const file of files) {
+  i++;
+  console.log(i);
   const blob = await utapi.uploadFiles(file);
   const url = blob.data?.appUrl;
   if (!url) {
