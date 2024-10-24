@@ -14,6 +14,7 @@ import { saveFeedback, saveDownload } from "./api";
 import { toast } from "sonner";
 import * as Sentry from "@sentry/nextjs";
 import { useMutation } from "@tanstack/react-query";
+import { usePostHog } from "posthog-js/react";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ interface HomeProps {
 }
 
 export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
+  const posthog = usePostHog();
   const [optimisticGeneratedPhotos, setOptimisticGeneratedPhotos] =
     useOptimistic(generatedPhotos);
   const [, startTransition] = useTransition();
@@ -33,6 +35,10 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
     generatedPhotoId: string,
     index: number,
   ) {
+    posthog.capture("feedback_photo", {
+      feedback,
+      generatedPhotoId,
+    });
     const newGeneratedPhotos = optimisticGeneratedPhotos.map((photo, i) =>
       i === index ? { ...photo, feedback } : photo,
     );
@@ -57,6 +63,9 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
     },
   });
   function handleDownload(url: string, generatedPhotoId: string) {
+    posthog.capture("download_photo", {
+      generatedPhotoId,
+    });
     downloadMutation.mutate(generatedPhotoId);
     try {
       saveAs(url);
