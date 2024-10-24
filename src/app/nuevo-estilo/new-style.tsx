@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Work_Sans } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,8 +11,6 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Prisma } from "@prisma/client";
 import Link from "next/link";
-
-const workSans = Work_Sans({ subsets: ["latin"] });
 
 type StyleWithCount = Prisma.StyleGetPayload<{
   include: {
@@ -53,9 +50,7 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
     },
   });
   return (
-    <main
-      className={` ${workSans.className} relative flex h-dvh w-dvw flex-col bg-gradient-to-b from-[#534E4E] to-[#171717] text-[#F5F5F5]`}
-    >
+    <main className="relative flex h-dvh w-dvw flex-col bg-gradient-to-b from-[#534E4E] to-[#171717] text-[#F5F5F5]">
       <ScrollArea className="size-full">
         <div className="px-2 pb-24 pt-4">
           <div className="mb-8 flex w-full flex-col items-center space-y-8">

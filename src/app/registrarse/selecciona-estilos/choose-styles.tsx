@@ -1,6 +1,5 @@
 "use client";
 
-import { Work_Sans } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import Image from "next/image";
@@ -8,8 +7,6 @@ import { useSearchParams } from "next/navigation";
 import { Style } from "@prisma/client";
 import { useQueryState, parseAsArrayOf, parseAsString } from "nuqs";
 import Link from "next/link";
-
-const workSans = Work_Sans({ subsets: ["latin"] });
 
 export function ChooseStyles({ styles }: { styles: Style[] }) {
   const [selectedStyles, setSelectedStyles] = useQueryState(
@@ -21,9 +18,7 @@ export function ChooseStyles({ styles }: { styles: Style[] }) {
   }
   const searchParams = useSearchParams();
   return (
-    <main
-      className={` ${workSans.className} flex min-h-dvh w-full flex-col items-center justify-between bg-gradient-to-b from-[#534E4E] to-[#171717] px-2 pb-8 pt-4 text-[#F5F5F5]`}
-    >
+    <main className="flex min-h-dvh w-full flex-col items-center justify-between bg-gradient-to-b from-[#534E4E] to-[#171717] px-2 pb-8 pt-4 text-[#F5F5F5]">
       <div className="flex w-full space-x-2">
         <h1 className="flex size-16 scroll-m-20 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat text-3xl font-semibold tracking-tight text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-position:0_0,0_100%] [background-size:100%_4px] lg:text-5xl">
           2

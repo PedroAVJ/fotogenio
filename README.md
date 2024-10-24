@@ -25,6 +25,6 @@
 - Change to syncronous payment method creation
 - Change to syncronous prediction creation
 - Use cn utility where applicable
-- Apply the font globally instead of importing it in each component
+- Properly break up codebase into components
 - Use variants instead of copying the code everywhere
 - Figure out why the setZippedPhotosUrl query state is not being set before redirecting to create account

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useOptimistic, useTransition } from "react";
-import { Work_Sans } from "next/font/google";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -15,10 +14,6 @@ import { toast } from "sonner";
 import * as Sentry from "@sentry/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { usePostHog } from "posthog-js/react";
-
-const workSans = Work_Sans({
-  subsets: ["latin"],
-});
 
 interface HomeProps {
   credits: number;
@@ -92,9 +87,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
   };
 
   return (
-    <main
-      className={` ${workSans.className} h-screen w-full bg-gradient-to-b from-[#534E4E] to-[#171717] text-[#F5F5F5]`}
-    >
+    <main className="h-screen w-full bg-gradient-to-b from-[#534E4E] to-[#171717] text-[#F5F5F5]">
       <ScrollArea className="h-full">
         <div className="flex flex-col items-center px-2 pb-8 pt-4">
           <h3 className="flex scroll-m-20 items-center justify-center p-4 text-center text-[20px] font-semibold leading-normal tracking-[0.02em]">

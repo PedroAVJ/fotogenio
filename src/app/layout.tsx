@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "@/app/api/uploadthing/core";
+import { Work_Sans } from "next/font/google";
 
 import { QueryClientProvider } from "./query-client-provider";
 import { CSPostHogProvider } from "./posthog-provider";
@@ -16,9 +17,11 @@ export const metadata: Metadata = {
   title: "Fotogenio",
 };
 
+const workSans = Work_Sans({ subsets: ["latin"] });
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es-MX">
+    <html lang="es-MX" className={workSans.className}>
       <ClerkProvider localization={esMX}>
         <CSPostHogProvider>
           <body className="h-dvh w-dvw">

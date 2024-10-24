@@ -1,6 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Work_Sans } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown } from "lucide-react";
@@ -9,11 +8,6 @@ import dianaVestidoBlanco from "./mujeres/diana-vestido-blanco.png";
 import santiago from "./hombres/santiago.png";
 import santiagoSuperman from "./hombres/santiago-superman.png";
 import reseñaOscarGutierrez from "./hombres/reseña-oscar-gutierrez.png";
-
-const workSans = Work_Sans({
-  subsets: ["latin"],
-  variable: "--font-work-sans",
-});
 
 import mujerAsombradaEnLaCama from "./mujeres/mujer-asombrada-en-la-cama.png";
 import hombreEleganteConTatuajes from "./hombres/hombre-elegante-con-tatuajes.png";
@@ -127,9 +121,7 @@ const estilos = [
 
 export function FotoGenioLandingComponent() {
   return (
-    <main
-      className={`h-screen w-full bg-gradient-to-b from-[#323133] to-[#4776E6] ${workSans.variable} font-sans`}
-    >
+    <main className="h-screen w-full bg-gradient-to-b from-[#323133] to-[#4776E6]">
       <ScrollArea className="size-full">
         <div className="flex flex-col items-center p-6">
           <div className="w-full">
