@@ -24,7 +24,9 @@
   - Change to syncronous account creation
 - Change to syncronous payment method creation
 - Change to syncronous prediction creation
+- Use shadcn css variables where applicable
 - Use cn utility where applicable
 - Properly break up codebase into components
+- Use typography components where applicable
 - Use variants instead of copying the code everywhere
 - Figure out why the setZippedPhotosUrl query state is not being set before redirecting to create account

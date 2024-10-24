@@ -48,7 +48,7 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
   }, [router]);
 
   return (
-    <main className="flex size-full h-dvh w-dvw flex-col bg-gradient-to-b from-[#534E4E] to-[#171717] px-2 pb-4 pt-2 text-[#F5F5F5]">
+    <div className="flex size-full flex-col px-2 pb-4 pt-2 text-[#F5F5F5]">
       <div className="mb-4 flex w-full space-x-2">
         <h1 className="flex size-16 scroll-m-20 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat text-[32px] font-semibold tracking-[0.02em] text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-position:0_0,0_100%] [background-size:100%_4px]">
           ✓
@@ -69,6 +69,6 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
           Puedes salir de esta pagina y volver en {aproxTime} minutos aprox.
         </p>
       </div>
-    </main>
+    </div>
   );
 }

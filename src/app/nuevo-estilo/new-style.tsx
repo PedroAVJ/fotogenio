@@ -50,10 +50,10 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
     },
   });
   return (
-    <main className="relative flex h-dvh w-dvw flex-col bg-gradient-to-b from-[#534E4E] to-[#171717] text-[#F5F5F5]">
+    <div className="relative flex h-dvh w-dvw flex-col">
       <ScrollArea className="size-full">
         <div className="px-2 pb-24 pt-4">
-          <div className="mb-8 flex w-full flex-col items-center space-y-8">
+          <div className="mb-8 flex w-full flex-col items-center space-y-8 text-primary">
             <h3 className="flex w-11/12 scroll-m-20 justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 text-[20px] font-semibold leading-[102%] tracking-normal [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-position:0_0,0_100%] [background-size:100%_4px]">
               Escoge un Nuevo Estilo
             </h3>
@@ -126,6 +126,6 @@ export function NewStyleComponent({ credits, styles }: NewStyleProps) {
           )}
         </Button>
       </div>
-    </main>
+    </div>
   );
 }

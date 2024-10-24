@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { X, Check, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { FileUploader } from "@/components/ui/file-uploader";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import JSZip from "jszip";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -131,94 +130,91 @@ export function UploadPhotosComponent() {
     }
   }
   return (
-    <ScrollArea>
-      <main className="flex min-h-dvh flex-col items-center justify-between space-y-4 bg-gradient-to-b from-[#534E4E] to-[#171717] p-4 text-[#F5F5F5]">
-        <Form {...form}>
-          <div className="flex w-full space-x-2">
-            <h1 className="flex size-16 scroll-m-20 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat text-3xl font-semibold tracking-tight text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-position:0_0,0_100%] [background-size:100%_4px] lg:text-5xl">
-              3
-            </h1>
-            <h3 className="flex grow scroll-m-20 justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 text-xl font-semibold tracking-tight [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-position:0_0,0_100%] [background-size:100%_4px]">
-              Sube Tus Fotos
-            </h3>
+    <div className="flex min-h-dvh flex-col items-center justify-between space-y-4 bg-gradient-to-b from-[#534E4E] to-[#171717] p-4 text-[#F5F5F5]">
+      <Form {...form}>
+        <div className="flex w-full space-x-2">
+          <h1 className="flex size-16 scroll-m-20 items-center justify-center rounded-lg border-x-4 border-l-[#4776E6] border-r-[#8E54E9] bg-no-repeat text-3xl font-semibold tracking-tight text-[#8E54E9] [background-image:linear-gradient(90deg,#4776E6,#8E54E9),linear-gradient(90deg,#4776E6,#8E54E9)] [background-position:0_0,0_100%] [background-size:100%_4px] lg:text-5xl">
+            3
+          </h1>
+          <h3 className="flex grow scroll-m-20 justify-center rounded-lg border-x-4 border-l-[#8E54E9] border-r-[#4776E6] bg-no-repeat p-4 text-xl font-semibold tracking-tight [background-image:linear-gradient(90deg,#8E54E9,#4776E6),linear-gradient(90deg,#8E54E9,#4776E6)] [background-position:0_0,0_100%] [background-size:100%_4px]">
+            Sube Tus Fotos
+          </h3>
+        </div>
+        <div className="flex w-full max-w-md flex-col items-center justify-center space-y-4 px-4 md:max-w-4xl">
+          <div className="grid w-full grid-cols-3 gap-4 gap-y-8 md:grid-cols-6">
+            {placeholderImages.map((placeholderImage, index) => (
+              <div
+                key={index}
+                className="relative aspect-square h-32 w-24 overflow-visible"
+              >
+                <Image
+                  src={placeholderImage.foto}
+                  priority
+                  alt={`Ejemplo ${(index + 1).toString()}`}
+                  className="h-32 w-24 rounded-md object-cover"
+                />
+                {placeholderImage.status === "rejected" ? (
+                  <div className="absolute -right-4 -top-4 flex size-8 items-center justify-center rounded-full border border-red-500">
+                    <X className="text-red-500" size={20} />
+                  </div>
+                ) : (
+                  <div className="absolute -right-4 -top-4 flex size-8 items-center justify-center rounded-full border border-green-500">
+                    <Check className="text-green-500" size={20} />
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-          <div className="flex w-full max-w-md flex-col items-center justify-center space-y-4 px-4 md:max-w-4xl">
-            <div className="grid w-full grid-cols-3 gap-4 gap-y-8 md:grid-cols-6">
-              {placeholderImages.map((placeholderImage, index) => (
-                <div
-                  key={index}
-                  className="relative aspect-square h-32 w-24 overflow-visible"
-                >
-                  <Image
-                    src={placeholderImage.foto}
-                    priority
-                    alt={`Ejemplo ${(index + 1).toString()}`}
-                    className="h-32 w-24 rounded-md object-cover"
+          <FormField
+            control={form.control}
+            name="photos"
+            render={({ field: { onChange, onBlur, value, disabled } }) => (
+              <FormItem>
+                <FormControl>
+                  <FileUploader
+                    onValueChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    disabled={
+                      disabled ?? (subirFotos.isUploading || mutation.isPending)
+                    }
+                    accept={{
+                      "image/jpeg": [".jpg", ".jpeg"],
+                      "image/png": [".png"],
+                    }}
+                    progresses={subirFotos.progresses}
+                    onUpload={subirFotos.onUpload}
+                    maxFileCount={20}
+                    maxSize={8 * 1024 * 1024}
                   />
-                  {placeholderImage.status === "rejected" ? (
-                    <div className="absolute -right-4 -top-4 flex size-8 items-center justify-center rounded-full border border-red-500">
-                      <X className="text-red-500" size={20} />
-                    </div>
-                  ) : (
-                    <div className="absolute -right-4 -top-4 flex size-8 items-center justify-center rounded-full border border-green-500">
-                      <Check className="text-green-500" size={20} />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <FormField
-              control={form.control}
-              name="photos"
-              render={({ field: { onChange, onBlur, value, disabled } }) => (
-                <FormItem>
-                  <FormControl>
-                    <FileUploader
-                      onValueChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      disabled={
-                        disabled ??
-                        (subirFotos.isUploading || mutation.isPending)
-                      }
-                      accept={{
-                        "image/jpeg": [".jpg", ".jpeg"],
-                        "image/png": [".png"],
-                      }}
-                      progresses={subirFotos.progresses}
-                      onUpload={subirFotos.onUpload}
-                      maxFileCount={20}
-                      maxSize={8 * 1024 * 1024}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button
-            size="lg"
-            className="flex w-36 rounded-md bg-gradient-to-r from-[#4776E6] to-[#8E54E9] font-semibold text-[#F5F5F5] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={
-              !form.formState.isValid ||
-              subirFotos.isUploading ||
-              mutation.isPending
-            }
-            onClick={() => {
-              void form.handleSubmit(handleSubmit)();
-            }}
-          >
-            {mutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
-                {loadingText()}
-              </>
-            ) : (
-              "Subir fotos"
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </Button>
-        </Form>
-      </main>
-    </ScrollArea>
+          />
+        </div>
+        <Button
+          size="lg"
+          className="flex w-36 rounded-md bg-gradient-to-r from-[#4776E6] to-[#8E54E9] font-semibold text-[#F5F5F5] hover:from-[#4776E6]/90 hover:to-[#8E54E9]/90 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={
+            !form.formState.isValid ||
+            subirFotos.isUploading ||
+            mutation.isPending
+          }
+          onClick={() => {
+            void form.handleSubmit(handleSubmit)();
+          }}
+        >
+          {mutation.isPending ? (
+            <>
+              <Loader2 className="mr-2 size-4 animate-spin" />
+              {loadingText()}
+            </>
+          ) : (
+            "Subir fotos"
+          )}
+        </Button>
+      </Form>
+    </div>
   );
 }

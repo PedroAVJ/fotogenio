@@ -14,9 +14,7 @@ function getBaseUrl() {
     }
     return `https://${env.VERCEL_BRANCH_URL}`;
   } else {
-    throw new Error(
-      "Base URL is used for webhook processing. That means it cannot be used in development.",
-    );
+    return `https://${env.NGROK_STATIC_DOMAIN}`;
   }
 }
 

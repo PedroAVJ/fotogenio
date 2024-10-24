@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { fileRouter } from "@/app/api/uploadthing/core";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Work_Sans } from "next/font/google";
 
 import { QueryClientProvider } from "./query-client-provider";
@@ -27,7 +28,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <body className="h-dvh w-dvw">
             <QueryClientProvider>
               <NextSSRPlugin routerConfig={extractRouterConfig(fileRouter)} />
-              {children}
+              <ScrollArea className="size-full">
+                <main className="bg-gradient-to-b from-[#534E4E] to-[#171717]">
+                  {children}
+                </main>
+              </ScrollArea>
             </QueryClientProvider>
             <Toaster />
           </body>
