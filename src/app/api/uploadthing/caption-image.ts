@@ -1,12 +1,7 @@
 import "server-only";
 
 import OpenAI from "openai";
-import { zodResponseFormat } from "openai/helpers/zod";
-import { z } from "zod";
-
-const Prompt = z.object({
-  description: z.string(),
-});
+import { retryAsync } from "ts-retry";
 
 const openai = new OpenAI();
 
@@ -23,27 +18,33 @@ Do not break this rule.
 `;
 
 export async function captionImage(photoUrl: string) {
-  const completion = await openai.beta.chat.completions.parse({
-    model: "gpt-4o-2024-08-06",
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      {
-        role: "user",
-        content: [
+  const completion = await retryAsync(
+    async () =>
+      await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
           {
-            type: "image_url",
-            image_url: {
-              url: photoUrl,
-            },
+            role: "system",
+            content: systemPrompt,
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "image_url",
+                image_url: {
+                  url: photoUrl,
+                },
+              },
+            ],
           },
         ],
-      },
-    ],
-    response_format: zodResponseFormat(Prompt, "prompt"),
-  });
+      }),
+    {
+      maxTry: 3,
+      delay: 10000,
+    },
+  );
 
-  return completion.choices[0]?.message.parsed?.description ?? "";
+  return completion.choices[0]?.message.content ?? "";
 }
