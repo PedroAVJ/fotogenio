@@ -1,6 +1,9 @@
 # To Do
 
 - Curate style selections for each gender
+- Remove "superheroina" from the list of female styles
+- Figure out a better way to caption images
+
 - See feature flags in vercel and posthog
 - See relevant sentry integrations
 - See relevant posthog integrations, for example:
