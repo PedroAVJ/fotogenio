@@ -31,7 +31,9 @@ export default function WordRotate({
     }, duration);
 
     // Clean up interval on unmount
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [words, duration]);
 
   return (
