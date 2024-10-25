@@ -1,6 +1,5 @@
 # To Do
 
-- Curate style selections for each gender
 - Figure out a better way to caption images
 
 - See feature flags in vercel and posthog
