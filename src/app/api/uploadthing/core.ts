@@ -14,7 +14,7 @@ export const fileRouter = {
   }),
   subirFotos: f(
     {
-      image: { maxFileSize: "8MB", maxFileCount: 20, minFileCount: 12 },
+      image: { maxFileSize: "8MB", maxFileCount: 20 },
     },
     {
       awaitServerData: true,

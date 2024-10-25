@@ -34,11 +34,12 @@
     "@tanstack/react-query": "^5.45.0",
     "@tanstack/react-table": "^8.20.1",
     "@trpc/server": "^11.0.0-rc.490",
-    "@uploadthing/react": "^7.0.2",
+    "@uploadthing/react": "^7.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^0.2.1",
     "file-saver": "^2.0.5",
+    "framer-motion": "^11.11.10",
     "input-otp": "^1.2.4",
     "jiti": "^1.21.6",
     "jszip": "^3.10.1",
@@ -61,7 +62,7 @@
     "stripe": "^16.11.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.0.2",
+    "uploadthing": "^7.2.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

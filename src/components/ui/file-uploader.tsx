@@ -14,6 +14,8 @@ import { useControllableState } from "@/hooks/use-controllable-state";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import WordRotate from "@/components/ui/word-rotate";
+import { Loader2 } from "lucide-react";
 
 import { type ClientUploadedFileData } from "uploadthing/types";
 
@@ -168,7 +170,19 @@ export function FileUploader(props: FileUploaderProps) {
             : `archivo`;
 
         toast.promise(onUpload(updatedFiles), {
-          loading: toastText(progresses),
+          loading: (
+            <div className="flex items-center gap-2">
+              <Loader2 className="size-4 animate-spin" />
+              <WordRotate
+                words={[
+                  "Subiendo...",
+                  "Procesando fotos con IA...",
+                  "Este proceso puede tardar unos minutos...",
+                ]}
+                duration={5000}
+              />
+            </div>
+          ),
           success: () => {
             return updatedFiles.length > 0 ? `${target} subidos` : `subido`;
           },
@@ -178,7 +192,7 @@ export function FileUploader(props: FileUploaderProps) {
       }
     },
 
-    [files, maxFileCount, multiple, onUpload, setFiles, progresses],
+    [files, maxFileCount, multiple, onUpload, setFiles],
   );
 
   function onRemove(index: number) {
@@ -282,15 +296,6 @@ export function FileUploader(props: FileUploaderProps) {
       ) : null}
     </div>
   );
-}
-
-function toastText(progresses: Record<string, number> | undefined) {
-  if (!progresses) return "Subiendo...";
-  if (Object.keys(progresses).length === 0) return "Subiendo...";
-  const allProgressesComplete = Object.values(progresses).every(
-    (progress) => progress === 100,
-  );
-  return allProgressesComplete ? "Subtitulando..." : "Subiendo...";
 }
 
 interface FileCardProps {
