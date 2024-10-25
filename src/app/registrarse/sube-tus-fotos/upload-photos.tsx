@@ -86,27 +86,18 @@ export function UploadPhotosComponent() {
     return `Subiendo... ${progress.toString()}%`;
   }
   async function handleUpload() {
-    const photos = form.getValues("photos");
-    const txtFiles = subirFotos.uploadedFiles.map((file, index) => {
-      const photoName = photos[index]?.name;
-      if (photoName !== file.name) {
-        Sentry.captureMessage("Photo name mismatch", {
-          extra: {
-            photoName,
-            fileName: file.name,
-            formPhotosLength: photos.length,
-            uploadedFilesLength: subirFotos.uploadedFiles.length,
-          },
-        });
-        toast.error("Hubo un error al subir tus fotos");
-      }
+    const txtFiles = subirFotos.uploadedFiles.map((file) => {
       const txtFile = new File([file.serverData.caption], `${file.name}.txt`, {
         type: "text/plain",
       });
       return txtFile;
     });
     const zip = new JSZip();
-    for (const file of form.getValues("photos")) {
+    const uploadedFileNames = subirFotos.uploadedFiles.map((file) => file.name);
+    const photos = form.getValues("photos").filter((file) => {
+      return !uploadedFileNames.includes(file.name);
+    });
+    for (const file of photos) {
       zip.file(file.name, file);
     }
     for (const file of txtFiles) {
