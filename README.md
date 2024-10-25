@@ -1,7 +1,5 @@
 # To Do
 
-- Figure out a better way to caption images
-
 - See feature flags in vercel and posthog
 - See relevant sentry integrations
 - See relevant posthog integrations, for example:
