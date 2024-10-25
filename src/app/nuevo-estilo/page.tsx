@@ -7,9 +7,15 @@ export default async function NewStyle() {
   const { gender, credits } = await db.userSettings.findUniqueOrThrow({
     where: { userId },
   });
+  // This style doesn't match our quality standards
+  // Omit it for now
+  const superheroinaId = "013ad1bb-c9eb-42a4-bfd8-09402e144074";
   const styles = await db.style.findMany({
     where: {
       gender,
+      id: {
+        not: superheroinaId,
+      },
     },
     include: {
       _count: {
