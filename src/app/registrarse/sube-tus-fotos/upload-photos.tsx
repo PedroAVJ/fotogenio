@@ -93,10 +93,7 @@ export function UploadPhotosComponent() {
       return txtFile;
     });
     const zip = new JSZip();
-    const uploadedFileNames = subirFotos.uploadedFiles.map((file) => file.name);
-    const photos = form.getValues("photos").filter((file) => {
-      return !uploadedFileNames.includes(file.name);
-    });
+    const photos = form.getValues("photos");
     for (const file of photos) {
       zip.file(file.name, file);
     }
