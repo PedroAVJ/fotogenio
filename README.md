@@ -19,7 +19,6 @@
   - Upgrade to eslint 9
   - Use special react linter for react compiler
 - Use react query everywhere applicable with sentry error handling
-- Use clerk elements instead of custom components
 - Use session claims instead of saving data in database
   - Change to syncronous account creation
 - Change to syncronous payment method creation

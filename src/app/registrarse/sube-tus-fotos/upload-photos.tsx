@@ -117,7 +117,7 @@ export function UploadPhotosComponent() {
     } else {
       const params = new URLSearchParams(searchParams.toString());
       params.set("zippedPhotosUrl", uploadedZip.appUrl);
-      const url: Route = "/registrarse/crear-cuenta";
+      const url: Route = "/registrarse/pago";
       router.push(`${url}?${params.toString()}`);
     }
   }
