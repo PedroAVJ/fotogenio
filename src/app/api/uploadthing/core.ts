@@ -3,7 +3,6 @@ import {
   type FileRouter as UploadThingFileRouter,
 } from "uploadthing/next";
 import { captionImage } from "./caption-image";
-import * as Sentry from "@sentry/nextjs";
 
 const f = createUploadthing();
 
@@ -12,11 +11,7 @@ export const fileRouter = {
     "application/zip": { maxFileSize: "256MB", maxFileCount: 1 },
   })
     .onUploadError(({ error, fileKey }) => {
-      Sentry.captureException(error, {
-        extra: {
-          fileKey,
-        },
-      });
+      console.error(error);
     })
     .onUploadComplete(() => {
       return {};
@@ -30,11 +25,7 @@ export const fileRouter = {
     },
   )
     .onUploadError(({ error, fileKey }) => {
-      Sentry.captureException(error, {
-        extra: {
-          fileKey,
-        },
-      });
+      console.error(error);
     })
     .onUploadComplete(async ({ file: { appUrl } }) => {
       const caption = await captionImage(appUrl);

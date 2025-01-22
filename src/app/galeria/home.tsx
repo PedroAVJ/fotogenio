@@ -12,7 +12,6 @@ import { saveAs } from "file-saver";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { saveFeedback, saveDownload } from "./api";
 import { toast } from "sonner";
-import * as Sentry from "@sentry/nextjs";
 import { useMutation } from "@tanstack/react-query";
 import { usePostHog } from "posthog-js/react";
 
@@ -55,11 +54,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
   const downloadMutation = useMutation({
     mutationFn: saveDownload,
     onError: (error, generatedPhotoId) => {
-      Sentry.captureException(error, {
-        extra: {
-          generatedPhotoId,
-        },
-      });
+      console.error(error);
     },
   });
   function handleDownload(url: string, generatedPhotoId: string) {
@@ -70,12 +65,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
     try {
       saveAs(url);
     } catch (error) {
-      Sentry.captureException(error, {
-        extra: {
-          generatedPhotoId,
-          url,
-        },
-      });
+      console.error(error);
       toast.error(
         "Ocurrió un error al descargar la foto. Por favor, intenta de nuevo.",
       );

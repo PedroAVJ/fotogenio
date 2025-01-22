@@ -9,7 +9,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import JSZip from "jszip";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -112,7 +111,7 @@ export function UploadPhotosComponent() {
     });
     const uploadedZip = uploadedFiles[0];
     if (!uploadedZip) {
-      Sentry.captureMessage("No zip file uploaded", "error");
+      console.error("No zip file uploaded");
       toast.error("Las fotos no se pudieron subir");
     } else {
       const params = new URLSearchParams(searchParams.toString());

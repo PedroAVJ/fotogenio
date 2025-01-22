@@ -3,7 +3,6 @@ import { env } from "@/lib/env";
 import { baseUrl } from "@/lib/urls";
 import { auth } from "@clerk/nextjs/server";
 import { ChoosePaymentComponent } from "@/app/choose-payment";
-import * as Sentry from "@sentry/nextjs";
 import { clerkClient } from "@clerk/nextjs/server";
 import { Route } from "next";
 
@@ -31,7 +30,7 @@ export default async function Page() {
     locale: "es",
   });
   if (!client_secret) {
-    Sentry.captureMessage("No client secret", "error");
+    console.error("No client secret");
   }
   return <ChoosePaymentComponent clientSecret={client_secret} />;
 }

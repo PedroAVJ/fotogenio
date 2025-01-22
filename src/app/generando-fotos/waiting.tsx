@@ -5,7 +5,6 @@ import { Work_Sans } from "next/font/google";
 import Lottie from "lottie-react";
 import animation from "./animacion.json";
 import { useRouter } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
 
 const workSans = Work_Sans({ subsets: ["latin"] });
 
@@ -23,7 +22,7 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
         try {
           router.refresh();
         } catch (error) {
-          Sentry.captureException(error);
+          console.error(error);
         }
       }
     };
@@ -41,7 +40,7 @@ export function WaitingComponent({ aproxTime }: WaitingComponentProps) {
       try {
         router.refresh();
       } catch (error) {
-        Sentry.captureException(error);
+        console.error(error);
       }
     }, THIRTY_SECONDS);
 
