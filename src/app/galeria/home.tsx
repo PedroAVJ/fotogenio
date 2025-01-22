@@ -53,7 +53,7 @@ export function HomeComponent({ credits, generatedPhotos }: HomeProps) {
 
   const downloadMutation = useMutation({
     mutationFn: saveDownload,
-    onError: (error, generatedPhotoId) => {
+    onError: (error) => {
       console.error(error);
     },
   });
