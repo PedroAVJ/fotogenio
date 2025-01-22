@@ -10,7 +10,7 @@ export const fileRouter = {
   subirZip: f({
     "application/zip": { maxFileSize: "256MB", maxFileCount: 1 },
   })
-    .onUploadError(({ error, fileKey }) => {
+    .onUploadError(({ error }) => {
       console.error(error);
     })
     .onUploadComplete(() => {
@@ -24,7 +24,7 @@ export const fileRouter = {
       awaitServerData: true,
     },
   )
-    .onUploadError(({ error, fileKey }) => {
+    .onUploadError(({ error }) => {
       console.error(error);
     })
     .onUploadComplete(async ({ file: { appUrl } }) => {
